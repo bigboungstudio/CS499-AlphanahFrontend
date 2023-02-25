@@ -4,7 +4,6 @@ const baseUrl = "http://alphanah.com:8080/product/";
 export function createProductCategory(product_uuid, category_uuid) {
   return fetch(baseUrl + product_uuid + `/category/` + category_uuid, {
     method: "POST",
-    // body: JSON.stringify(option),
   })
     .then(handleResponse)
     .catch(handleError);

@@ -72,7 +72,7 @@ export default function CartPage() {
             startIcon={<KeyboardBackspaceIcon />}
             size="large"
             component={Link}
-            to={"/shop"}
+            to={"/products"}
           >
             เลือกสินค้าเพิ่ม
           </Button>

@@ -1,11 +1,11 @@
 import { Box, Avatar, Typography, Button, Stack, Divider } from "@mui/material";
 import React from "react";
-export default function ProductOwner() {
+export default function ProductOwner({ product }) {
   return (
     <Stack bgcolor="white" direction="row" padding={5} spacing={4}>
       <Avatar
-        alt="vergil"
-        src="/vergil.jpg"
+        alt={product.creator.firstname}
+        src={product.creator.image}
         sx={{
           width: 70,
           height: 70,
@@ -15,7 +15,9 @@ export default function ProductOwner() {
         <Typography color="#ababab" fontSize="12px">
           ขายโดย
         </Typography>
-        <Typography mb={1}>VergilNumberOne</Typography>
+        <Typography
+          mb={1}
+        >{`${product.creator.firstname} ${product.creator.lastname}`}</Typography>
         <Button variant="outlined">ดูร้านค้า</Button>
       </Box>
       <Divider orientation="vertical" flexItem />

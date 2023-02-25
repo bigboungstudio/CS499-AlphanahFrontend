@@ -14,16 +14,26 @@ export function getAccountById(account_uuid) {
 export function updateCurrentAccount(account) {
   return fetch(baseUrl, {
     method: "PUT",
-    body: JSON.stringify(account),
+    body: JSON.stringify({
+      firstname: account.firstname,
+      lastname: account.lastname,
+      address: account.address,
+      phone: account.phone,
+    }),
   })
     .then(handleResponse)
     .catch(handleError);
 }
 
 export function updateCurrentAccountImage(image) {
+  let formData = new FormData();
+
+  formData.append("image", image.file);
+
   return fetch(baseUrl + `/image`, {
     method: "PUT",
-    body: JSON.stringify(image),
+    headers: { "content-type": "multipart/form-data" },
+    body: formData,
   })
     .then(handleResponse)
     .catch(handleError);

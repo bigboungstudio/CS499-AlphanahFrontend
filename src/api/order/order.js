@@ -4,7 +4,6 @@ const baseUrl = "http://alphanah.com:8080";
 export function ApplyCouponToCart(coupon_code) {
   return fetch(baseUrl + `/cart/coupon/` + coupon_code, {
     method: "POST",
-    body: JSON.stringify(coupon_code),
   })
     .then(handleResponse)
     .catch(handleError);
@@ -36,6 +35,7 @@ export function getPurchaseOrderById(order_uuid) {
     .catch(handleError);
 }
 
+// co with mic's code
 export function CheckoutCart(cart) {
   return fetch(baseUrl + `/checkout`, {
     method: "POST",

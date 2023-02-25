@@ -11,7 +11,7 @@ import ReviewCard from "./ReviewCard";
 import StarRatingBar from "./StarRatingBar";
 import WriteReviewPage from "./WriteReviewPage";
 
-export default function ProductReview() {
+export default function ProductReview({ product }) {
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
     setOpen(true);
@@ -29,19 +29,39 @@ export default function ProductReview() {
           <div
             style={{ fontSize: "60px", color: "#01bfa6", fontWeight: "bold" }}
           >
-            2.5
+            {product.reviewScore}
           </div>
           <div style={{ fontSize: "30px", color: "#ababab" }}>/5</div>
         </Stack>
 
         <Stack spacing={1}>
-          <StarRatingBar star={5} amount={60} value={60} />
-          <StarRatingBar star={4} amount={10} value={10} />
-          <StarRatingBar star={3} amount={10} value={10} />
-          <StarRatingBar star={2} amount={10} value={10} />
-          <StarRatingBar star={1} amount={10} value={10} />
+          <StarRatingBar
+            star={5}
+            amount={product.reviewFiveStar}
+            value={(product.reviewFiveStar / product.reviews.length) * 100}
+          />
+          <StarRatingBar
+            star={4}
+            amount={product.reviewFourStar}
+            value={(product.reviewFourStar / product.reviews.length) * 100}
+          />
+          <StarRatingBar
+            star={3}
+            amount={product.reviewThreeStar}
+            value={(product.reviewThreeStar / product.reviews.length) * 100}
+          />
+          <StarRatingBar
+            star={2}
+            amount={product.reviewTwoStar}
+            value={(product.reviewTwoStar / product.reviews.length) * 100}
+          />
+          <StarRatingBar
+            star={1}
+            amount={product.reviewOneStar}
+            value={(product.reviewOneStar / product.reviews.length) * 100}
+          />
           <Typography alignself="end" sx={{ color: "#ababab", fontSize: 14 }}>
-            666 Ratings
+            {product.reviews.length} Ratings
           </Typography>
         </Stack>
       </Stack>
@@ -57,7 +77,9 @@ export default function ProductReview() {
         </Button>
         <WriteReviewPage open={open} handleClose={handleClose} />
         <Box py={3}>
-          <ReviewCard />
+          {product.reviews.map((item, i) => (
+            <ReviewCard review={item} key={i} />
+          ))}
         </Box>
       </Box>
       <Stack direction="row" justifyContent="space-between">

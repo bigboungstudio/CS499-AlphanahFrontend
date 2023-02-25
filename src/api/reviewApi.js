@@ -15,10 +15,10 @@ export function getReviewById(product_uuid, review_uuid) {
 
 export function saveReview(product_uuid, review) {
   return fetch(
-    baseUrl + product_uuid + `/review` + (`/${review.review_uuid}` || ""),
+    baseUrl + product_uuid + `/review` + (`/${review.reviewUUID}` || ""),
     {
-      method: review.review_uuid ? "PUT" : "POST",
-      body: JSON.stringify(review),
+      method: review.reviewUUID ? "PUT" : "POST",
+      body: JSON.stringify({ message: review.message, rating: review.rating }),
     }
   )
     .then(handleResponse)

@@ -41,7 +41,17 @@ export function getCouponByCode(coupon_code) {
 }
 
 export function createCoupon(coupon) {
-  return fetch(baseUrl, { method: "POST", body: JSON.stringify(coupon) })
+  return fetch(baseUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      code: coupon.code,
+      type: coupon.type,
+      value: coupon.value,
+      startDate: coupon.startDate,
+      endDate: coupon.endDate,
+      maxUse: coupon.maxUse,
+    }),
+  })
     .then(handleResponse)
     .catch(handleError);
 }

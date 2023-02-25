@@ -1,25 +1,25 @@
 import "./App.css";
-import NavBar from "./common/NavBar";
-import HomePage from "./Home/HomePage";
+import NavBar from "./components/common/NavBar";
+import HomePage from "./components/Home/HomePage";
 import { Route, Routes, useLocation } from "react-router-dom";
-import BuyerLoginPage from "./auth/Buyer/BuyerLoginPage";
-import CartPage from "./Cart/CartPage";
-import BuyerRegisterPage from "./auth/Buyer/BuyerRegisterPage";
-import AccountPage from "./auth/Account/AccountPage";
-import CheckoutPage from "./Checkout/CheckoutPage";
-import ShoppingPage from "./Shopping/ShoppingPage";
-import ProductPage from "./Shopping/ProductPage";
-import SellerRegisterPage from "./auth/Seller/SellerRegisterPage";
-import SellerLoginPage from "./auth/Seller/SellerLoginPage";
-import SellerHomePage from "./Seller/SellerHomePage";
-import SellerAddProductPage from "./Seller/SellerProducts/SellerAddProductPage";
-import SellerEditProductPage from "./Seller/SellerProducts/SellerEditProductPage";
-import SellerProductsPage from "./Seller/SellerProducts/SellerProductsPage";
-import SellerDrawer from "./Seller/SellerDrawer";
-import SellerOrdersPage from "./Seller/SellerOrders/SellerOrdersPage";
-import SellerProfilePage from "./Seller/SellerProfilePage";
-import SellerCouponsPage from "./Seller/SellerCoupons/SellerCouponsPage";
-import SellerAddCouponPage from "./Seller/SellerCoupons/SellerAddCouponPage";
+import BuyerLoginPage from "./components/auth/Buyer/BuyerLoginPage";
+import CartPage from "./components/Cart/CartPage";
+import BuyerRegisterPage from "./components/auth/Buyer/BuyerRegisterPage";
+import AccountPage from "./components/auth/Account/AccountPage";
+import CheckoutPage from "./components/Checkout/CheckoutPage";
+import ShoppingPage from "./components/Shopping/ShoppingPage";
+import ProductPage from "./components/Shopping/ProductPage";
+import SellerRegisterPage from "./components/auth/Seller/SellerRegisterPage";
+import SellerLoginPage from "./components/auth/Seller/SellerLoginPage";
+import SellerHomePage from "./components/Seller/SellerHomePage";
+import SellerAddProductPage from "./components/Seller/SellerProducts/SellerAddProductPage";
+import SellerEditProductPage from "./components/Seller/SellerProducts/SellerEditProductPage";
+import SellerProductsPage from "./components/Seller/SellerProducts/SellerProductsPage";
+import SellerDrawer from "./components/Seller/SellerDrawer";
+import SellerOrdersPage from "./components/Seller/SellerOrders/SellerOrdersPage";
+import SellerProfilePage from "./components/Seller/SellerProfilePage";
+import SellerCouponsPage from "./components/Seller/SellerCoupons/SellerCouponsPage";
+import SellerAddCouponPage from "./components/Seller/SellerCoupons/SellerAddCouponPage";
 
 import { Box } from "@mui/material";
 
@@ -45,8 +45,8 @@ function App() {
             />
             <Route exact path="/account" element={<AccountPage />} />
             <Route exact path="/checkout" element={<CheckoutPage />} />
-            <Route exact path="/shop" element={<ShoppingPage />} />
-            <Route exact path="/products" element={<ProductPage />} />
+            <Route exact path="/products" element={<ShoppingPage />} />
+            <Route exact path="/products/:UUID" element={<ProductPage />} />
           </Routes>
         </Box>
       </Box>

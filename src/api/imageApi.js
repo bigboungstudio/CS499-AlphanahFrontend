@@ -2,9 +2,12 @@ import { handleResponse, handleError } from "./apiUtils";
 const baseUrl = "http://alphanah.com:8080/product/";
 
 export function createProductMainImage(product_uuid, image) {
+  let formData = new FormData();
+  formData.append("image", image.file);
   return fetch(baseUrl + product_uuid + `/main_image`, {
     method: "POST",
-    body: JSON.stringify(image),
+    headers: { "content-type": "multipart/form-data" },
+    body: formData,
   })
     .then(handleResponse)
     .catch(handleError);
@@ -15,9 +18,12 @@ export function getProductImages(product_uuid) {
     .catch(handleError);
 }
 export function createProductImage(product_uuid, image) {
+  let formData = new FormData();
+  formData.append("image", image.file);
   return fetch(baseUrl + product_uuid + `/image`, {
     method: "POST",
-    body: JSON.stringify(image),
+    headers: { "content-type": "multipart/form-data" },
+    body: formData,
   })
     .then(handleResponse)
     .catch(handleError);
@@ -36,9 +42,12 @@ export function getReviewImages(product_uuid, review_uuid) {
 }
 
 export function createReviewImage(product_uuid, review_uuid, image) {
+  let formData = new FormData();
+  formData.append("image", image.file);
   return fetch(baseUrl + product_uuid + `/review/` + review_uuid + `/image`, {
     method: "POST",
-    body: JSON.stringify(image),
+    headers: { "content-type": "multipart/form-data" },
+    body: formData,
   })
     .then(handleResponse)
     .catch(handleError);

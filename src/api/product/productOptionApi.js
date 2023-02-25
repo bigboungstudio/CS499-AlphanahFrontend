@@ -15,13 +15,14 @@ export function getProductOptionById(product_uuid, product_option_uuid) {
 
 export function saveProductOption(product_uuid, option) {
   return fetch(
-    baseUrl +
-      product_uuid +
-      `/option` +
-      (`/${option.product_option_uuid}` || ""),
+    baseUrl + product_uuid + `/option` + (`/${option.optionUUID}` || ""),
     {
-      method: option.product_option_uuid ? "PUT" : "POST",
-      body: JSON.stringify(option),
+      method: option.optionUUID ? "PUT" : "POST",
+      body: JSON.stringify({
+        name: option.name,
+        price: option.price,
+        quantity: option.quantity,
+      }),
     }
   )
     .then(handleResponse)

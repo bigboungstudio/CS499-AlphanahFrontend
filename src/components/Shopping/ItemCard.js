@@ -12,15 +12,7 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 
-export default function ItemCard({
-  image,
-  alt,
-  name,
-  price,
-  star,
-  review,
-  sold,
-}) {
+export default function ItemCard({ product }) {
   return (
     <Grid item>
       <Card
@@ -32,19 +24,19 @@ export default function ItemCard({
           },
         }}
       >
-        <ButtonBase component={Link} to={"/products"}>
+        <ButtonBase component={Link} to={"/products/" + product.productUUID}>
           <CardContent>
             <CardMedia
               component="img"
-              image={image}
-              alt={alt}
+              image={product.mainImage.path}
+              alt={product.name}
               sx={{ objectFit: "contain", height: 200, py: 1 }}
             />
-            <Typography variant="h5" component="div">
-              {name}
+            <Typography variant="h6" component="div">
+              {product.name}
             </Typography>
-            <Typography color="#01bfa6" py={0.5} variant="h5" component="div">
-              ฿{price}
+            <Typography color="#01bfa6" py={0.5} variant="h6" component="div">
+              ฿{product.minPrice}
             </Typography>
             <Stack
               direction="row"
@@ -53,15 +45,19 @@ export default function ItemCard({
                 alignItems: "center",
               }}
             >
-              <Typography sx={{ fontSize: 13 }}>ขายแล้ว {sold}</Typography>
+              <Typography sx={{ fontSize: 13 }}>
+                ขายแล้ว {product.saleCount}
+              </Typography>
               <Divider orientation="vertical" flexItem />
               <Rating
-                defaultValue={star}
+                defaultValue={product.reviewScore}
                 precision={0.5}
                 readOnly
                 sx={{ fontSize: 12 }}
               />
-              <Typography sx={{ fontSize: 12 }}>({review})</Typography>
+              <Typography sx={{ fontSize: 12 }}>
+                ({product.reviews.length})
+              </Typography>
             </Stack>
           </CardContent>
         </ButtonBase>

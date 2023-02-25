@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  TableRow,
-  TableCell,
-  Avatar,
-  Stack,
-  Box,
-  Typography,
-} from "@mui/material";
+import { TableRow, TableCell, Avatar, Stack, Typography } from "@mui/material";
 
 export default function HistoryTableBody() {
   return (

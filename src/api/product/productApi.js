@@ -1,44 +1,47 @@
-import { handleResponse, handleError } from "./apiUtils";
+import { handleError, handleResponse } from "../apiUtils";
 const baseUrl = "http://alphanah.com:8080/product";
 
-export function getProducts() {
-  return fetch(baseUrl).then(handleResponse).catch(handleError);
+export async function getProducts() {
+  return await fetch(baseUrl).then(handleResponse).catch(handleError);
 }
 
-export function getProductsByName(name) {
-  return fetch(baseUrl + `?name=${name}`)
+export async function getProductsByName(name) {
+  return await fetch(baseUrl + `?name=${name}`)
     .then(handleResponse)
     .catch(handleError);
 }
 
-export function getProductsByCategory(category) {
-  return fetch(baseUrl + `?category=${category}`)
+export async function getProductsByCategory(category) {
+  return await fetch(baseUrl + `?category=${category}`)
     .then(handleResponse)
     .catch(handleError);
 }
 
-export function getProductsByMerchant(merchant_uuid) {
-  return fetch(baseUrl + `?merchant=${merchant_uuid}`)
+export async function getProductsByMerchant(merchant_uuid) {
+  return await fetch(baseUrl + `?merchant=${merchant_uuid}`)
     .then(handleResponse)
     .catch(handleError);
 }
 
-export function getProductById(product_uuid) {
-  return fetch(baseUrl + `/${product_uuid}`)
+export async function getProductById(product_uuid) {
+  return await fetch(baseUrl + `/${product_uuid}`)
     .then(handleResponse)
     .catch(handleError);
 }
 
-export function saveProduct(product) {
-  return fetch(baseUrl + (`/${product.id}` || ""), {
-    method: product.id ? "PUT" : "POST",
-    body: JSON.stringify(product),
+export async function saveProduct(product) {
+  return await fetch(baseUrl + (`/${product.productUUID}` || ""), {
+    method: product.productUUID ? "PUT" : "POST",
+    body: JSON.stringify({
+      name: product.name,
+      description: product.description,
+    }),
   })
     .then(handleResponse)
     .catch(handleError);
 }
-export function deleteProduct(productId) {
-  return fetch(baseUrl + `/${productId}`, {
+export async function deleteProduct(productId) {
+  return await fetch(baseUrl + `/${productId}`, {
     method: "DELETE",
   })
     .then(handleResponse)

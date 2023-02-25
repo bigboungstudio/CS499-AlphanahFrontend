@@ -2,12 +2,18 @@ import React from "react";
 import { CardMedia } from "@mui/material";
 import Carousel from "react-material-ui-carousel";
 
-export default function ProductImage() {
+export default function ProductImage({ product }) {
   return (
     <Carousel
       IndicatorIcon={[
-        <img alt="item1" src="/diasword.png" height="30" />,
-        <img alt="item1" src="/dante.jpg" height="30" />,
+        <img
+          alt={product.mainImage.imageUUID}
+          src={product.mainImage.path}
+          height="30"
+        />,
+        product.images.map((item, i) => (
+          <img key={i} alt={item.imageUUID} src={item.path} height="30" />
+        )),
       ]}
       indicatorIconButtonProps={{
         style: {
@@ -27,19 +33,22 @@ export default function ProductImage() {
       <CardMedia
         sx={{ objectFit: "contain" }}
         component="img"
-        image="/diasword.png"
-        alt="item1"
+        image={product.mainImage.path}
+        alt={product.mainImage.imageUUID}
         height="300"
         width="350"
       />
-      <CardMedia
-        sx={{ objectFit: "contain" }}
-        component="img"
-        image="/dante.jpg"
-        alt="item1"
-        height="300"
-        width="350"
-      />
+      {product.images.map((item, i) => (
+        <CardMedia
+          sx={{ objectFit: "contain" }}
+          component="img"
+          image={item.path}
+          alt={item.imageUUID}
+          height="300"
+          width="350"
+          key={i}
+        />
+      ))}
     </Carousel>
   );
 }

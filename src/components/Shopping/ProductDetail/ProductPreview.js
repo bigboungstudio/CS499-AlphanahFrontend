@@ -7,14 +7,24 @@ import {
   Divider,
   IconButton,
   TextField,
+  ToggleButton,
+  ToggleButtonGroup,
 } from "@mui/material";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import ProductImage from "./ProductImage";
 import { Link } from "react-router-dom";
 
-export default function ProductPreview() {
+export default function ProductPreview({ product }) {
   const [quantity, setQuantity] = useState(1);
+  const [option, setOption] = useState(0);
+  const handleOption = (event, newOption) => {
+    if (newOption !== null) {
+      setOption(newOption);
+      setQuantity(1);
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -23,11 +33,11 @@ export default function ProductPreview() {
       }}
     >
       <Box px={6} py={9} width="30%">
-        <ProductImage />
+        <ProductImage product={product} />
       </Box>
       <Box flexDirection="column" padding={10}>
         <Typography variant="h4" component="div">
-          Diamond sword
+          {product.name}
         </Typography>
         <Typography
           paddingTop={5}
@@ -36,7 +46,7 @@ export default function ProductPreview() {
           component="div"
           color="primary"
         >
-          ฿99.99
+          ฿{product.options[option].price}
         </Typography>
         <Box
           sx={{
@@ -45,13 +55,34 @@ export default function ProductPreview() {
             alignItems: "center",
           }}
         >
-          <Rating defaultValue={2.5} precision={0.5} readOnly size="small" />
-          <Box sx={{ ml: 2 }}>(666)</Box>
+          <Rating
+            defaultValue={parseInt(product.reviewScore)}
+            precision={0.5}
+            readOnly
+            size="small"
+          />
+          <Box sx={{ ml: 2 }}>({product.reviews.length})</Box>
         </Box>
         <Divider />
+        {product.options.length === 1 ? (
+          <></>
+        ) : (
+          <ToggleButtonGroup
+            sx={{ mt: 2 }}
+            value={option}
+            onChange={handleOption}
+            exclusive
+          >
+            {product.options.map((item, i) => (
+              <ToggleButton key={i} value={i}>
+                {item.name}
+              </ToggleButton>
+            ))}
+          </ToggleButtonGroup>
+        )}
         <Box
           sx={{
-            pt: 5,
+            pt: 3,
             display: "flex",
             alignItems: "center",
           }}
@@ -81,6 +112,7 @@ export default function ProductPreview() {
             value={quantity}
           />
           <IconButton
+            disabled={quantity === parseInt(product.options[option].quantity)}
             sx={{
               borderRadius: 0,
               backgroundColor: "#f5f5f5",
@@ -92,7 +124,7 @@ export default function ProductPreview() {
             <AddIcon />
           </IconButton>
           <Typography ml={3} color="#ababab">
-            เหลือสินค้า 2 ชิ้น
+            เหลือสินค้า {product.options[option].quantity} ชิ้น
           </Typography>
         </Box>
         <Box

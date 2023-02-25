@@ -37,7 +37,7 @@ export default function Categories() {
         <Typography sx={{ fontSize: "24px" }}>หมวดหมู่</Typography>
         <Button
           component={Link}
-          to={"/shop"}
+          to={"/products"}
           variant="outlined"
           sx={{ fontSize: "16px" }}
         >

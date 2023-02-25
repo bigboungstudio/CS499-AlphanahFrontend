@@ -22,7 +22,7 @@ export default function CategoriesCard(props) {
         },
       }}
     >
-      <ButtonBase component={Link} to={"/shop"}>
+      <ButtonBase component={Link} to={"/products"}>
         <CardContent>
           <CardMedia
             component="img"

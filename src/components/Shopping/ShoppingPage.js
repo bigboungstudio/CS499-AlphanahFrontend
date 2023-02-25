@@ -8,8 +8,14 @@ import {
   Divider,
 } from "@mui/material";
 import ItemCard from "./ItemCard";
+import { useSelector, useDispatch } from "react-redux";
+import { loadProducts } from "../../redux/actions/productActions";
 
 export default function ShoppingPage() {
+  const products = useSelector((state) => state.products);
+  const dispatch = useDispatch();
+
+  dispatch(loadProducts());
   return (
     <>
       <Stack direction="row" spacing={2} height="100%">
@@ -38,7 +44,7 @@ export default function ShoppingPage() {
             justifyContent="space-between"
             paddingBottom={5}
           >
-            <Typography>เจอสินค้า 322 ชิ้น</Typography>
+            <Typography>เจอสินค้า {products.data.length} ชิ้น</Typography>
             <Stack alignItems="center" direction="row" spacing={2}>
               <Typography>เรียงโดย:</Typography>
               <TextField
@@ -57,33 +63,10 @@ export default function ShoppingPage() {
           </Stack>
           <Divider />
           <Grid container spacing={3} alignContent="space-evenly" pt={3}>
-            <ItemCard
-              image="/diasword.png"
-              alt="item1"
-              name="Diamond sword"
-              price="99.99"
-              star={2.5}
-              review={666}
-              sold={300}
-            />
-            <ItemCard
-              image="/gun2.jpg"
-              alt="item2"
-              name="Kitchen gun"
-              price="0.45"
-              star={4.5}
-              review={45}
-              sold={112}
-            />
-            <ItemCard
-              image="/light.png"
-              alt="item3"
-              name="Youngling slayer"
-              price="9000"
-              star={5}
-              review={2000}
-              sold={9000}
-            />
+            {products &&
+              products.data.map((item, i) => (
+                <ItemCard product={item} key={i} />
+              ))}
           </Grid>
         </Box>
       </Stack>

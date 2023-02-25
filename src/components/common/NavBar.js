@@ -14,8 +14,16 @@ import NavBarText from "./NavbarText";
 import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Link } from "react-router-dom";
+// import { getProducts } from "../api/product/productApi";
 
 export default function NavBar() {
+  // React.useEffect(() => {
+  //   const fetchData = async () => {
+  //     const data = await getProducts();
+  //     console.log(data);
+  //   };
+  //   fetchData();
+  // }, []);
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar

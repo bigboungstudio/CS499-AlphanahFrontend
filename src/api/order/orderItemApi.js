@@ -6,12 +6,13 @@ export function saveProductToCart(product_uuid, product_option_uuid, product) {
     baseUrl + `/cart/` + product_uuid + `/option/` + product_option_uuid,
     {
       method: product.quantity ? "PUT" : "POST",
-      body: JSON.stringify(product),
+      body: JSON.stringify({ quantity: product.quantity }),
     }
   )
     .then(handleResponse)
     .catch(handleError);
 }
+
 export function deleteProductInCart(product_uuid, product_option_uuid) {
   return fetch(
     baseUrl + `/cart/` + product_uuid + `/option/` + product_option_uuid,
