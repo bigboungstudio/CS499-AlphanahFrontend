@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Typography, Stack, Breadcrumbs } from "@mui/material";
 import ProductReview from "./Review/ProductReview";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -6,16 +6,22 @@ import ProductPreview from "./ProductDetail/ProductPreview";
 import ProductDetails from "./ProductDetail/ProductDetails";
 import { Link } from "react-router-dom";
 import ProductOwner from "./ProductDetail/ProductOwner";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
+import { loadProductById } from "../../redux/actions/productActions";
 
 export default function ProductPage() {
   const params = useParams().UUID;
   const products = useSelector((state) => state.products);
+  const buyer = useSelector((state) => state.auth.buyer);
+  const isAuthentication = buyer.isAuthentication;
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(loadProductById(params));
+  }, [dispatch, params]);
 
-  const product =
-    products.data.find((product) => product.productUUID === params) || null;
-
+  const product = products.oneProduct;
+  const categories = [...product.categories].sort((a, b) => a.level - b.level);
   return (
     <Box
       sx={{
@@ -30,23 +36,32 @@ export default function ProductPage() {
           <ArrowForwardIosIcon sx={{ color: "#ababab", fontSize: "16px" }} />
         }
       >
-        <Typography
-          component={Link}
-          to={"/products"}
-          color="primary"
-          sx={{ textDecoration: "none" }}
-        >
-          Weapons
-        </Typography>
+        {categories.map((item, i) => (
+          <Typography
+            component={Link}
+            to={"/products/categories/" + item.categoryUUID}
+            color="primary"
+            sx={{ textDecoration: "none" }}
+            key={i}
+          >
+            {item.name}
+          </Typography>
+        ))}
 
-        <Typography>Diamond sword</Typography>
+        <Typography>{product.name}</Typography>
       </Breadcrumbs>
-      {product != null ? (
+      {typeof product !== "undefined" ? (
         <Stack spacing={1}>
-          <ProductPreview product={product} />
+          <ProductPreview
+            product={product}
+            isAuthentication={isAuthentication}
+          />
           <ProductOwner product={product} />
           <ProductDetails product={product} />
-          <ProductReview product={product} />
+          <ProductReview
+            product={product}
+            isAuthentication={isAuthentication}
+          />
         </Stack>
       ) : (
         <></>

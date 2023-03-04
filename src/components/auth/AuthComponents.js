@@ -18,18 +18,31 @@ export function AuthButton({ label, component, to }) {
     </Button>
   );
 }
-export function TextFieldForm({ head, placeholder }) {
+export function TextFieldForm({
+  head,
+  placeholder,
+  name,
+  value,
+  type,
+  handleOnchange,
+  maxLength,
+}) {
   return (
     <Box>
       <Typography sx={{ fontSize: "16px", pb: 1 }}>{head}</Typography>
       <TextField
         placeholder={placeholder}
+        type={type}
+        name={name}
+        value={value}
+        onChange={handleOnchange}
         fullWidth
         inputProps={{
           sx: {
             height: "7px",
             fontSize: "14px",
           },
+          maxLength: { maxLength },
         }}
       />
     </Box>

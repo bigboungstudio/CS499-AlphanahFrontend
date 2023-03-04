@@ -8,15 +8,14 @@ import { loadProducts } from "../../redux/actions/productActions";
 import { loadCategories } from "../../redux/actions/categoryActions";
 
 export default function HomePage() {
-  const products = useSelector((state) => state.products);
-  const categories = useSelector((state) => state.categories);
   const dispatch = useDispatch();
+  const products = useSelector((state) => state.products.allProducts);
+  const categories = useSelector((state) => state.categories);
 
   React.useEffect(() => {
     dispatch(loadProducts());
     dispatch(loadCategories());
-  }, []);
-
+  }, [dispatch]);
   return (
     <>
       <ImageSlider />

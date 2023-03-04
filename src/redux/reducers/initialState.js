@@ -1,9 +1,20 @@
 const initialState = {
-  sessions: {
-    isAuthentication: false,
-    currentUser: {},
+  auth: {
+    buyer: {
+      isAuthentication: false,
+      currentUser: {},
+      token: {},
+    },
+    seller: {
+      isAuthentication: false,
+      currentUser: {},
+      token: {},
+    },
   },
-  products: {},
+  products: {
+    allProducts: {},
+    oneProduct: {},
+  },
   category: {},
 };
 export default initialState;

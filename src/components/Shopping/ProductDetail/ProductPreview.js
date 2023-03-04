@@ -14,14 +14,25 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import ProductImage from "./ProductImage";
 import { Link } from "react-router-dom";
+import FormatPrice from "../../common/FormatPrice";
 
-export default function ProductPreview({ product }) {
+export default function ProductPreview({ product, isAuthentication }) {
   const [quantity, setQuantity] = useState(1);
   const [option, setOption] = useState(0);
   const handleOption = (event, newOption) => {
     if (newOption !== null) {
       setOption(newOption);
       setQuantity(1);
+    }
+  };
+  const handleChange = (e) => {
+    const value = e.target.value.replace(/\D/g, "");
+    if (parseInt(value) > product.options[option].quantity) {
+      setQuantity(product.options[option].quantity);
+    } else if (parseInt(value) < 1) {
+      setQuantity(1);
+    } else {
+      setQuantity(value);
     }
   };
 
@@ -46,7 +57,7 @@ export default function ProductPreview({ product }) {
           component="div"
           color="primary"
         >
-          ฿{product.options[option].price}
+          {FormatPrice(product.options[option].price)}
         </Typography>
         <Box
           sx={{
@@ -110,9 +121,10 @@ export default function ProductPreview({ product }) {
               },
             }}
             value={quantity}
+            onChange={handleChange}
           />
           <IconButton
-            disabled={quantity === parseInt(product.options[option].quantity)}
+            disabled={quantity >= parseInt(product.options[option].quantity)}
             sx={{
               borderRadius: 0,
               backgroundColor: "#f5f5f5",
@@ -180,7 +192,7 @@ export default function ProductPreview({ product }) {
           variant="contained"
           size="large"
           component={Link}
-          to={"/cart"}
+          to={isAuthentication ? "/cart" : "/buyer/login"}
         >
           เพิ่มในรถเข็น
         </Button>

@@ -1,65 +1,69 @@
 import { handleResponse, handleError } from "./apiUtils";
+import axios from "axios";
 const baseUrl = "http://alphanah.com:8080/coupon";
 
-export function getCoupons() {
+export async function getCoupons() {
   return fetch(baseUrl).then(handleResponse).catch(handleError);
 }
 
-export function getCouponsByType(type) {
-  return fetch(baseUrl + `?type=${type}`)
+export async function getCouponsByType(type) {
+  return await axios
+    .get(baseUrl + `?type=${type}`)
     .then(handleResponse)
     .catch(handleError);
 }
 
-export function getCouponsByStarted(started) {
-  return fetch(baseUrl + `?started=${started}`)
+export async function getCouponsByStarted(started) {
+  return await axios
+    .get(baseUrl + `?started=${started}`)
     .then(handleResponse)
     .catch(handleError);
 }
-export function getCouponsByExpired(expired) {
-  return fetch(baseUrl + `?expired=${expired}`)
-    .then(handleResponse)
-    .catch(handleError);
-}
-
-export function getCouponsByRunOut(runout) {
-  return fetch(baseUrl + `?runout=${runout}`)
+export async function getCouponsByExpired(expired) {
+  return await axios
+    .get(baseUrl + `?expired=${expired}`)
     .then(handleResponse)
     .catch(handleError);
 }
 
-export function getCouponsByMerchant(merchant_uuid) {
-  return fetch(baseUrl + `?merchant=${merchant_uuid}`)
+export async function getCouponsByRunOut(runout) {
+  return await axios
+    .get(baseUrl + `?runout=${runout}`)
     .then(handleResponse)
     .catch(handleError);
 }
 
-export function getCouponByCode(coupon_code) {
-  return fetch(baseUrl + `/${coupon_code}`)
+export async function getCouponsByMerchant(merchant_uuid) {
+  return await axios
+    .get(baseUrl + `?merchant=${merchant_uuid}`)
     .then(handleResponse)
     .catch(handleError);
 }
 
-export function createCoupon(coupon) {
-  return fetch(baseUrl, {
-    method: "POST",
-    body: JSON.stringify({
+export async function getCouponByCode(coupon_code) {
+  return await axios
+    .get(baseUrl + `/${coupon_code}`)
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+export async function createCoupon(coupon) {
+  return await axios
+    .post(baseUrl, {
       code: coupon.code,
       type: coupon.type,
       value: coupon.value,
       startDate: coupon.startDate,
       endDate: coupon.endDate,
       maxUse: coupon.maxUse,
-    }),
-  })
+    })
     .then(handleResponse)
     .catch(handleError);
 }
 
-export function deleteCoupon(coupon_code) {
-  return fetch(baseUrl + `/${coupon_code}`, {
-    method: "DELETE",
-  })
+export async function deleteCoupon(coupon_code) {
+  return await axios
+    .delete(baseUrl + `/${coupon_code}`)
     .then(handleResponse)
     .catch(handleError);
 }

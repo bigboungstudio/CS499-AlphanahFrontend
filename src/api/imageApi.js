@@ -1,65 +1,68 @@
+import axios from "axios";
 import { handleResponse, handleError } from "./apiUtils";
 const baseUrl = "http://alphanah.com:8080/product/";
 
-export function createProductMainImage(product_uuid, image) {
+export async function createProductMainImage(product_uuid, image) {
   let formData = new FormData();
   formData.append("image", image.file);
-  return fetch(baseUrl + product_uuid + `/main_image`, {
-    method: "POST",
-    headers: { "content-type": "multipart/form-data" },
-    body: formData,
+  return await axios({
+    method: "post",
+    url: baseUrl + product_uuid + `/main_image`,
+    data: formData,
+    headers: { "Content-Type": "multipart/form-data" },
   })
     .then(handleResponse)
     .catch(handleError);
 }
-export function getProductImages(product_uuid) {
-  return fetch(baseUrl + product_uuid + `/image`)
+export async function getProductImages(product_uuid) {
+  return await axios
+    .get(baseUrl + product_uuid + `/image`)
     .then(handleResponse)
     .catch(handleError);
 }
-export function createProductImage(product_uuid, image) {
+export async function createProductImage(product_uuid, image) {
   let formData = new FormData();
   formData.append("image", image.file);
-  return fetch(baseUrl + product_uuid + `/image`, {
-    method: "POST",
-    headers: { "content-type": "multipart/form-data" },
-    body: formData,
+  return await axios({
+    method: "post",
+    url: baseUrl + product_uuid + `/image`,
+    data: formData,
+    headers: { "Content-Type": "multipart/form-data" },
   })
     .then(handleResponse)
     .catch(handleError);
 }
-export function deleteProductImage(product_uuid, image_uuid) {
-  return fetch(baseUrl + product_uuid + `/image/` + image_uuid, {
-    method: "DELETE",
-  })
+export async function deleteProductImage(product_uuid, image_uuid) {
+  return await axios
+    .delete(baseUrl + product_uuid + `/image/` + image_uuid)
     .then(handleResponse)
     .catch(handleError);
 }
-export function getReviewImages(product_uuid, review_uuid) {
-  return fetch(baseUrl + product_uuid + `/review/` + review_uuid + `/image`)
+export async function getReviewImages(product_uuid, review_uuid) {
+  return await axios
+    .get(baseUrl + product_uuid + `/review/` + review_uuid + `/image`)
     .then(handleResponse)
     .catch(handleError);
 }
 
-export function createReviewImage(product_uuid, review_uuid, image) {
+export async function createReviewImage(product_uuid, review_uuid, image) {
   let formData = new FormData();
   formData.append("image", image.file);
-  return fetch(baseUrl + product_uuid + `/review/` + review_uuid + `/image`, {
-    method: "POST",
-    headers: { "content-type": "multipart/form-data" },
-    body: formData,
+  return await axios({
+    method: "post",
+    url: baseUrl + product_uuid + `/review/` + review_uuid + `/image`,
+    data: formData,
+    headers: { "Content-Type": "multipart/form-data" },
   })
     .then(handleResponse)
     .catch(handleError);
 }
 
-export function deleteReviewImage(product_uuid, review_uuid, image_uuid) {
-  return fetch(
-    baseUrl + product_uuid + `/review/` + review_uuid + `/image/` + image_uuid,
-    {
-      method: "DELETE",
-    }
-  )
+export async function deleteReviewImage(product_uuid, review_uuid, image_uuid) {
+  return await axios
+    .delete(
+      baseUrl + product_uuid + `/review/` + review_uuid + `/image/` + image_uuid
+    )
     .then(handleResponse)
     .catch(handleError);
 }

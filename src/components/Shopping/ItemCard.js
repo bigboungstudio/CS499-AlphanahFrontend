@@ -11,6 +11,7 @@ import {
   Stack,
 } from "@mui/material";
 import { Link } from "react-router-dom";
+import FormatPrice from "../common/FormatPrice";
 
 export default function ItemCard({ product }) {
   return (
@@ -24,7 +25,10 @@ export default function ItemCard({ product }) {
           },
         }}
       >
-        <ButtonBase component={Link} to={"/products/" + product.productUUID}>
+        <ButtonBase
+          component={Link}
+          to={"/products/detail/" + product.productUUID}
+        >
           <CardContent>
             <CardMedia
               component="img"
@@ -36,7 +40,7 @@ export default function ItemCard({ product }) {
               {product.name}
             </Typography>
             <Typography color="#01bfa6" py={0.5} variant="h6" component="div">
-              ฿{product.minPrice}
+              {FormatPrice(product.minPrice)}
             </Typography>
             <Stack
               direction="row"

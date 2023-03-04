@@ -1,6 +1,8 @@
 export async function handleResponse(response) {
-  if (response.ok) return response.json();
-  if (response.status === 400) {
+  console.log(response);
+  if (response.request.status === 200) {
+    return response.data;
+  } else if (response.request.status !== 200) {
     // So, a server-side validation error occurred.
     // Server side validation returns a string error message, so parse as text instead of json.
     const error = await response.text();

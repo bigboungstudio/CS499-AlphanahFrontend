@@ -13,17 +13,20 @@ import {
 import NavBarText from "./NavbarText";
 import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import MenuIcon from "@mui/icons-material/Menu";
+import CategoriesDrawer from "./CategoriesDrawer";
 import { Link } from "react-router-dom";
-// import { getProducts } from "../api/product/productApi";
+import { useSelector } from "react-redux";
 
 export default function NavBar() {
-  // React.useEffect(() => {
-  //   const fetchData = async () => {
-  //     const data = await getProducts();
-  //     console.log(data);
-  //   };
-  //   fetchData();
-  // }, []);
+  const [open, setOpen] = React.useState(false);
+  const buyer = useSelector((state) => state.auth.buyer);
+  const isAuthentication = buyer.isAuthentication;
+
+  function toggleDrawer(newOpen) {
+    setOpen(newOpen);
+  }
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
@@ -45,12 +48,21 @@ export default function NavBar() {
             >
               <NavBarText text="ขายสินค้ากับ ALPHANAH"></NavBarText>
             </Button>
-            <Button component={Link} to={"/buyer/register"}>
-              <NavBarText text="สร้างบัญชี"></NavBarText>
-            </Button>
-            <Button component={Link} to={"/buyer/login"}>
-              <NavBarText text="เข้าสู่ระบบ"></NavBarText>
-            </Button>
+            {!isAuthentication && (
+              <>
+                <Button component={Link} to={"/buyer/register"}>
+                  <NavBarText text="สร้างบัญชี"></NavBarText>
+                </Button>
+                <Button component={Link} to={"/buyer/login"}>
+                  <NavBarText text="เข้าสู่ระบบ"></NavBarText>
+                </Button>
+              </>
+            )}
+            {isAuthentication && (
+              <Button component={Link} to={"/account"}>
+                <NavBarText text="จัดการบัญชี"></NavBarText>
+              </Button>
+            )}
           </Stack>
         </Box>
 
@@ -62,6 +74,10 @@ export default function NavBar() {
             justifyContent="center"
             alignItems="center"
           >
+            <IconButton onClick={() => toggleDrawer(true)}>
+              <MenuIcon sx={{ height: 30, width: 30 }} />
+            </IconButton>
+            <CategoriesDrawer open={open} toggleDrawer={toggleDrawer} />
             <Button component={Link} to={"/"}>
               <img height="50px" src="/a.png" alt="logo" />
               <Typography variant="h4" component="div" color="primary">
@@ -81,7 +97,11 @@ export default function NavBar() {
               }}
             />
             <Box>
-              <IconButton color="primary" component={Link} to={"/cart"}>
+              <IconButton
+                color="primary"
+                component={Link}
+                to={isAuthentication ? "/cart" : "/buyer/login"}
+              >
                 <ShoppingCartIcon sx={{ height: 40, width: 40 }} />
               </IconButton>
             </Box>

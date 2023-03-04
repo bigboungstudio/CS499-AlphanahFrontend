@@ -1,12 +1,14 @@
 import { handleResponse, handleError } from "./apiUtils";
+import axios from "axios";
 const baseUrl = "http://alphanah.com:8080/category";
 
-export function getCategories() {
-  return fetch(baseUrl).then(handleResponse).catch(handleError);
+export async function getCategories() {
+  return await axios.get(baseUrl).then(handleResponse).catch(handleError);
 }
 
-export function getCategoryById(category_uuid) {
-  return fetch(baseUrl + `/${category_uuid}`)
+export async function getCategoryById(category_uuid) {
+  return await axios
+    .get(baseUrl + `/${category_uuid}`)
     .then(handleResponse)
     .catch(handleError);
 }

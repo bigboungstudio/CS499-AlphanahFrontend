@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 export default function ReviewCard({ review }) {
   return (
-    <Box display="flex">
+    <Box pt={2} display="flex">
       <Avatar
         alt={review.creator.firstname}
         src={review.creator.image}
@@ -35,21 +35,25 @@ export default function ReviewCard({ review }) {
           size="small"
         />
         <Typography sx={{ fontSize: 16, pt: 1 }}>{review.message}</Typography>
-        <ImageList
-          sx={{
-            width: 200,
-            height: 100,
-            transform: "translateZ(0)",
-            flexWrap: "nowrap",
-          }}
-          rowHeight={100}
-        >
-          {review.images.map((item, i) => (
-            <ImageListItem key={i}>
-              <img src={item.path} alt={item.imageUUID} loading="lazy" />
-            </ImageListItem>
-          ))}
-        </ImageList>
+        {review.images.length !== 0 ? (
+          <ImageList
+            sx={{
+              width: 200,
+              height: 100,
+              transform: "translateZ(0)",
+              flexWrap: "nowrap",
+            }}
+            rowHeight={100}
+          >
+            {review.images.map((item, i) => (
+              <ImageListItem key={i}>
+                <img src={item.path} alt={item.imageUUID} loading="lazy" />
+              </ImageListItem>
+            ))}
+          </ImageList>
+        ) : (
+          <Box pb={1.5} />
+        )}
         <Divider sx={{ pb: 1 }} />
       </Box>
     </Box>

@@ -45,8 +45,16 @@ function App() {
             />
             <Route exact path="/account" element={<AccountPage />} />
             <Route exact path="/checkout" element={<CheckoutPage />} />
-            <Route exact path="/products" element={<ShoppingPage />} />
-            <Route exact path="/products/:UUID" element={<ProductPage />} />
+            <Route
+              exact
+              path="/products/categories/:UUID"
+              element={<ShoppingPage />}
+            />
+            <Route
+              exact
+              path="/products/detail/:UUID"
+              element={<ProductPage />}
+            />
           </Routes>
         </Box>
       </Box>

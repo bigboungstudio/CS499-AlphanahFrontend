@@ -25,13 +25,13 @@ export default function ProductOwner({ product }) {
         <Box display="flex" alignItems="center">
           <Typography pr={1}>รายการสินค้า: </Typography>
           <Typography color="primary" fontSize="20px">
-            100
+            {product.creator.productCount}
           </Typography>
         </Box>
         <Box display="flex" alignItems="center">
           <Typography pr={1}>คะแนนสินค้า: </Typography>
           <Typography color="primary" fontSize="20px">
-            2,000
+            {product.creator.reviewCount}
           </Typography>
         </Box>
       </Stack>

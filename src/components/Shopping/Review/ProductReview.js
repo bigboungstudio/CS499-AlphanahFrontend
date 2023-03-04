@@ -11,7 +11,7 @@ import ReviewCard from "./ReviewCard";
 import StarRatingBar from "./StarRatingBar";
 import WriteReviewPage from "./WriteReviewPage";
 
-export default function ProductReview({ product }) {
+export default function ProductReview({ product, isAuthentication }) {
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
     setOpen(true);
@@ -67,14 +67,16 @@ export default function ProductReview({ product }) {
       </Stack>
       <Divider />
       <Box>
-        <Button
-          onClick={handleClickOpen}
-          sx={{ mt: 5 }}
-          variant="contained"
-          size="large"
-        >
-          เขียนคำวิจารณ์
-        </Button>
+        {isAuthentication && (
+          <Button
+            onClick={handleClickOpen}
+            sx={{ mt: 5 }}
+            variant="contained"
+            size="large"
+          >
+            เขียนคำวิจารณ์
+          </Button>
+        )}
         <WriteReviewPage open={open} handleClose={handleClose} />
         <Box py={3}>
           {product.reviews.map((item, i) => (

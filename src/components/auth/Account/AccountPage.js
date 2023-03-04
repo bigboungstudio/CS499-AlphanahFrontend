@@ -1,17 +1,78 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Divider, Stack, Typography, Box } from "@mui/material";
-import { Link } from "react-router-dom";
 import HistoryPage from "./HistoryPage";
 import ProfilePage from "./ProfilePage";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  loadUserDetail,
+  logout,
+  updateUserDetail,
+  updateUserImage,
+} from "../../../redux/actions/authActions";
 
 export default function AccountPage() {
-  const [isProfile, setIsProfile] = React.useState(true);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const buyer = useSelector((state) => state.auth.buyer);
+  useEffect(() => {
+    const goHomePage = () => navigate("/");
+    !buyer.isAuthentication && goHomePage();
+  }, [buyer, navigate]);
+
+  useEffect(() => {
+    buyer.isAuthentication && dispatch(loadUserDetail("buyer", buyer.token));
+    typeof buyer.currentUser.accountUUID !== "undefined" &&
+      setFormValues({
+        firstname: buyer.currentUser.firstname,
+        lastname: buyer.currentUser.lastname,
+        address: buyer.currentUser.address ?? "",
+        phone: buyer.currentUser.phone ?? "",
+      });
+  }, [
+    buyer.token,
+    buyer.isAuthentication,
+    dispatch,
+    buyer.currentUser.accountUUID,
+    buyer.currentUser.firstname,
+    buyer.currentUser.lastname,
+    buyer.currentUser.address,
+    buyer.currentUser.phone,
+  ]);
+
+  const [isProfile, setIsProfile] = useState(true);
   const handleClick = (event) => {
     if (event.target.value === "true") {
       setIsProfile(true);
     } else {
       setIsProfile(false);
     }
+  };
+
+  const handleLogOut = () => {
+    dispatch(logout("buyer"));
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues({
+      ...formValues,
+      [name]: value,
+    });
+  };
+  const [formValues, setFormValues] = React.useState({
+    firstname: "",
+    lastname: "",
+    address: "",
+    phone: "",
+  });
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    dispatch(updateUserDetail(formValues, buyer.token));
+  };
+  const handleUpload = async (event) => {
+    event.preventDefault();
+    dispatch(updateUserImage(event.target.files[0], buyer.token));
   };
 
   return (
@@ -46,15 +107,24 @@ export default function AccountPage() {
           <Button
             color="secondary"
             sx={{ fontSize: "16px" }}
-            component={Link}
-            to={"/"}
+            onClick={handleLogOut}
           >
             ลงชื่อออก
           </Button>
         </Stack>
         <Divider orientation="vertical" flexItem />
         <Box sx={{ flex: "1 1 auto", overflowY: "auto" }}>
-          {isProfile ? <ProfilePage /> : <HistoryPage />}
+          {typeof buyer.currentUser.accountUUID !== "undefined" && isProfile ? (
+            <ProfilePage
+              buyer={buyer}
+              handleInputChange={handleInputChange}
+              handleSubmit={handleSubmit}
+              formValues={formValues}
+              handleUpload={handleUpload}
+            />
+          ) : (
+            <HistoryPage />
+          )}
         </Box>
       </Stack>
     </>
