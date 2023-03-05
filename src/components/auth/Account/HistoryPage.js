@@ -16,7 +16,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import HistoryTableBody from "./HistoryTableBody";
 import { Stack } from "@mui/system";
 
-export default function HistoryPage() {
+export default function HistoryPage({ history }) {
   function HistoryTableHeadCell({ text }) {
     return (
       <TableCell>

@@ -16,16 +16,26 @@ export async function RemoveCouponFromCart() {
     .catch(handleError);
 }
 
-export async function getCart() {
+export async function getCart(token) {
   return await axios
-    .get(baseUrl + `/cart`)
+    .get(baseUrl + `/cart`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token.tokenType} ${token.accessToken}`,
+      },
+    })
     .then(handleResponse)
     .catch(handleError);
 }
 
-export async function getPurchaseHistory() {
+export async function getPurchaseHistory(token) {
   return await axios
-    .get(baseUrl + `/purchase_order`)
+    .get(baseUrl + `/purchase_order`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token.tokenType} ${token.accessToken}`,
+      },
+    })
     .then(handleResponse)
     .catch(handleError);
 }

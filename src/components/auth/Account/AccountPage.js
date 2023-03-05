@@ -10,11 +10,13 @@ import {
   updateUserDetail,
   updateUserImage,
 } from "../../../redux/actions/authActions";
+import { loadPurchaseHistory } from "../../../redux/actions/orderActions";
 
 export default function AccountPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const buyer = useSelector((state) => state.auth.buyer);
+  const history = useSelector((state) => state.order.purchaseHistory.data);
   useEffect(() => {
     const goHomePage = () => navigate("/");
     !buyer.isAuthentication && goHomePage();
@@ -22,6 +24,7 @@ export default function AccountPage() {
 
   useEffect(() => {
     buyer.isAuthentication && dispatch(loadUserDetail("buyer", buyer.token));
+    buyer.isAuthentication && dispatch(loadPurchaseHistory(buyer.token));
     typeof buyer.currentUser.accountUUID !== "undefined" &&
       setFormValues({
         firstname: buyer.currentUser.firstname,
@@ -123,7 +126,7 @@ export default function AccountPage() {
               handleUpload={handleUpload}
             />
           ) : (
-            <HistoryPage />
+            typeof history !== "undefined" && <HistoryPage history={history} />
           )}
         </Box>
       </Stack>

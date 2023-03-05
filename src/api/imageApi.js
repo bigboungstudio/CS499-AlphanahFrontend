@@ -45,12 +45,13 @@ export async function getReviewImages(product_uuid, review_uuid) {
     .catch(handleError);
 }
 
-export async function createReviewImage(product_uuid, review_uuid, image) {
+export async function createReviewImage(image, review, token) {
   let formData = new FormData();
-  formData.append("image", image.file);
+  formData.append("image", image);
   return await axios({
     method: "post",
-    url: baseUrl + product_uuid + `/review/` + review_uuid + `/image`,
+    url:
+      baseUrl + review.productUUID + `/review/` + review.reviewUUID + `/image`,
     data: formData,
     headers: { "Content-Type": "multipart/form-data" },
   })

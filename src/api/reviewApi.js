@@ -16,23 +16,49 @@ export async function getReviewById(product_uuid, review_uuid) {
     .catch(handleError);
 }
 
-export async function saveReview(product_uuid, review) {
-  return review.reviewUUID
+export async function saveReview(isCreated, review, token) {
+  return isCreated
     ? await axios
-        .put(baseUrl + product_uuid + `/review/${review.reviewUUID}`, {
-          message: review.message,
-          rating: review.rating,
-        })
+        .put(
+          baseUrl + review.productUUID + `/review/${review.reviewUUID}`,
+          {
+            message: review.message,
+            rating: review.rating,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `${token.tokenType} ${token.accessToken}`,
+            },
+          }
+        )
         .then(handleResponse)
         .catch(handleError)
     : await axios
-        .post(baseUrl, { message: review.message, rating: review.rating })
+        .post(
+          baseUrl + review.productUUID + `/review`,
+          {
+            message: review.message,
+            rating: review.rating,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `${token.tokenType} ${token.accessToken}`,
+            },
+          }
+        )
         .then(handleResponse)
         .catch(handleError);
 }
-export async function deleteReview(product_uuid, review_uuid) {
+export async function deleteReview(review, token) {
   return await axios
-    .delete(baseUrl + product_uuid + `/review/` + review_uuid)
+    .delete(baseUrl + review.productUUID + `/review/` + review.reviewUUID, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token.tokenType} ${token.accessToken}`,
+      },
+    })
     .then(handleResponse)
     .catch(handleError);
 }

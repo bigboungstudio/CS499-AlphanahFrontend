@@ -16,5 +16,10 @@ const initialState = {
     oneProduct: {},
   },
   category: {},
+  order: {
+    purchaseHistory: {},
+    cart: {},
+    salesOrder: {},
+  },
 };
 export default initialState;

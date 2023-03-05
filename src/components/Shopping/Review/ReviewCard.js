@@ -8,8 +8,14 @@ import {
   Divider,
   ImageList,
   ImageListItem,
+  IconButton,
 } from "@mui/material";
-export default function ReviewCard({ review }) {
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useSelector } from "react-redux";
+
+export default function ReviewCard({ review, handleDeleteReview }) {
+  const buyer = useSelector((state) => state.auth.buyer);
+  const userId = buyer.currentUser.accountUUID;
   return (
     <Box pt={2} display="flex">
       <Avatar
@@ -23,13 +29,22 @@ export default function ReviewCard({ review }) {
       />
       <Box flexGrow={1}>
         <Stack direction="row" justifyContent="space-between">
-          <Typography sx={{ fontSize: 13 }}>
+          <Typography sx={{ fontSize: 14 }}>
             {review.creator.firstname} {review.creator.lastname}
           </Typography>
-          {/* <Typography sx={{ fontSize: 13 }}>1 วันก่อน</Typography> */}
+          {userId && userId === review.creator.accountUUID && (
+            <IconButton
+              sx={{ color: "#FB6376" }}
+              onClick={() =>
+                handleDeleteReview({ reviewUUID: review.reviewUUID })
+              }
+            >
+              <DeleteIcon sx={{ fontSize: 22 }} />
+            </IconButton>
+          )}
         </Stack>
         <Rating
-          defaultValue={parseInt(review.rating)}
+          value={parseInt(review.rating) ?? 5}
           precision={0.5}
           readOnly
           size="small"

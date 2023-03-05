@@ -8,7 +8,6 @@ import {
   Button,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function SellerProfilePage() {
   function EditForm({ value, head, placeholder }) {
@@ -43,29 +42,16 @@ export default function SellerProfilePage() {
               height: 140,
             }}
           />
-          <Stack spacing={2}>
-            <Button
-              variant="contained"
-              startIcon={<EditIcon />}
-              sx={{
-                height: 35,
-                fontSize: 16,
-              }}
-            >
-              เปลี่ยนรูป
-            </Button>
-            <Button
-              variant="outlined"
-              color="error"
-              startIcon={<DeleteIcon />}
-              sx={{
-                height: 35,
-                fontSize: 16,
-              }}
-            >
-              ลบรูป
-            </Button>
-          </Stack>
+          <Button
+            variant="contained"
+            startIcon={<EditIcon />}
+            sx={{
+              height: 35,
+              fontSize: 16,
+            }}
+          >
+            เปลี่ยนรูป
+          </Button>
         </Stack>
 
         <Stack spacing={3}>
@@ -121,11 +107,6 @@ export default function SellerProfilePage() {
               }}
             />
           </Box>
-          <EditForm head="รหัสผ่านใหม่" placeholder="ระบุรหัสผ่านใหม่" />
-          <EditForm
-            head="รหัสผ่านปัจจุบัน*"
-            placeholder="ระบุรหัสผ่านปัจจุบันเพื่อแก้ไข"
-          />
         </Stack>
         <Box spacing={2} mt={5}>
           <Button sx={{ height: 40, fontSize: 18, px: 2 }} variant="contained">

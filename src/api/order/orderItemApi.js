@@ -2,40 +2,71 @@ import { handleResponse, handleError } from "../apiUtils";
 import axios from "axios";
 const baseUrl = "http://alphanah.com:8080";
 
-export async function saveProductToCart(
-  product_uuid,
-  product_option_uuid,
-  product
-) {
-  return product.quantity
+export async function saveProductToCart(isAdded, product, token) {
+  return isAdded
     ? await axios
         .put(
-          baseUrl + `/cart/` + product_uuid + `/option/` + product_option_uuid,
-          { quantity: product.quantity }
+          baseUrl +
+            `/cart/` +
+            product.productUUID +
+            `/option/` +
+            product.optionUUID,
+          { quantity: product.quantity },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `${token.tokenType} ${token.accessToken}`,
+            },
+          }
         )
         .then(handleResponse)
         .catch(handleError)
     : await axios
         .post(
-          baseUrl + `/cart/` + product_uuid + `/option/` + product_option_uuid,
-          { quantity: product.quantity }
+          baseUrl +
+            `/cart/` +
+            product.productUUID +
+            `/option/` +
+            product.optionUUID,
+          { quantity: product.quantity },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `${token.tokenType} ${token.accessToken}`,
+            },
+          }
         )
         .then(handleResponse)
         .catch(handleError);
 }
 
-export async function deleteProductInCart(product_uuid, product_option_uuid) {
+export async function deleteProductInCart(product, token) {
   return await axios
     .delete(
-      baseUrl + `/cart/` + product_uuid + `/option/` + product_option_uuid
+      baseUrl +
+        `/cart/` +
+        product.productUUID +
+        `/option/` +
+        product.optionUUID,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token.tokenType} ${token.accessToken}`,
+        },
+      }
     )
     .then(handleResponse)
     .catch(handleError);
 }
 
-export async function getSalesOrder() {
+export async function getSalesOrder(token) {
   return await axios
-    .get(baseUrl + `/sale_order`)
+    .get(baseUrl + `/sale_order`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token.tokenType} ${token.accessToken}`,
+      },
+    })
     .then(handleResponse)
     .catch(handleError);
 }

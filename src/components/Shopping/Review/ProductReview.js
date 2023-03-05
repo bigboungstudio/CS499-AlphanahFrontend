@@ -10,8 +10,15 @@ import {
 import ReviewCard from "./ReviewCard";
 import StarRatingBar from "./StarRatingBar";
 import WriteReviewPage from "./WriteReviewPage";
+import { useSelector } from "react-redux";
 
-export default function ProductReview({ product, isAuthentication }) {
+export default function ProductReview({
+  isAuthentication,
+  handleCreateReview,
+  handleDeleteReview,
+  isReviewed,
+}) {
+  const product = useSelector((state) => state.products.oneProduct);
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
     setOpen(true);
@@ -19,7 +26,6 @@ export default function ProductReview({ product, isAuthentication }) {
   const handleClose = () => {
     setOpen(false);
   };
-
   return (
     <Box bgcolor="white" padding={5}>
       <Typography sx={{ fontSize: "24px" }}>คะแนนสินค้า</Typography>
@@ -67,7 +73,7 @@ export default function ProductReview({ product, isAuthentication }) {
       </Stack>
       <Divider />
       <Box>
-        {isAuthentication && (
+        {isAuthentication && !isReviewed && (
           <Button
             onClick={handleClickOpen}
             sx={{ mt: 5 }}
@@ -77,17 +83,30 @@ export default function ProductReview({ product, isAuthentication }) {
             เขียนคำวิจารณ์
           </Button>
         )}
-        <WriteReviewPage open={open} handleClose={handleClose} />
+        <WriteReviewPage
+          open={open}
+          handleClose={handleClose}
+          handleCreateReview={handleCreateReview}
+        />
         <Box py={3}>
           {product.reviews.map((item, i) => (
-            <ReviewCard review={item} key={i} />
+            <ReviewCard
+              review={item}
+              key={i}
+              handleDeleteReview={handleDeleteReview}
+            />
           ))}
         </Box>
       </Box>
-      <Stack direction="row" justifyContent="space-between">
-        <div></div>
-        <Pagination count={5} alignself="end" />
-      </Stack>
+      {product.reviews.length > 5 && (
+        <Stack direction="row" justifyContent="space-between">
+          <div></div>
+          <Pagination
+            count={Math.ceil(product.reviews.length / 5)}
+            alignself="end"
+          />
+        </Stack>
+      )}
     </Box>
   );
 }

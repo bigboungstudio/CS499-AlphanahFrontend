@@ -9,14 +9,17 @@ import {
   TextField,
   ToggleButton,
   ToggleButtonGroup,
+  Stack,
 } from "@mui/material";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import ProductImage from "./ProductImage";
-import { Link } from "react-router-dom";
 import FormatPrice from "../../common/FormatPrice";
+import { useSelector } from "react-redux";
 
-export default function ProductPreview({ product, isAuthentication }) {
+export default function ProductPreview({ isAuthentication, handleClick }) {
+  const product = useSelector((state) => state.products.oneProduct);
+  const cart = useSelector((state) => state.order.cart);
   const [quantity, setQuantity] = useState(1);
   const [option, setOption] = useState(0);
   const handleOption = (event, newOption) => {
@@ -35,7 +38,13 @@ export default function ProductPreview({ product, isAuthentication }) {
       setQuantity(value);
     }
   };
-
+  const isInCart = cart.cartItems.find(
+    (item) =>
+      item.product.productUUID === product.productUUID &&
+      item.option.optionUUID === product.options[option].optionUUID
+  );
+  const addDisable =
+    !isAuthentication || (isAuthentication && isInCart ? true : false);
   return (
     <Box
       sx={{
@@ -67,7 +76,7 @@ export default function ProductPreview({ product, isAuthentication }) {
           }}
         >
           <Rating
-            defaultValue={parseInt(product.reviewScore)}
+            value={parseInt(product.reviewScore) ?? 5}
             precision={0.5}
             readOnly
             size="small"
@@ -145,57 +154,27 @@ export default function ProductPreview({ product, isAuthentication }) {
             display: "flex",
             alignItems: "center",
           }}
-        >
-          {/* <TextField
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": {
-                  borderColor: "#faaf00",
-                },
-                "&:hover fieldset": {
-                  borderColor: "#faaf00",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#faaf00",
-                },
-              },
-            }}
-            InputProps={{
-              style: { height: "40px", fontSize: "16px" },
-              endAdornment: (
-                <InputAdornment position="end">
-                  <Button
-                    sx={{
-                      color: "#faaf00",
-                      "&:hover": {
-                        backgroundColor: "#fff7d1",
-                      },
-                    }}
-                    variant="text"
-                  >
-                    ใช้งาน
-                  </Button>
-                </InputAdornment>
-              ),
-              startAdornment: (
-                <InputAdornment position="start">
-                  <ConfirmationNumberIcon sx={{ color: "#faaf00" }} />
-                </InputAdornment>
-              ),
-            }}
-            placeholder="กรอกคูปอง"
-          /> */}
-        </Box>
-
-        <Button
-          sx={{ mt: 2 }}
-          variant="contained"
-          size="large"
-          component={Link}
-          to={isAuthentication ? "/cart" : "/buyer/login"}
-        >
-          เพิ่มในรถเข็น
-        </Button>
+        ></Box>
+        <Stack direction="row" alignItems="center" spacing={2} sx={{ mt: 2 }}>
+          <Button
+            disabled={addDisable}
+            variant="contained"
+            size="large"
+            onClick={() =>
+              handleClick({
+                productUUID: product.productUUID,
+                optionUUID: product.options[option].optionUUID,
+                quantity: quantity,
+              })
+            }
+          >
+            เพิ่มในรถเข็น
+          </Button>
+          {!isAuthentication && <Typography>กรุณาเข้าสู่ระบบก่อน</Typography>}
+          {isAuthentication && isInCart && (
+            <Typography>คุณมีสินค้านี้ในรถเข็นแล้ว</Typography>
+          )}
+        </Stack>
       </Box>
     </Box>
   );

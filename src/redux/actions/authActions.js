@@ -28,10 +28,10 @@ export function sellerRegisterSuccess() {
   return { type: types.SELLER_REGISTER_SUCCESS };
 }
 export function buyerLoginSuccess(token) {
-  return { type: types.BUYER_LOGIN_SUCCESS, token: token };
+  return { type: types.BUYER_LOGIN_SUCCESS, token };
 }
 export function sellerLoginSuccess(token) {
-  return { type: types.SELLER_LOGIN_SUCCESS, token: token };
+  return { type: types.SELLER_LOGIN_SUCCESS, token };
 }
 export function buyerLogoutSuccess() {
   return { type: types.BUYER_LOGOUT_SUCCESS };

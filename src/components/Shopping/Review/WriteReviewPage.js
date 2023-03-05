@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Typography,
   Rating,
@@ -18,9 +18,22 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import { useTheme } from "@mui/material/styles";
 
-export default function WriteReviewPage({ open, handleClose }) {
+export default function WriteReviewPage({
+  open,
+  handleClose,
+  handleCreateReview,
+}) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("xl"));
+  const [formValues, setFormValues] = useState({ rating: 0, message: "" });
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues({
+      ...formValues,
+      [name]: name === "rating" ? parseInt(value) : value,
+    });
+  };
+
   return (
     <Dialog
       maxWidth="xl"
@@ -53,23 +66,37 @@ export default function WriteReviewPage({ open, handleClose }) {
             </Typography>
             <Rating
               sx={{ pt: 1, fontSize: 50 }}
-              defaultValue={0}
+              value={formValues.rating}
+              name="rating"
               precision={1}
+              onChange={handleInputChange}
             />
             <Typography sx={{ fontSize: 16, fontWeight: "bold" }} pt={2}>
               ความคิดเห็น
             </Typography>
             <TextField
+              name="message"
               multiline={true}
               rows={6}
+              value={formValues.message}
               placeholder="เล่าประสบการณ์ที่ได้จากสินค้านี้"
               sx={{ width: 400, mt: 1 }}
+              inputProps={{
+                maxLength: 255,
+              }}
+              onChange={handleInputChange}
             />
             <Box py={3} display="flex">
               <Button
                 variant="contained"
                 sx={{ borderRadius: 5, mr: 2 }}
-                onClick={handleClose}
+                onClick={() => {
+                  if (formValues.rating !== 0 && formValues.message !== "") {
+                    handleCreateReview(formValues);
+                    setFormValues({ rating: 0, message: "" });
+                    handleClose();
+                  }
+                }}
               >
                 <Typography px={3} py={0.5}>
                   ส่ง

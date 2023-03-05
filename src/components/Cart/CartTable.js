@@ -14,17 +14,48 @@ import {
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
+import FormatPrice from "../common/FormatPrice";
 
-function Item(props) {
-  const [quantity, setQuantity] = useState(props.item.quantity);
+function Item({ item, handleRemoveItem, handleUpdateItem }) {
+  const [quantity, setQuantity] = useState(parseInt(item.quantity));
+  const handleChange = (e) => {
+    const value = e.target.value.replace(/\D/g, "");
+    if (parseInt(value) > item.option.quantity) {
+      handleUpdateItem({
+        quantity: item.option.quantity,
+        productUUID: item.product.productUUID,
+        optionUUID: item.option.optionUUID,
+        orderItemUUID: item.orderItemUUID,
+      });
+      setQuantity(item.option.quantity);
+    } else if (parseInt(value) < 1) {
+      handleUpdateItem({
+        quantity: "1",
+        productUUID: item.product.productUUID,
+        optionUUID: item.option.optionUUID,
+        orderItemUUID: item.orderItemUUID,
+      });
+      setQuantity(1);
+    } else if (value === "") {
+      setQuantity(value);
+    } else {
+      handleUpdateItem({
+        quantity: value,
+        productUUID: item.product.productUUID,
+        optionUUID: item.option.optionUUID,
+        orderItemUUID: item.orderItemUUID,
+      });
+      setQuantity(value);
+    }
+  };
   return (
     <TableBody>
       <TableRow>
         <TableCell>
           <Stack direction="row" pl={10} alignItems="center">
             <Avatar
-              alt={props.item.alt}
-              src={props.item.src}
+              alt={item.product.name}
+              src={item.product.mainImage.path}
               sx={{
                 width: 120,
                 height: 120,
@@ -34,10 +65,16 @@ function Item(props) {
 
             <Box>
               <Typography sx={{ fontWeight: "bold", fontSize: "22px" }}>
-                {props.item.name}
+                {item.product.name}
               </Typography>
+              <Typography sx={{ fontSize: "18px" }}>
+                ({item.option.name})
+              </Typography>
+
               <Typography sx={{ color: "#ababab" }}>
-                {props.item.seller}
+                {item.product.creator.firstname +
+                  " " +
+                  item.product.creator.lastname}
               </Typography>
             </Box>
           </Stack>
@@ -45,13 +82,19 @@ function Item(props) {
         <TableCell sx={{ fontWeight: "bold", fontSize: "20px" }}>
           <Stack direction="row" alignItems="center">
             <IconButton
-              disabled={quantity === 1}
+              disabled={parseInt(quantity) === 1}
               sx={{
                 borderRadius: 0,
                 backgroundColor: "#f5f5f5",
               }}
               onClick={() => {
-                setQuantity(quantity - 1);
+                handleUpdateItem({
+                  quantity: parseInt(quantity) - 1,
+                  productUUID: item.product.productUUID,
+                  optionUUID: item.option.optionUUID,
+                  orderItemUUID: item.orderItemUUID,
+                });
+                setQuantity(parseInt(quantity) - 1);
               }}
             >
               <RemoveIcon />
@@ -65,15 +108,23 @@ function Item(props) {
                   textAlign: "center",
                 },
               }}
+              onChange={handleChange}
               value={quantity}
             />
             <IconButton
+              disabled={parseInt(quantity) === parseInt(item.option.quantity)}
               sx={{
                 borderRadius: 0,
                 backgroundColor: "#f5f5f5",
               }}
               onClick={() => {
-                setQuantity(quantity + 1);
+                handleUpdateItem({
+                  quantity: parseInt(quantity) + 1,
+                  productUUID: item.product.productUUID,
+                  optionUUID: item.option.optionUUID,
+                  orderItemUUID: item.orderItemUUID,
+                });
+                setQuantity(parseInt(quantity) + 1);
               }}
             >
               <AddIcon />
@@ -81,21 +132,39 @@ function Item(props) {
           </Stack>
         </TableCell>
         <TableCell sx={{ fontWeight: "bold", fontSize: "20px" }}>
-          ฿{props.item.price}
+          {FormatPrice(item.option.price)}
         </TableCell>
         <TableCell>
-          <CloseIcon color="primary" sx={{ fontSize: 35 }} />
+          <IconButton
+            onClick={() =>
+              handleRemoveItem({
+                productUUID: item.product.productUUID,
+                optionUUID: item.option.optionUUID,
+              })
+            }
+          >
+            <CloseIcon color="primary" sx={{ fontSize: 35 }} />
+          </IconButton>
         </TableCell>
       </TableRow>
     </TableBody>
   );
 }
 
-export default function CartTable(props) {
+export default function CartTable({
+  items,
+  handleRemoveItem,
+  handleUpdateItem,
+}) {
   return (
     <Table>
-      {props.items.map((item, i) => (
-        <Item key={i} item={item} />
+      {items.map((item, i) => (
+        <Item
+          key={i}
+          item={item}
+          handleRemoveItem={handleRemoveItem}
+          handleUpdateItem={handleUpdateItem}
+        />
       ))}
     </Table>
   );
