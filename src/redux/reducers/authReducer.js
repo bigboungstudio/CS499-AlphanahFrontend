@@ -46,10 +46,13 @@ export default function authReducer(state = initialState.auth, action) {
         ...state,
         seller: { ...state.seller, currentUser: action.user },
       };
-    case types.UPDATE_USER_DETAIL_SUCCESS:
-      return state;
-    case types.UPDATE_USER_IMAGE_SUCCESS:
-      return state;
+    case types.UPDATE_BUYER_DETAIL_SUCCESS:
+      return { ...state, buyer: { ...state.buyer, currentUser: action.user } };
+    case types.UPDATE_SELLER_DETAIL_SUCCESS:
+      return {
+        ...state,
+        seller: { ...state.seller, currentUser: action.user },
+      };
     default:
       return state;
   }

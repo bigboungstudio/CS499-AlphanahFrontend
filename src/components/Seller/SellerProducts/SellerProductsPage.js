@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableRow,
@@ -24,10 +24,18 @@ import SearchIcon from "@mui/icons-material/Search";
 import { Link } from "react-router-dom";
 
 export default function SellerProductsPage() {
-  const [value, setValue] = React.useState("all");
+  const [value, setValue] = useState("all");
+  const [sortOption, setSortOption] = useState("ล่าสุด");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+  };
+  const handleChangeSort = (event) => {
+    setSortOption(event.target.value);
+    if (event.target.value === "ล่าสุด") {
+    } else if (event.target.value === "ราคาสูงสุด") {
+    } else if (event.target.value === "ราคาต่ำสุด") {
+    }
   };
 
   function ProductsTableHeadCell({ text }) {
@@ -180,7 +188,8 @@ export default function SellerProductsPage() {
           <TextField
             size="small"
             select
-            defaultValue="เลือก"
+            value={sortOption}
+            onChange={handleChangeSort}
             sx={{ minWidth: "120px" }}
             inputProps={{
               sx: {
@@ -188,7 +197,17 @@ export default function SellerProductsPage() {
                 fontSize: "14px",
               },
             }}
-          />
+          >
+            <MenuItem key="ล่าสุด" value="ล่าสุด">
+              ล่าสุด
+            </MenuItem>
+            <MenuItem key="ราคาสูงสุด" value="ราคาสูงสุด">
+              ราคาสูงสุด
+            </MenuItem>
+            <MenuItem key="ราคาต่ำสุด" value="ราคาต่ำสุด">
+              ราคาต่ำสุด
+            </MenuItem>
+          </TextField>
         </Stack>
         <Table>
           <TableHead>

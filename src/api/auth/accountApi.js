@@ -14,9 +14,9 @@ export async function getCurrentAccount(token) {
     .catch(handleError);
 }
 
-export async function getAccountById(account_uuid) {
+export async function getAccountById(accountUUID) {
   return await axios
-    .get(baseUrl + `/${account_uuid}`)
+    .get(baseUrl + `/${accountUUID}`)
     .then(handleResponse)
     .catch(handleError);
 }

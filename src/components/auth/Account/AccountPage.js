@@ -16,7 +16,7 @@ export default function AccountPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const buyer = useSelector((state) => state.auth.buyer);
-  const history = useSelector((state) => state.order.purchaseHistory.data);
+  const history = useSelector((state) => state.order.purchaseHistory);
   useEffect(() => {
     const goHomePage = () => navigate("/");
     !buyer.isAuthentication && goHomePage();
@@ -71,11 +71,13 @@ export default function AccountPage() {
   });
   const handleSubmit = async (event) => {
     event.preventDefault();
-    dispatch(updateUserDetail(formValues, buyer.token));
+    dispatch(updateUserDetail("buyer", formValues, buyer.token));
   };
   const handleUpload = async (event) => {
-    event.preventDefault();
-    dispatch(updateUserImage(event.target.files[0], buyer.token));
+    if (event.target.files.length !== 0) {
+      event.preventDefault();
+      dispatch(updateUserImage("buyer", event.target.files[0], buyer.token));
+    }
   };
 
   return (
@@ -126,7 +128,9 @@ export default function AccountPage() {
               handleUpload={handleUpload}
             />
           ) : (
-            typeof history !== "undefined" && <HistoryPage history={history} />
+            typeof history !== "undefined" && (
+              <HistoryPage history={history.data} />
+            )
           )}
         </Box>
       </Stack>

@@ -21,6 +21,7 @@ import { useSelector } from "react-redux";
 export default function NavBar() {
   const [open, setOpen] = React.useState(false);
   const buyer = useSelector((state) => state.auth.buyer);
+  const seller = useSelector((state) => state.auth.seller);
   const isAuthentication = buyer.isAuthentication;
 
   function toggleDrawer(newOpen) {
@@ -42,7 +43,7 @@ export default function NavBar() {
           >
             <Button
               component={Link}
-              to={"/seller/register"}
+              to={seller.isAuthentication ? "/seller/home" : "/seller/register"}
               rel="noopener noreferrer"
               target="_blank"
             >

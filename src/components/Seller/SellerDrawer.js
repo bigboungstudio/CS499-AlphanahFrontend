@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Drawer,
   Divider,
@@ -17,9 +17,22 @@ import EventNoteIcon from "@mui/icons-material/EventNote";
 import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../../redux/actions/authActions";
 const drawerWidth = 250;
 
 export default function SellerDrawer({ location }) {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const seller = useSelector((state) => state.auth.seller);
+  useEffect(() => {
+    const goSellerLoginPage = () => navigate("/seller/login");
+    !seller.isAuthentication && goSellerLoginPage();
+  }, [seller, navigate]);
+  const handleLogOut = () => {
+    dispatch(logout("seller"));
+  };
   const DrawerList = [
     {
       text: "จัดการสินค้า",
@@ -92,7 +105,7 @@ export default function SellerDrawer({ location }) {
       <Divider />
       <List>
         <ListItem key="ลงชื่อออก" disablePadding>
-          <ListItemButton component={Link} to={"/seller/login"}>
+          <ListItemButton onClick={handleLogOut}>
             <ListItemIcon>
               <MeetingRoomIcon />
             </ListItemIcon>

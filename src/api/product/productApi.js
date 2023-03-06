@@ -20,9 +20,9 @@ export async function getProductsByCategory(category) {
     .catch(handleError);
 }
 
-export async function getProductsByMerchant(merchant_uuid) {
+export async function getProductsByMerchant(accountUUID) {
   return await axios
-    .get(baseUrl + `?merchant=${merchant_uuid}`)
+    .get(baseUrl + `?merchant=${accountUUID}`)
     .then(handleResponse)
     .catch(handleError);
 }

@@ -20,6 +20,7 @@ import SellerOrdersPage from "./components/Seller/SellerOrders/SellerOrdersPage"
 import SellerProfilePage from "./components/Seller/SellerProfilePage";
 import SellerCouponsPage from "./components/Seller/SellerCoupons/SellerCouponsPage";
 import SellerAddCouponPage from "./components/Seller/SellerCoupons/SellerAddCouponPage";
+import MerchantPage from "./components/Shopping/MerchantPage";
 
 import { Box } from "@mui/material";
 
@@ -55,6 +56,7 @@ function App() {
               path="/products/detail/:UUID"
               element={<ProductPage />}
             />
+            <Route exact path="/merchant/:UUID" element={<MerchantPage />} />
           </Routes>
         </Box>
       </Box>

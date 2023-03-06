@@ -11,14 +11,14 @@ export function loadUserDetailSuccess(userType, user) {
     user,
   };
 }
-export function updateUserDetailSuccess() {
+
+export function updateUserDetailSuccess(userType, user) {
   return {
-    type: types.UPDATE_USER_DETAIL_SUCCESS,
-  };
-}
-export function updateUserImageSuccess() {
-  return {
-    type: types.UPDATE_USER_IMAGE_SUCCESS,
+    type:
+      userType === "buyer"
+        ? types.UPDATE_BUYER_DETAIL_SUCCESS
+        : types.UPDATE_SELLER_DETAIL_SUCCESS,
+    user,
   };
 }
 export function buyerRegisterSuccess() {
@@ -54,10 +54,10 @@ export function loadUserDetail(userType, token) {
   };
 }
 
-export function updateUserDetail(user, token) {
+export function updateUserDetail(userType, user, token) {
   return async function (dispatch) {
     function onSuccess(success) {
-      dispatch(updateUserDetailSuccess());
+      dispatch(updateUserDetailSuccess(userType, success));
     }
     try {
       const success = await accountApi.updateCurrentAccount(user, token);
@@ -68,10 +68,10 @@ export function updateUserDetail(user, token) {
   };
 }
 
-export function updateUserImage(file, token) {
+export function updateUserImage(userType, file, token) {
   return async function (dispatch) {
     function onSuccess(success) {
-      dispatch(updateUserImageSuccess());
+      dispatch(updateUserDetailSuccess(userType, success));
     }
     try {
       const success = await accountApi.updateCurrentAccountImage(file, token);
@@ -99,7 +99,9 @@ export function buyerRegister(customer) {
 export function buyerLogin(customer) {
   return async function (dispatch) {
     function onSuccess(success) {
-      dispatch(buyerLoginSuccess(success));
+      if (success.account.role !== "MERCHANT") {
+        dispatch(buyerLoginSuccess(success));
+      }
     }
     try {
       const success = await authenticationApi.Login(customer);
@@ -127,7 +129,9 @@ export function sellerRegister(merchant) {
 export function sellerLogin(merchant) {
   return async function (dispatch) {
     function onSuccess(success) {
-      dispatch(sellerLoginSuccess(success));
+      if (success.account.role === "MERCHANT") {
+        dispatch(sellerLoginSuccess(success));
+      }
     }
     try {
       const success = await authenticationApi.Login(merchant);

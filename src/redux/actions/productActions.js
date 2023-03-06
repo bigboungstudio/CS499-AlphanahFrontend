@@ -1,6 +1,7 @@
 import * as types from "./actionTypes";
 import * as productApi from "../../api/product/productApi";
 import * as reviewApi from "../../api/reviewApi";
+import * as accountApi from "../../api/auth/accountApi";
 import * as imageApi from "../../api/imageApi";
 
 export function loadProductsSuccess(products) {
@@ -9,6 +10,14 @@ export function loadProductsSuccess(products) {
 
 export function loadOneProductSuccess(product) {
   return { type: types.LOAD_PRODUCT_DETAIL_SUCCESS, product };
+}
+
+export function loadMerchantProductsSuccess(products) {
+  return { type: types.LOAD_MERCHANT_PRODUCTS_SUCCESS, products };
+}
+
+export function loadMerchantDetailSuccess(user) {
+  return { type: types.LOAD_MERCHANT_DETAIL_SUCCESS, user };
 }
 
 export function createReviewSuccess() {
@@ -40,6 +49,34 @@ export function loadProductById(productUUID) {
     }
     try {
       const success = await productApi.getProductById(productUUID);
+      return onSuccess(success);
+    } catch (error) {
+      throw error;
+    }
+  };
+}
+
+export function loadProductByMerchant(accountUUID) {
+  return async function (dispatch) {
+    function onSuccess(success) {
+      dispatch(loadMerchantProductsSuccess(success));
+    }
+    try {
+      const success = await productApi.getProductsByMerchant(accountUUID);
+      return onSuccess(success);
+    } catch (error) {
+      throw error;
+    }
+  };
+}
+
+export function loadMerchantDetail(accountUUID) {
+  return async function (dispatch) {
+    function onSuccess(success) {
+      dispatch(loadMerchantDetailSuccess(success));
+    }
+    try {
+      const success = await accountApi.getAccountById(accountUUID);
       return onSuccess(success);
     } catch (error) {
       throw error;

@@ -1,5 +1,9 @@
 import { Box, Avatar, Typography, Button, Stack, Divider } from "@mui/material";
 import React from "react";
+import { Link } from "react-router-dom";
+import StorefrontIcon from "@mui/icons-material/Storefront";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
+
 export default function ProductOwner({ product }) {
   return (
     <Stack bgcolor="white" direction="row" padding={5} spacing={4}>
@@ -18,22 +22,32 @@ export default function ProductOwner({ product }) {
         <Typography
           mb={1}
         >{`${product.creator.firstname} ${product.creator.lastname}`}</Typography>
-        <Button variant="outlined">ดูร้านค้า</Button>
+        <Button
+          variant="outlined"
+          component={Link}
+          to={`/merchant/${product.creator.accountUUID}`}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          ดูร้านค้า
+        </Button>
       </Box>
       <Divider orientation="vertical" flexItem />
       <Stack spacing={2}>
-        <Box display="flex" alignItems="center">
-          <Typography pr={1}>รายการสินค้า: </Typography>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <StorefrontIcon />
+          <Typography>รายการสินค้า: </Typography>
           <Typography color="primary" fontSize="20px">
             {product.creator.productCount}
           </Typography>
-        </Box>
-        <Box display="flex" alignItems="center">
-          <Typography pr={1}>คะแนนสินค้า: </Typography>
+        </Stack>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <StarBorderIcon />
+          <Typography>คะแนนสินค้า: </Typography>
           <Typography color="primary" fontSize="20px">
             {product.creator.reviewCount}
           </Typography>
-        </Box>
+        </Stack>
       </Stack>
     </Stack>
   );

@@ -7,6 +7,10 @@ export default function productReducer(state = initialState.products, action) {
       return { ...state, allProducts: action.products };
     case types.LOAD_PRODUCT_DETAIL_SUCCESS:
       return { ...state, oneProduct: action.product };
+    case types.LOAD_MERCHANT_PRODUCTS_SUCCESS:
+      return { ...state, merchantProducts: action.products };
+    case types.LOAD_MERCHANT_DETAIL_SUCCESS:
+      return { ...state, merchantDetail: action.user };
     case types.CREATE_REVIEW_SUCCESS:
       return state;
     case types.DELETE_REVIEW_SUCCESS:

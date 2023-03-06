@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import { TextFieldForm } from "../AuthComponents";
-import { buyerRegister, buyerLogin } from "../../../redux/actions/authActions";
+import { buyerRegister } from "../../../redux/actions/authActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -31,11 +31,12 @@ export default function BuyerRegisterPage() {
   const [formValues, setFormValues] = useState(initialValues);
   const handleSubmit = (event) => {
     event.preventDefault();
-    dispatch(buyerRegister(formValues)).then(
-      dispatch(
-        buyerLogin({ email: formValues.email, password: formValues.password })
-      ).then(setFormValues(initialValues))
-    );
+    dispatch(buyerRegister(formValues));
+    // .then(
+    //   dispatch(
+    //     buyerLogin({ email: formValues.email, password: formValues.password })
+    //   ).then(setFormValues(initialValues))
+    // );
   };
 
   return (

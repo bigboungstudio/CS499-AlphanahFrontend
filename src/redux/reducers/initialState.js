@@ -14,6 +14,8 @@ const initialState = {
   products: {
     allProducts: {},
     oneProduct: {},
+    merchantProducts: {},
+    merchantDetail: {},
   },
   category: {},
   order: {
