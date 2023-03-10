@@ -9,19 +9,19 @@ export function loadCartSuccess(cart) {
   };
 }
 
-export function saveCartProductSuccess(isAdded, product) {
+export function saveCartProductSuccess(isAdded, cart) {
   return {
     type: isAdded
       ? types.UPDATE_CART_PRODUCT_SUCCESS
       : types.ADD_CART_PRODUCT_SUCCESS,
-    product,
+    cart,
   };
 }
 
-export function deleteCartProductSuccess(product) {
+export function deleteCartProductSuccess(cart) {
   return {
     type: types.DELETE_CART_PRODUCT_SUCCESS,
-    product,
+    cart,
   };
 }
 
@@ -56,7 +56,7 @@ export function loadCart(token) {
 export function saveCartProduct(isAdded, product, token) {
   return async function (dispatch) {
     function onSuccess(success) {
-      dispatch(saveCartProductSuccess(isAdded, product));
+      dispatch(saveCartProductSuccess(isAdded, success));
     }
     try {
       const success = await orderItemApi.saveProductToCart(
@@ -74,7 +74,7 @@ export function saveCartProduct(isAdded, product, token) {
 export function deleteCartProduct(product, token) {
   return async function (dispatch) {
     function onSuccess(success) {
-      dispatch(deleteCartProductSuccess(product));
+      dispatch(deleteCartProductSuccess(success));
     }
     try {
       const success = await orderItemApi.deleteProductInCart(product, token);

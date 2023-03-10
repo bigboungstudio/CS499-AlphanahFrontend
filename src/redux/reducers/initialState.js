@@ -23,5 +23,6 @@ const initialState = {
     cart: {},
     salesOrder: {},
   },
+  coupons: {},
 };
 export default initialState;

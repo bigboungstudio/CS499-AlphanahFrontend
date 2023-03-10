@@ -6,30 +6,16 @@ export default function orderReducer(state = initialState.order, action) {
     case types.LOAD_CART_SUCCESS:
       return { ...state, cart: action.cart };
     case types.ADD_CART_PRODUCT_SUCCESS:
-      return state;
+      return action.cart;
     case types.UPDATE_CART_PRODUCT_SUCCESS:
       return {
         ...state,
-        cart: {
-          ...state.cart,
-          cartItems: state.cart.cartItems.map((item) =>
-            item.orderItemUUID === action.product.orderItemUUID
-              ? { ...item, quantity: action.product.quantity }
-              : item
-          ),
-        },
+        cart: action.cart,
       };
     case types.DELETE_CART_PRODUCT_SUCCESS:
       return {
         ...state,
-        cart: {
-          ...state.cart,
-          cartItems: state.cart.cartItems.filter(
-            (item) =>
-              action.product.productUUID !== item.product.productUUID &&
-              action.product.optionUUID !== item.option.optionUUID
-          ),
-        },
+        cart: action.cart,
       };
     case types.LOAD_PURCHASE_HISTORY_SUCCESS:
       return { ...state, purchaseHistory: action.purchaseHistory };

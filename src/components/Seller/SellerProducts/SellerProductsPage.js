@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Table,
   TableRow,
@@ -15,26 +15,75 @@ import {
   InputAdornment,
   Tabs,
   Tab,
-  Avatar,
   Menu,
   Pagination,
+  CardMedia,
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import SearchIcon from "@mui/icons-material/Search";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { loadUserDetail } from "../../../redux/actions/authActions";
+import {
+  deleteProduct,
+  loadProductByMerchant,
+} from "../../../redux/actions/productActions";
+import FormatPrice from "../../common/FormatPrice";
+import { format } from "date-fns";
 
 export default function SellerProductsPage() {
+  const dispatch = useDispatch();
+  const seller = useSelector((state) => state.auth.seller);
+  const products = useSelector((state) => state.products.merchantProducts.data);
+  const [sortedProducts, setSortedProducts] = useState(
+    [...products].sort((a, b) => Date(b.createDate) - Date(a.createDate)) ?? []
+  );
+  useEffect(() => {
+    seller.isAuthentication && dispatch(loadUserDetail("seller", seller.token));
+    seller.currentUser.accountUUID &&
+      dispatch(loadProductByMerchant(seller.currentUser.accountUUID));
+  }, [
+    dispatch,
+    seller.currentUser.accountUUID,
+    seller.isAuthentication,
+    seller.token,
+  ]);
+  useEffect(() => {
+    products &&
+      setSortedProducts(
+        [...products].sort((a, b) => {
+          return (
+            new Date(b.createDate).getTime() - new Date(a.createDate).getTime()
+          );
+        })
+      );
+  }, [products]);
   const [value, setValue] = useState("all");
   const [sortOption, setSortOption] = useState("ล่าสุด");
-
+  const outOfStockProducts = [
+    ...products.filter((product) => product.outOfStock > 0),
+  ];
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
   const handleChangeSort = (event) => {
     setSortOption(event.target.value);
     if (event.target.value === "ล่าสุด") {
+      setSortedProducts(
+        [...sortedProducts].sort((a, b) => {
+          return (
+            new Date(b.createDate).getTime() - new Date(a.createDate).getTime()
+          );
+        })
+      );
     } else if (event.target.value === "ราคาสูงสุด") {
+      setSortedProducts(
+        [...sortedProducts].sort((a, b) => b.minPrice - a.minPrice)
+      );
     } else if (event.target.value === "ราคาต่ำสุด") {
+      setSortedProducts(
+        [...sortedProducts].sort((a, b) => a.minPrice - b.minPrice)
+      );
     }
   };
 
@@ -50,7 +99,7 @@ export default function SellerProductsPage() {
     );
   }
 
-  function ProductsTableBody() {
+  function ProductsTableBody({ product }) {
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const open = Boolean(anchorEl);
@@ -60,33 +109,97 @@ export default function SellerProductsPage() {
     const handleClose = () => {
       setAnchorEl(null);
     };
+    const handleDelete = () => {
+      setAnchorEl(null);
+      dispatch(deleteProduct(product.productUUID, seller.token));
+    };
+    var date = new Date(product.createDate);
     return (
       <TableRow>
-        <TableCell align="center">
+        <TableCell align="center" sx={{ width: 120 }}>
           <Stack direction="row" pl={5} alignItems="center">
-            <Avatar
-              alt="yamato"
-              src="/yamato.png"
-              sx={{
-                width: 80,
-                height: 80,
-                pr: 8,
-              }}
+            <CardMedia
+              component="img"
+              src={product.mainImage.path}
+              alt={product.name}
+              sx={{ objectFit: "contain", width: 100, height: 100 }}
             />
-            <Typography sx={{ fontSize: "22px" }}>Yamato sword</Typography>
           </Stack>
         </TableCell>
-        <TableCell align="center" sx={{ fontSize: "20px" }}>
-          100
+        <TableCell align="center">
+          {product.options.length > 1 ? (
+            <Stack sx={{ ml: 1 }} spacing={1}>
+              {product.options.map((option, index) => (
+                <Stack
+                  key={index}
+                  direction="row"
+                  spacing={1}
+                  justifyContent="center"
+                >
+                  <Typography sx={{ fontSize: "20px" }}>
+                    {product.name}
+                  </Typography>
+                  <Typography sx={{ fontSize: "20px", color: "#ababab" }}>
+                    ({option.name})
+                  </Typography>
+                </Stack>
+              ))}
+            </Stack>
+          ) : (
+            <Typography sx={{ fontSize: "20px", ml: 1 }}>
+              {product.name}
+            </Typography>
+          )}
         </TableCell>
-        <TableCell align="center" sx={{ fontSize: "20px", color: "#01bfa6" }}>
-          ฿96.00
+        <TableCell align="center">
+          {product.options.length > 1 ? (
+            <Stack spacing={1}>
+              {product.options.map((option, index) => (
+                <Typography
+                  key={index}
+                  sx={{ fontSize: "20px", color: "#01bfa6" }}
+                >
+                  {FormatPrice(option.price)}
+                </Typography>
+              ))}
+            </Stack>
+          ) : (
+            <Typography sx={{ fontSize: "20px", color: "#01bfa6" }}>
+              {FormatPrice(product.options[0].price)}
+            </Typography>
+          )}
+        </TableCell>
+        <TableCell align="center">
+          {product.options.length > 1 ? (
+            <Stack spacing={1}>
+              {product.options.map((option, index) => (
+                <Typography
+                  key={index}
+                  sx={{
+                    fontSize: "20px",
+                    color: parseInt(option.quantity) === 0 && "red",
+                  }}
+                >
+                  {option.quantity}
+                </Typography>
+              ))}
+            </Stack>
+          ) : (
+            <Typography
+              sx={{
+                fontSize: "20px",
+                color: parseInt(product.options[0].quantity) === 0 && "red",
+              }}
+            >
+              {product.options[0].quantity}
+            </Typography>
+          )}
         </TableCell>
         <TableCell align="center" sx={{ fontSize: "20px" }}>
-          0
+          {product.saleCount}
         </TableCell>
         <TableCell align="center" sx={{ fontSize: "20px" }}>
-          10/02/2566
+          {format(date, "dd/MM/yyyy hh:mm")}
         </TableCell>
         <TableCell>
           <Stack>
@@ -99,15 +212,26 @@ export default function SellerProductsPage() {
                 anchorEl={anchorEl}
                 open={open}
                 onClose={handleClose}
-                getContentAnchorEl={null}
+                getcontentanchorel={null}
                 anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
                 transformOrigin={{ vertical: "top", horizontal: "center" }}
               >
-                <MenuItem component={Link} to={"/seller/products/edit"}>
+                <MenuItem
+                  component={Link}
+                  to={"/seller/products/edit/" + product.productUUID}
+                >
                   แก้ไขสินค้า
                 </MenuItem>
-                <MenuItem onClick={handleClose}>ดูหน้าร้านค้า</MenuItem>
-                <MenuItem onClick={handleClose}>ลบสินค้า</MenuItem>
+                <MenuItem
+                  component={Link}
+                  to={"/products/detail/" + product.productUUID}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  onClick={handleClose}
+                >
+                  ดูหน้าร้านค้า
+                </MenuItem>
+                <MenuItem onClick={handleDelete}>ลบสินค้า</MenuItem>
               </Menu>
             </Box>
           </Stack>
@@ -179,8 +303,8 @@ export default function SellerProductsPage() {
           textColor="primary"
           indicatorColor="primary"
         >
-          <Tab value="all" label="ทั้งหมด (10)" />
-          <Tab value="out" label="หมดสต็อก (2)" />
+          <Tab value="all" label={`ทั้งหมด (${products.length})`} />
+          <Tab value="out" label={`หมดสต็อก (${outOfStockProducts.length})`} />
         </Tabs>
 
         <Stack alignItems="center" direction="row" py={2} justifyContent="end">
@@ -212,23 +336,36 @@ export default function SellerProductsPage() {
         <Table>
           <TableHead>
             <TableRow>
+              <TableCell sx={{ width: 120 }} />
               <ProductsTableHeadCell text="สินค้า" />
-              <ProductsTableHeadCell text="ขายไปแล้ว" />
               <ProductsTableHeadCell text="ราคา" />
               <ProductsTableHeadCell text="เหลือสินค้า" />
+              <ProductsTableHeadCell text="ขายไปแล้ว" />
               <ProductsTableHeadCell text="เพิ่มตั้งแต่" />
               <TableCell />
             </TableRow>
           </TableHead>
           <TableBody>
-            <ProductsTableBody />
-            <ProductsTableBody />
+            {value === "all"
+              ? sortedProducts &&
+                sortedProducts.map((product, index) => (
+                  <ProductsTableBody product={product} key={index} />
+                ))
+              : outOfStockProducts &&
+                outOfStockProducts.map((product, index) => (
+                  <ProductsTableBody product={product} key={index} />
+                ))}
           </TableBody>
         </Table>
-        <Stack mt={4} direction="row" justifyContent="space-between">
-          <div></div>
-          <Pagination count={5} alignself="end" />
-        </Stack>
+        {sortedProducts && sortedProducts.length > 5 && (
+          <Stack mt={4} direction="row" justifyContent="space-between">
+            <div></div>
+            <Pagination
+              count={Math.ceil(sortedProducts.length / 5)}
+              alignself="end"
+            />
+          </Stack>
+        )}
       </Box>
     </Box>
   );

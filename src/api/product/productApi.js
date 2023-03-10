@@ -34,26 +34,49 @@ export async function getProductById(product_uuid) {
     .catch(handleError);
 }
 
-export async function saveProduct(product) {
+export async function saveProduct(product, token) {
   return product.productUUID
     ? await axios
-        .put(baseUrl + `/${product.productUUID}`, {
-          name: product.name,
-          description: product.description,
-        })
+        .put(
+          baseUrl + `/${product.productUUID}`,
+          {
+            name: product.name,
+            description: product.description,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `${token.tokenType} ${token.accessToken}`,
+            },
+          }
+        )
         .then(handleResponse)
         .catch(handleError)
     : await axios
-        .post(baseUrl, {
-          name: product.name,
-          description: product.description,
-        })
+        .post(
+          baseUrl,
+          {
+            name: product.name,
+            description: product.description,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `${token.tokenType} ${token.accessToken}`,
+            },
+          }
+        )
         .then(handleResponse)
         .catch(handleError);
 }
-export async function deleteProduct(productId) {
+export async function deleteProduct(productUUID, token) {
   return await axios
-    .delete(baseUrl + `/${productId}`)
+    .delete(baseUrl + `/${productUUID}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token.tokenType} ${token.accessToken}`,
+      },
+    })
     .then(handleResponse)
     .catch(handleError);
 }

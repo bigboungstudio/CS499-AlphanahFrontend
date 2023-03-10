@@ -31,7 +31,11 @@ export default function ShoppingPage() {
       : {}
   );
   const [sortedProducts, setSortedProducts] = useState(
-    [...products].sort((a, b) => Date(b.createDate) - Date(a.createDate))
+    [...products].sort((a, b) => {
+      return (
+        new Date(b.createDate).getTime() - new Date(a.createDate).getTime()
+      );
+    })
   );
 
   useEffect(() => {
@@ -54,7 +58,11 @@ export default function ShoppingPage() {
         );
     } else if (params === "all") {
       setSortedProducts(
-        [...products].sort((a, b) => Date(b.createDate) - Date(a.createDate))
+        [...products].sort((a, b) => {
+          return (
+            new Date(b.createDate).getTime() - new Date(a.createDate).getTime()
+          );
+        })
       );
     }
   }, [params, categories, products, category]);
@@ -65,9 +73,11 @@ export default function ShoppingPage() {
     setSortOption(event.target.value);
     if (event.target.value === "ล่าสุด") {
       setSortedProducts(
-        [...sortedProducts].sort(
-          (a, b) => Date(b.createDate) - Date(a.createDate)
-        )
+        [...sortedProducts].sort((a, b) => {
+          return (
+            new Date(b.createDate).getTime() - new Date(a.createDate).getTime()
+          );
+        })
       );
     } else if (event.target.value === "ราคาสูงสุด") {
       setSortedProducts(

@@ -10,31 +10,32 @@ import { Link } from "react-router-dom";
 
 export default function CategoriesCard(props) {
   return (
-    <Card
-      sx={{
-        border: 1,
-        borderColor: "#e6e6e6",
-        borderRadius: 0,
-        boxShadow: "none",
-        width: 130,
-        ":hover": {
-          boxShadow: 5,
-        },
-      }}
-    >
-      <ButtonBase component={Link} to={"/products/categories/all"}>
+    <ButtonBase component={Link} to={"/products/categories/all"}>
+      <Card
+        sx={{
+          border: 1,
+          borderColor: "#e6e6e6",
+          borderRadius: 0,
+          boxShadow: "none",
+          px: 1,
+          width: 120,
+          ":hover": {
+            boxShadow: 5,
+          },
+        }}
+      >
+        <CardMedia
+          component="img"
+          image={props.item.image}
+          alt={props.item.alt}
+          sx={{ pt: 2, display: "contain", height: 120 }}
+        />
         <CardContent>
-          <CardMedia
-            component="img"
-            image={props.item.image}
-            alt={props.item.alt}
-            sx={{ objectFit: "contain", py: 1 }}
-          />
           <Typography sx={{ fontSize: "15px", textAlign: "center" }}>
             {props.item.name}
           </Typography>
         </CardContent>
-      </ButtonBase>
-    </Card>
+      </Card>
+    </ButtonBase>
   );
 }

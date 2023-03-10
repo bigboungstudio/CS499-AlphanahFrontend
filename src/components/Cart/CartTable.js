@@ -9,7 +9,7 @@ import {
   Typography,
   IconButton,
   TextField,
-  Avatar,
+  CardMedia,
 } from "@mui/material";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
@@ -52,17 +52,13 @@ function Item({ item, handleRemoveItem, handleUpdateItem }) {
     <TableBody>
       <TableRow>
         <TableCell>
-          <Stack direction="row" pl={10} alignItems="center">
-            <Avatar
+          <Stack direction="row" ml={10} alignItems="center">
+            <CardMedia
+              component="img"
               alt={item.product.name}
               src={item.product.mainImage.path}
-              sx={{
-                width: 120,
-                height: 120,
-                pr: 10,
-              }}
+              sx={{ objectFit: "contain", width: 120, height: 120, mr: 10 }}
             />
-
             <Box>
               <Typography sx={{ fontWeight: "bold", fontSize: "22px" }}>
                 {item.product.name}

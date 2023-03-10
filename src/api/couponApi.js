@@ -2,6 +2,18 @@ import { handleResponse, handleError } from "./apiUtils";
 import axios from "axios";
 const baseUrl = "http://alphanah.com:8080/coupon";
 
+export async function getCouponsBySort(type, type2, merchant_uuid, token) {
+  return await axios
+    .get(baseUrl + `?merchant=${merchant_uuid}` + type + type2, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token.tokenType} ${token.accessToken}`,
+      },
+    })
+    .then(handleResponse)
+    .catch(handleError);
+}
+
 export async function getCoupons() {
   return fetch(baseUrl).then(handleResponse).catch(handleError);
 }
@@ -47,23 +59,26 @@ export async function getCouponByCode(coupon_code) {
     .catch(handleError);
 }
 
-export async function createCoupon(coupon) {
+export async function createCoupon(coupon, token) {
   return await axios
-    .post(baseUrl, {
-      code: coupon.code,
-      type: coupon.type,
-      value: coupon.value,
-      startDate: coupon.startDate,
-      endDate: coupon.endDate,
-      maxUse: coupon.maxUse,
+    .post(baseUrl, coupon, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token.tokenType} ${token.accessToken}`,
+      },
     })
     .then(handleResponse)
     .catch(handleError);
 }
 
-export async function deleteCoupon(coupon_code) {
+export async function deleteCoupon(coupon_code, token) {
   return await axios
-    .delete(baseUrl + `/${coupon_code}`)
+    .delete(baseUrl + `/${coupon_code}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token.tokenType} ${token.accessToken}`,
+      },
+    })
     .then(handleResponse)
     .catch(handleError);
 }

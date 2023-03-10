@@ -1,16 +1,44 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography, Stack, Divider } from "@mui/material";
+import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+import { loadUserDetail } from "../../redux/actions/authActions";
+import { loadProductByMerchant } from "../../redux/actions/productActions";
 
 export default function SellerHomePage() {
-  function ToDoItem({ num, text }) {
+  const dispatch = useDispatch();
+  const seller = useSelector((state) => state.auth.seller);
+  const products = useSelector((state) => state.products.merchantProducts.data);
+  const [outOfStockCount, setOutOfStockCount] = useState(0);
+  useEffect(() => {
+    seller.isAuthentication && dispatch(loadUserDetail("seller", seller.token));
+    seller.currentUser.accountUUID &&
+      dispatch(loadProductByMerchant(seller.currentUser.accountUUID));
+  }, [
+    dispatch,
+    seller.currentUser.accountUUID,
+    seller.isAuthentication,
+    seller.token,
+  ]);
+  products &&
+    products.map(
+      (product) =>
+        product.outOfStock > 0 &&
+        setOutOfStockCount(outOfStockCount + product.outOfStock)
+    );
+
+  function ToDoItem({ num, text, link }) {
     return (
-      <Box>
+      <Stack alignItems="center">
         <Typography
+          component={Link}
+          to={link}
           sx={{
             color: "#01bfa6",
             fontSize: 24,
             textAlign: "center",
             pb: 1,
+            textDecoration: "none",
           }}
         >
           {num}
@@ -20,7 +48,7 @@ export default function SellerHomePage() {
         >
           {text}
         </Typography>
-      </Box>
+      </Stack>
     );
   }
   return (
@@ -30,9 +58,13 @@ export default function SellerHomePage() {
           สิ่งที่ต้องจัดการ
         </Typography>
         <Stack direction="row" mx={12} spacing={8} justifyContent="center">
-          <ToDoItem num={0} text="สินค้าที่ต้องจัดส่ง" />
+          <ToDoItem link="/seller/orders" num={0} text="สินค้าที่ต้องจัดส่ง" />
           <Divider orientation="vertical" flexItem />
-          <ToDoItem num={0} text="สินค้าหมดคลัง" />
+          <ToDoItem
+            link="/seller/products"
+            num={outOfStockCount}
+            text="สินค้าหมดคลัง"
+          />
         </Stack>
       </Box>
     </>

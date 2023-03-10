@@ -16,28 +16,55 @@ export async function getProductOptionById(product_uuid, product_option_uuid) {
     .catch(handleError);
 }
 
-export async function saveProductOption(product_uuid, option) {
+export async function saveProductOption(product_uuid, option, token) {
   return option.optionUUID
     ? await axios
-        .put(baseUrl + product_uuid + `/option/${option.optionUUID}`, {
-          name: option.name,
-          price: option.price,
-          quantity: option.quantity,
-        })
+        .put(
+          baseUrl + product_uuid + `/option/${option.optionUUID}`,
+          {
+            name: option.name,
+            price: option.price,
+            quantity: option.quantity,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `${token.tokenType} ${token.accessToken}`,
+            },
+          }
+        )
         .then(handleResponse)
         .catch(handleError)
     : await axios
-        .post(baseUrl, {
-          name: option.name,
-          price: option.price,
-          quantity: option.quantity,
-        })
+        .post(
+          baseUrl + product_uuid + `/option`,
+          {
+            name: option.name,
+            price: option.price,
+            quantity: option.quantity,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `${token.tokenType} ${token.accessToken}`,
+            },
+          }
+        )
         .then(handleResponse)
         .catch(handleError);
 }
-export async function deleteProductOption(product_uuid, product_option_uuid) {
+export async function deleteProductOption(
+  product_uuid,
+  product_option_uuid,
+  token
+) {
   return await axios
-    .delete(baseUrl + product_uuid + `/option/` + product_option_uuid)
+    .delete(baseUrl + product_uuid + `/option/` + product_option_uuid, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token.tokenType} ${token.accessToken}`,
+      },
+    })
     .then(handleResponse)
     .catch(handleError);
 }

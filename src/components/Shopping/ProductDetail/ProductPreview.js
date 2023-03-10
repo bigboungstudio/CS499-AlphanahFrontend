@@ -44,7 +44,9 @@ export default function ProductPreview({ isAuthentication, handleClick }) {
       item.option.optionUUID === product.options[option].optionUUID
   );
   const addDisable =
-    !isAuthentication || (isAuthentication && isInCart ? true : false);
+    !isAuthentication ||
+    (isAuthentication && isInCart ? true : false) ||
+    parseInt(product.options[option].quantity) === 0;
   return (
     <Box
       sx={{
@@ -145,7 +147,9 @@ export default function ProductPreview({ isAuthentication, handleClick }) {
             <AddIcon />
           </IconButton>
           <Typography ml={3} color="#ababab">
-            เหลือสินค้า {product.options[option].quantity} ชิ้น
+            {parseInt(product.options[option].quantity) !== 0
+              ? `เหลือสินค้า ${product.options[option].quantity} ชิ้น`
+              : "สินค้าหมดสต็อก"}
           </Typography>
         </Box>
         <Box

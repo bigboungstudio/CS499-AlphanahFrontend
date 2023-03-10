@@ -98,7 +98,7 @@ function App() {
             />
             <Route
               exact
-              path="/seller/products/edit"
+              path="/seller/products/edit/:UUID"
               element={<SellerEditProductPage />}
             />
             <Route exact path="/seller/orders" element={<SellerOrdersPage />} />

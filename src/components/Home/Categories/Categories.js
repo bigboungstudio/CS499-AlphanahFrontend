@@ -26,7 +26,7 @@ export default function Categories() {
       name: "เครื่องประดับ",
     },
     {
-      image: "/diasword.png",
+      image: "/yamato.png",
       alt: "weapons",
       name: "อาวุธ",
     },

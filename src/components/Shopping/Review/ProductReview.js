@@ -44,27 +44,47 @@ export default function ProductReview({
           <StarRatingBar
             star={5}
             amount={product.reviewFiveStar}
-            value={(product.reviewFiveStar / product.reviews.length) * 100}
+            value={
+              product.reviewFiveStar === 0
+                ? 0
+                : (product.reviewFiveStar / product.reviews.length) * 100
+            }
           />
           <StarRatingBar
             star={4}
             amount={product.reviewFourStar}
-            value={(product.reviewFourStar / product.reviews.length) * 100}
+            value={
+              product.reviewFourStar === 0
+                ? 0
+                : (product.reviewFourStar / product.reviews.length) * 100
+            }
           />
           <StarRatingBar
             star={3}
             amount={product.reviewThreeStar}
-            value={(product.reviewThreeStar / product.reviews.length) * 100}
+            value={
+              product.reviewThreeStar === 0
+                ? 0
+                : (product.reviewThreeStar / product.reviews.length) * 100
+            }
           />
           <StarRatingBar
             star={2}
             amount={product.reviewTwoStar}
-            value={(product.reviewTwoStar / product.reviews.length) * 100}
+            value={
+              product.reviewTwoStar === 0
+                ? 0
+                : (product.reviewTwoStar / product.reviews.length) * 100
+            }
           />
           <StarRatingBar
             star={1}
             amount={product.reviewOneStar}
-            value={(product.reviewOneStar / product.reviews.length) * 100}
+            value={
+              product.reviewOneStar === 0
+                ? 0
+                : (product.reviewOneStar / product.reviews.length) * 100
+            }
           />
           <Typography alignself="end" sx={{ color: "#ababab", fontSize: 14 }}>
             {product.reviews.length} Ratings

@@ -16,25 +16,26 @@ import FormatPrice from "../common/FormatPrice";
 export default function ItemCard({ product }) {
   return (
     <Grid item>
-      <Card
-        sx={{
-          border: "none",
-          boxShadow: "none",
-          ":hover": {
-            boxShadow: 5,
-          },
-        }}
+      <ButtonBase
+        component={Link}
+        to={"/products/detail/" + product.productUUID}
       >
-        <ButtonBase
-          component={Link}
-          to={"/products/detail/" + product.productUUID}
+        <Card
+          sx={{
+            maxWidth: 200,
+            border: "none",
+            boxShadow: "none",
+            ":hover": {
+              boxShadow: 5,
+            },
+          }}
         >
           <CardContent>
             <CardMedia
               component="img"
               image={product.mainImage.path}
               alt={product.name}
-              sx={{ objectFit: "contain", height: 200, py: 1 }}
+              sx={{ height: 150 }}
             />
             <Typography variant="h6" component="div">
               {product.name}
@@ -54,7 +55,7 @@ export default function ItemCard({ product }) {
               </Typography>
               <Divider orientation="vertical" flexItem />
               <Rating
-                defaultValue={product.reviewScore}
+                value={product.reviewScore ?? 0}
                 precision={0.5}
                 readOnly
                 sx={{ fontSize: 12 }}
@@ -64,8 +65,8 @@ export default function ItemCard({ product }) {
               </Typography>
             </Stack>
           </CardContent>
-        </ButtonBase>
-      </Card>
+        </Card>
+      </ButtonBase>
     </Grid>
   );
 }
