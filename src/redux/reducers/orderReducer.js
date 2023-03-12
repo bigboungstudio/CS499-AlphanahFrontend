@@ -6,13 +6,26 @@ export default function orderReducer(state = initialState.order, action) {
     case types.LOAD_CART_SUCCESS:
       return { ...state, cart: action.cart };
     case types.ADD_CART_PRODUCT_SUCCESS:
-      return action.cart;
+      return {
+        ...state,
+        cart: action.cart,
+      };
     case types.UPDATE_CART_PRODUCT_SUCCESS:
       return {
         ...state,
         cart: action.cart,
       };
     case types.DELETE_CART_PRODUCT_SUCCESS:
+      return {
+        ...state,
+        cart: action.cart,
+      };
+    case types.APPLY_COUPON_CART_SUCCESS:
+      return {
+        ...state,
+        cart: action.cart,
+      };
+    case types.REMOVE_COUPON_CART_SUCCESS:
       return {
         ...state,
         cart: action.cart,

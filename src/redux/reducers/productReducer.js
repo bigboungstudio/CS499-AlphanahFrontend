@@ -26,9 +26,25 @@ export default function productReducer(state = initialState.products, action) {
     case types.LOAD_MERCHANT_DETAIL_SUCCESS:
       return { ...state, merchantDetail: action.user };
     case types.CREATE_REVIEW_SUCCESS:
-      return state;
+      const newReviews = [...state.oneProduct.reviews];
+      newReviews.push(action.newReview);
+      return {
+        ...state,
+        oneProduct: {
+          ...state.oneProduct,
+          reviews: newReviews,
+        },
+      };
     case types.DELETE_REVIEW_SUCCESS:
-      return state;
+      return {
+        ...state,
+        oneProduct: {
+          ...state.oneProduct,
+          reviews: state.oneProduct.reviews.filter(
+            (review) => review.reviewUUID !== action.reviewUUID
+          ),
+        },
+      };
     default:
       return state;
   }

@@ -25,6 +25,20 @@ export function deleteCartProductSuccess(cart) {
   };
 }
 
+export function applyCouponToCartSuccess(cart) {
+  return {
+    type: types.APPLY_COUPON_CART_SUCCESS,
+    cart,
+  };
+}
+
+export function removeCouponFromCartSuccess(cart) {
+  return {
+    type: types.REMOVE_COUPON_CART_SUCCESS,
+    cart,
+  };
+}
+
 export function loadPurchaseHistorySuccess(purchaseHistory) {
   return {
     type: types.LOAD_PURCHASE_HISTORY_SUCCESS,
@@ -78,6 +92,35 @@ export function deleteCartProduct(product, token) {
     }
     try {
       const success = await orderItemApi.deleteProductInCart(product, token);
+      return onSuccess(success);
+    } catch (error) {
+      throw error;
+    }
+  };
+}
+
+export function applyCouponToCart(couponCode, token) {
+  return async function (dispatch) {
+    function onSuccess(success) {
+      dispatch(applyCouponToCartSuccess(success));
+    }
+    try {
+      const success = await orderApi.ApplyCouponToCart(couponCode, token);
+      return onSuccess(success);
+    } catch (error) {
+      throw error;
+    }
+  };
+}
+
+export function removeCouponFromCart(token, reset) {
+  return async function (dispatch) {
+    function onSuccess(success) {
+      dispatch(removeCouponFromCartSuccess(success));
+      reset();
+    }
+    try {
+      const success = await orderApi.RemoveCouponFromCart(token);
       return onSuccess(success);
     } catch (error) {
       throw error;

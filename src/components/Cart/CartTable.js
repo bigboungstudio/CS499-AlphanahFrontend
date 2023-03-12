@@ -63,9 +63,11 @@ function Item({ item, handleRemoveItem, handleUpdateItem }) {
               <Typography sx={{ fontWeight: "bold", fontSize: "22px" }}>
                 {item.product.name}
               </Typography>
-              <Typography sx={{ fontSize: "18px" }}>
-                ({item.option.name})
-              </Typography>
+              {item.product.options.length !== 1 && (
+                <Typography sx={{ fontSize: "18px" }}>
+                  ({item.option.name})
+                </Typography>
+              )}
 
               <Typography sx={{ color: "#ababab" }}>
                 {item.product.creator.firstname +

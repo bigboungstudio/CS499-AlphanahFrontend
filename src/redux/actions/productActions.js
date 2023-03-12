@@ -33,12 +33,12 @@ export function loadMerchantDetailSuccess(user) {
   return { type: types.LOAD_MERCHANT_DETAIL_SUCCESS, user };
 }
 
-export function createReviewSuccess() {
-  return { type: types.CREATE_REVIEW_SUCCESS };
+export function createReviewSuccess(newReview) {
+  return { type: types.CREATE_REVIEW_SUCCESS, newReview };
 }
 
-export function deleteReviewSuccess() {
-  return { type: types.DELETE_REVIEW_SUCCESS };
+export function deleteReviewSuccess(reviewUUID) {
+  return { type: types.DELETE_REVIEW_SUCCESS, reviewUUID };
 }
 
 export function loadProducts() {
@@ -212,21 +212,24 @@ export function loadMerchantDetail(accountUUID) {
 
 export function createReview(review, token) {
   return async function (dispatch) {
-    // async function addImage() {
-    //   try {
-    //     const success = await imageApi.createReviewImage(review);
-    //     return onSuccess(success);
-    //   } catch (error) {
-    //     throw error;
-    //   }
-    // }
     function onSuccess(success) {
-      dispatch(createReviewSuccess());
+      const newReview = { ...success, images: [] };
+      review.images.length !== 0 &&
+        review.images.map(async (image) =>
+          newReview.images.push(
+            await imageApi.createReviewImage(
+              image.file,
+              review,
+              success.reviewUUID,
+              token
+            )
+          )
+        );
+      dispatch(createReviewSuccess(newReview));
     }
     try {
       const success = await reviewApi.saveReview(false, review, token);
       return onSuccess(success);
-      // return await addImage();
     } catch (error) {
       throw error;
     }
@@ -236,7 +239,7 @@ export function createReview(review, token) {
 export function deleteReview(review, token) {
   return async function (dispatch) {
     function onSuccess(success) {
-      dispatch(deleteReviewSuccess());
+      dispatch(deleteReviewSuccess(review.reviewUUID));
     }
     try {
       const success = await reviewApi.deleteReview(review, token);

@@ -10,19 +10,27 @@ import { Provider as ReduxProvider } from "react-redux";
 import { persistor, store } from "./redux/store";
 import { PersistGate } from "redux-persist/integration/react";
 import ScrollToTop from "./scrollToTop";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+const stripePromise = loadStripe(
+  "pk_test_51MFAyZLQdLiEuIyigC5CZkevTCs6l7qYPYFmVc8wpEVfuTjLbAnp11zeFcoUt6C4CqYqF5cuEKAkK4dsVb1FBkcW00qkviZaFS"
+);
+
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <ReduxProvider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <Router>
-            <ScrollToTop />
-            <App />
-          </Router>
-        </PersistGate>
-      </ReduxProvider>
+      <Elements stripe={stripePromise}>
+        <ReduxProvider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <Router>
+              <ScrollToTop />
+              <App />
+            </Router>
+          </PersistGate>
+        </ReduxProvider>
+      </Elements>
     </ThemeProvider>
   </React.StrictMode>
 );

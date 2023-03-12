@@ -1,16 +1,6 @@
 import React, { useEffect } from "react";
-import {
-  Stack,
-  AppBar,
-  Toolbar,
-  Button,
-  Box,
-  Typography,
-  InputAdornment,
-  TextField,
-} from "@mui/material";
+import { Stack, AppBar, Toolbar, Button, Box, Typography } from "@mui/material";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
-import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
 import { Link } from "react-router-dom";
 import CartTable from "./CartTable";
 import { useNavigate } from "react-router-dom";
@@ -41,6 +31,7 @@ export default function CartPage() {
   const handleUpdateItem = (product) => {
     dispatch(saveCartProduct(true, product, buyer.token));
   };
+
   return (
     <>
       {typeof cart !== "undefined" && (
@@ -84,52 +75,33 @@ export default function CartPage() {
                 เลือกสินค้าเพิ่ม
               </Button>
               <Box sx={{ flexGrow: 1 }} />
-              <Stack direction="column" spacing={2} padding={5}>
-                <TextField
-                  sx={{
-                    "& .MuiOutlinedInput-root": {
-                      "& fieldset": {
-                        borderColor: "#faaf00",
-                      },
-                      "&:hover fieldset": {
-                        borderColor: "#faaf00",
-                      },
-                      "&.Mui-focused fieldset": {
-                        borderColor: "#faaf00",
-                      },
-                    },
-                  }}
-                  InputProps={{
-                    style: { height: "50px", fontSize: "16px" },
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <Button
-                          sx={{
-                            color: "#faaf00",
-                            "&:hover": {
-                              backgroundColor: "#fff7d1",
-                            },
-                          }}
-                          variant="text"
-                        >
-                          ใช้งาน
-                        </Button>
-                      </InputAdornment>
-                    ),
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <ConfirmationNumberIcon sx={{ color: "#faaf00" }} />
-                      </InputAdornment>
-                    ),
-                  }}
-                  placeholder="กรอกคูปอง"
-                />
-                <Typography variant="h6" noWrap component="div" color="#ababab">
-                  ค่าส่ง: {FormatPrice(cart.deliveryFee)}
-                </Typography>
-                <Typography variant="h5" noWrap component="div" color="#ababab">
-                  ราคารวม: {FormatPrice(cart.totalPrice)}
-                </Typography>
+              <Stack width="25%" direction="column" spacing={2} padding={5}>
+                <Stack>
+                  <Stack direction="row" justifyContent="space-between">
+                    <Typography sx={{ fontSize: 20, color: "#ababab" }}>
+                      ค่าส่ง:
+                    </Typography>
+                    <Typography sx={{ fontSize: 20, color: "#ababab" }}>
+                      {FormatPrice(cart.rawDeliveryFee)}
+                    </Typography>
+                  </Stack>
+                  <Stack direction="row" justifyContent="space-between" pb={2}>
+                    <Typography sx={{ fontSize: 20, color: "#ababab" }}>
+                      ค่าสินค้า:
+                    </Typography>
+                    <Typography sx={{ fontSize: 20, color: "#ababab" }}>
+                      {FormatPrice(cart.rawTotalPrice)}
+                    </Typography>
+                  </Stack>
+                  <Stack direction="row" justifyContent="space-between">
+                    <Typography sx={{ fontSize: 20, color: "#ababab" }}>
+                      ราคารวม:
+                    </Typography>
+                    <Typography sx={{ fontSize: 20, color: "#ababab" }}>
+                      {FormatPrice(cart.rawTotalPrice + cart.rawDeliveryFee)}
+                    </Typography>
+                  </Stack>
+                </Stack>
                 <Button
                   variant="contained"
                   size="large"

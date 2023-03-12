@@ -10,13 +10,17 @@ import {
   DialogTitle,
   IconButton,
   Card,
-  CardContent,
+  Grid,
+  ButtonBase,
   Stack,
+  Badge,
+  CardMedia,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import { useTheme } from "@mui/material/styles";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 export default function WriteReviewPage({
   open,
@@ -25,12 +29,39 @@ export default function WriteReviewPage({
 }) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("xl"));
-  const [formValues, setFormValues] = useState({ rating: 0, message: "" });
+  const initialValues = {
+    rating: 0,
+    message: "",
+    images: [],
+  };
+  const [formValues, setFormValues] = useState(initialValues);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormValues({
       ...formValues,
       [name]: name === "rating" ? parseInt(value) : value,
+    });
+  };
+  const handleUploadImage = (event) => {
+    const newImages = [...formValues.images];
+    newImages.push({
+      file: event.target.files[0],
+      path: URL.createObjectURL(event.target.files[0]),
+    });
+    if (event.target.files.length !== 0) {
+      event.preventDefault();
+      setFormValues({
+        ...formValues,
+        images: newImages,
+      });
+    }
+  };
+  const handleRemoveImage = (index) => {
+    const newImages = [...formValues.images];
+    newImages.splice(index, 1);
+    setFormValues({
+      ...formValues,
+      images: newImages,
     });
   };
 
@@ -93,7 +124,7 @@ export default function WriteReviewPage({
                 onClick={() => {
                   if (formValues.rating !== 0 && formValues.message !== "") {
                     handleCreateReview(formValues);
-                    setFormValues({ rating: 0, message: "" });
+                    setFormValues(initialValues);
                     handleClose();
                   }
                 }}
@@ -114,33 +145,75 @@ export default function WriteReviewPage({
             </Box>
           </Box>
           <Box>
-            <Typography sx={{ fontSize: 16, fontWeight: "bold" }}>
+            <Typography sx={{ fontSize: 16, fontWeight: "bold", pb: 3 }}>
               อัพโหลดรูป
             </Typography>
-            <Card
-              sx={{
-                mt: 1,
-                borderStyle: "dashed",
-                borderWidth: 1,
-                backgroundColor: "#f5f5f5",
-                width: 350,
-                height: 180,
-              }}
-            >
-              <CardContent>
-                <Stack alignItems="center" mt={5}>
-                  <Typography>ลากและวางไฟล์รูปหรือคลิก</Typography>
-                  <CloudUploadOutlinedIcon
-                    sx={{
-                      fontSize: 40,
-                    }}
-                  />
-                </Stack>
-              </CardContent>
-            </Card>
+            <Grid container spacing={10}>
+              {formValues.images.length > 0 &&
+                formValues.images.map((image, index) => (
+                  <Grid item key={index}>
+                    <Badge
+                      key={index}
+                      overlap="circular"
+                      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                      badgeContent={
+                        <IconButton
+                          color="error"
+                          onClick={() => handleRemoveImage(index)}
+                        >
+                          <CancelIcon sx={{ fontSize: 26 }} />
+                        </IconButton>
+                      }
+                    >
+                      <CardMedia
+                        component="img"
+                        src={image.path}
+                        alt="secondary"
+                        sx={{ objectFit: "contain", width: 160, height: 100 }}
+                      />
+                    </Badge>
+                  </Grid>
+                ))}
+              {formValues.images.length <= 2 && (
+                <Grid item>
+                  <ImageCard />
+                </Grid>
+              )}
+            </Grid>
           </Box>
         </Stack>
       </DialogContent>
     </Dialog>
   );
+
+  function ImageCard() {
+    return (
+      <ButtonBase component="label">
+        <Card
+          sx={{
+            display: "flex",
+            borderStyle: "dashed",
+            borderWidth: 1,
+            backgroundColor: "#f5f5f5",
+            width: 160,
+            height: 100,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <CloudUploadOutlinedIcon
+            sx={{
+              fontSize: 40,
+            }}
+          />
+        </Card>
+        <input
+          type="file"
+          accept="image/*"
+          hidden
+          onChange={handleUploadImage}
+        />
+      </ButtonBase>
+    );
+  }
 }

@@ -2,16 +2,30 @@ import { handleResponse, handleError } from "../apiUtils";
 import axios from "axios";
 const baseUrl = "http://alphanah.com:8080";
 
-export async function ApplyCouponToCart(coupon_code) {
+export async function ApplyCouponToCart(coupon_code, token) {
   return await axios
-    .post(baseUrl + `/cart/coupon/` + coupon_code)
+    .post(
+      baseUrl + `/cart/coupon/` + coupon_code,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token.tokenType} ${token.accessToken}`,
+        },
+      }
+    )
     .then(handleResponse)
     .catch(handleError);
 }
 
-export async function RemoveCouponFromCart() {
+export async function RemoveCouponFromCart(token) {
   return await axios
-    .delete(baseUrl + `/cart/coupon`)
+    .delete(baseUrl + `/cart/coupon`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token.tokenType} ${token.accessToken}`,
+      },
+    })
     .then(handleResponse)
     .catch(handleError);
 }

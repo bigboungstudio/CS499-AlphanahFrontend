@@ -6,8 +6,7 @@ import {
   Avatar,
   Stack,
   Divider,
-  ImageList,
-  ImageListItem,
+  Grid,
   IconButton,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -51,21 +50,24 @@ export default function ReviewCard({ review, handleDeleteReview }) {
         />
         <Typography sx={{ fontSize: 16, pt: 1 }}>{review.message}</Typography>
         {review.images.length !== 0 ? (
-          <ImageList
-            sx={{
-              width: 200,
-              height: 100,
-              transform: "translateZ(0)",
-              flexWrap: "nowrap",
-            }}
-            rowHeight={100}
+          <Grid
+            my={2}
+            spacing={1}
+            container
+            direction="row"
+            justifyContent="flex-start"
+            alignItems="center"
           >
             {review.images.map((item, i) => (
-              <ImageListItem key={i}>
-                <img src={item.path} alt={item.imageUUID} loading="lazy" />
-              </ImageListItem>
+              <img
+                key={i}
+                src={item.path}
+                alt={item.imageUUID}
+                loading="lazy"
+                style={{ height: 90, width: 150, objectFit: "contain" }}
+              />
             ))}
-          </ImageList>
+          </Grid>
         ) : (
           <Box pb={1.5} />
         )}
