@@ -103,6 +103,7 @@ export default function CartPage() {
                   </Stack>
                 </Stack>
                 <Button
+                  disabled={cart.cartItems.length === 0}
                   variant="contained"
                   size="large"
                   component={Link}

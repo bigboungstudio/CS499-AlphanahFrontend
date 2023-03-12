@@ -48,7 +48,7 @@ export function loadPurchaseHistorySuccess(purchaseHistory) {
 
 export function loadSalesOrderSuccess(salesOrder) {
   return {
-    type: types.LOAD_CART_SUCCESS,
+    type: types.LOAD_SALES_ORDER_SUCCESS,
     salesOrder,
   };
 }

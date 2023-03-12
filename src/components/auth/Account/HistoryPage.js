@@ -10,13 +10,13 @@ import {
   TableCell,
   Typography,
   Pagination,
+  Stack,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import HistoryTableBody from "./HistoryTableBody";
-import { Stack } from "@mui/system";
 
-export default function HistoryPage({ history }) {
+export default function HistoryPage({ histories }) {
   function HistoryTableHeadCell({ text }) {
     return (
       <TableCell>
@@ -48,7 +48,7 @@ export default function HistoryPage({ history }) {
         }}
         sx={{ display: "block", position: "absolute", right: "5%" }}
       />
-      <Box sx={{ marginTop: "8%", px: "10%" }}>
+      <Box sx={{ marginTop: "8%", px: "5%" }}>
         <Table>
           <TableHead>
             <TableRow>
@@ -58,14 +58,20 @@ export default function HistoryPage({ history }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            <HistoryTableBody />
-            <HistoryTableBody />
+            {histories.map((history, index) => (
+              <HistoryTableBody key={index} history={history} />
+            ))}
           </TableBody>
         </Table>
-        <Stack mt={5} direction="row" justifyContent="space-between">
-          <div></div>
-          <Pagination count={5} alignself="end" />
-        </Stack>
+        {histories && histories.length > 5 && (
+          <Stack mt={5} direction="row" justifyContent="space-between">
+            <div></div>
+            <Pagination
+              count={Math.ceil(histories.length / 5)}
+              alignself="end"
+            />
+          </Stack>
+        )}
       </Box>
     </>
   );

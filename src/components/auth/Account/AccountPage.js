@@ -129,7 +129,7 @@ export default function AccountPage() {
             />
           ) : (
             typeof history !== "undefined" && (
-              <HistoryPage history={history.data} />
+              <HistoryPage histories={history.data} />
             )
           )}
         </Box>

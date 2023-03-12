@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Table,
   TableRow,
@@ -12,18 +12,36 @@ import {
   InputAdornment,
   Tabs,
   Tab,
-  Avatar,
+  CardMedia,
   Pagination,
   Button,
+  MenuItem,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import SellerOrderDetail from "./SellerOrderDetail";
+import { useSelector, useDispatch } from "react-redux";
+import { loadSalesOrder } from "../../../redux/actions/orderActions";
+import FormatPrice from "../../common/FormatPrice";
 
 export default function SellerOrdersPage() {
-  const [value, setValue] = React.useState("all");
+  const dispatch = useDispatch();
+  const seller = useSelector((state) => state.auth.seller);
+  const salesOrders = useSelector((state) => state.order.salesOrder.data);
+  const [value, setValue] = useState("all");
+  const [sortOption, setSortOption] = useState("ล่าสุด");
+  useEffect(() => {
+    dispatch(loadSalesOrder(seller.token));
+  }, [dispatch, seller.token]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+  };
+  const handleChangeSort = (event) => {
+    setSortOption(event.target.value);
+    if (event.target.value === "ล่าสุด") {
+    } else if (event.target.value === "ราคาสูงสุด") {
+    } else if (event.target.value === "ราคาต่ำสุด") {
+    }
   };
 
   function ProductsTableHeadCell({ text }) {
@@ -38,8 +56,8 @@ export default function SellerOrdersPage() {
     );
   }
 
-  function HistoryTableBody() {
-    const [open, setOpen] = React.useState(false);
+  function HistoryTableBody({ order }) {
+    const [open, setOpen] = useState(false);
     const handleClickOpen = () => {
       setOpen(true);
     };
@@ -49,53 +67,35 @@ export default function SellerOrdersPage() {
     return (
       <TableRow>
         <TableCell align="center">
-          <Stack>
-            <Stack direction="row" alignItems="center" px={3}>
-              <Avatar
-                alt="yamato"
-                src="/yamato.png"
-                sx={{
-                  width: 80,
-                  height: 80,
-                  pr: 5,
-                }}
-              />
-              <Stack
-                flexGrow={1}
-                direction="row"
-                justifyContent="space-between"
-              >
-                <Typography sx={{ fontSize: "20px" }}>Yamato sword</Typography>
-                <Typography sx={{ fontSize: "20px" }}>x2</Typography>
-              </Stack>
-            </Stack>
-            <Stack direction="row" alignItems="center" px={3}>
-              <Avatar
-                alt="arm"
-                src="/arm.png"
-                sx={{
-                  width: 80,
-                  height: 80,
-                  pr: 5,
-                }}
-              />
-              <Stack
-                flexGrow={1}
-                direction="row"
-                justifyContent="space-between"
-              >
-                <Typography sx={{ fontSize: "20px" }}>Nero's arm</Typography>
-                <Typography sx={{ fontSize: "20px" }}>x1</Typography>
-              </Stack>
-            </Stack>
+          <Stack
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            spacing={2}
+          >
+            <CardMedia
+              component="img"
+              alt={order.product.name}
+              src={order.product.mainImage.path}
+              sx={{
+                objectFit: "contain",
+                width: 100,
+                height: 80,
+              }}
+            />
+
+            <Typography sx={{ fontSize: "20px" }}>
+              {order.product.name}
+            </Typography>
+            <Typography sx={{ fontSize: "20px" }}>x{order.quantity}</Typography>
           </Stack>
         </TableCell>
 
         <TableCell align="center" sx={{ fontSize: "20px", color: "#01bfa6" }}>
-          ฿96.00
+          {FormatPrice(order.price)}
         </TableCell>
         <TableCell align="center" sx={{ fontSize: "20px", color: "#FB6376" }}>
-          รอจัดส่ง
+          {order.deliveryStatus}
         </TableCell>
         <TableCell align="center">
           <Button
@@ -104,7 +104,11 @@ export default function SellerOrdersPage() {
           >
             ดูรายละเอียด
           </Button>
-          <SellerOrderDetail open={open} handleClose={handleClose} />
+          <SellerOrderDetail
+            order={order.order}
+            open={open}
+            handleClose={handleClose}
+          />
         </TableCell>
         <TableCell align="center" sx={{ fontSize: "20px", color: "blue" }}>
           จัดส่ง
@@ -112,7 +116,6 @@ export default function SellerOrdersPage() {
       </TableRow>
     );
   }
-
   return (
     <Box bgcolor="white" py={5}>
       <Box mx={4}>
@@ -157,7 +160,8 @@ export default function SellerOrdersPage() {
           <TextField
             size="small"
             select
-            defaultValue="เลือก"
+            value={sortOption}
+            onChange={handleChangeSort}
             sx={{ minWidth: "120px" }}
             inputProps={{
               sx: {
@@ -165,7 +169,17 @@ export default function SellerOrdersPage() {
                 fontSize: "14px",
               },
             }}
-          />
+          >
+            <MenuItem key="ล่าสุด" value="ล่าสุด">
+              ล่าสุด
+            </MenuItem>
+            <MenuItem key="ราคาสูงสุด" value="ราคาสูงสุด">
+              ราคาสูงสุด
+            </MenuItem>
+            <MenuItem key="ราคาต่ำสุด" value="ราคาต่ำสุด">
+              ราคาต่ำสุด
+            </MenuItem>
+          </TextField>
         </Stack>
         <Table>
           <TableHead>
@@ -178,14 +192,21 @@ export default function SellerOrdersPage() {
             </TableRow>
           </TableHead>
           <TableBody>
-            <HistoryTableBody />
-            <HistoryTableBody />
+            {salesOrders &&
+              salesOrders.map((salesOrder, index) => (
+                <HistoryTableBody key={index} order={salesOrder} />
+              ))}
           </TableBody>
         </Table>
-        <Stack mt={4} direction="row" justifyContent="space-between">
-          <div></div>
-          <Pagination count={5} alignself="end" />
-        </Stack>
+        {salesOrders && salesOrders.length > 5 && (
+          <Stack mt={4} direction="row" justifyContent="space-between">
+            <div></div>
+            <Pagination
+              count={Math.ceil(salesOrders.length / 5)}
+              alignself="end"
+            />
+          </Stack>
+        )}
       </Box>
     </Box>
   );

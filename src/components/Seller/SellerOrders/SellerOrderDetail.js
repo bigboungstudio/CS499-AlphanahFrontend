@@ -11,8 +11,10 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
+import { format } from "date-fns";
 
-export default function SellerOrderDetail({ open, handleClose }) {
+export default function SellerOrderDetail({ order, open, handleClose }) {
+  var date = new Date(order.checkoutDate);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("xl"));
   return (
@@ -43,29 +45,40 @@ export default function SellerOrderDetail({ open, handleClose }) {
         <Stack spacing={3} pb={5}>
           <Stack direction="row" alignItems="center" spacing={2}>
             <Avatar
-              alt="vergil"
-              src="/vergil.jpg"
+              alt={order.deliveryInformation.firstname}
+              src={order.creator.image}
               sx={{
                 width: 100,
                 height: 100,
               }}
             />
-            <Typography sx={{ fontSize: 20 }}>VergilNumberOne</Typography>
+            <Typography sx={{ fontSize: 20 }}>
+              {order.deliveryInformation.firstname +
+                " " +
+                order.deliveryInformation.lastname}
+            </Typography>
           </Stack>
           <Stack direction="row" spacing={2}>
             <Typography sx={{ width: 100, fontSize: 20 }}>ที่อยู่:</Typography>
             <Typography whiteSpace="pre-line" sx={{ fontSize: 20 }}>
-              {` Diamond sword is a sword that made with 1 stick and 2 diamonds which is rare.
-          So this make it's to be the most powerful sword in minecraft.
-          11111
-          Hell`}
+              {order.deliveryInformation.address}
             </Typography>
           </Stack>
           <Stack direction="row" spacing={2}>
             <Typography sx={{ width: 100, fontSize: 20 }}>
               เบอร์มือถือ:
             </Typography>
-            <Typography sx={{ fontSize: 20 }}>08X-XXX-XXXX</Typography>
+            <Typography sx={{ fontSize: 20 }}>
+              {order.deliveryInformation.phone}
+            </Typography>
+          </Stack>
+          <Stack direction="row" spacing={2}>
+            <Typography sx={{ width: 100, fontSize: 20 }}>
+              สั่งซื้อเมื่อ:
+            </Typography>
+            <Typography sx={{ fontSize: 20 }}>
+              {format(date, "dd/MM/yyyy hh:mm")}
+            </Typography>
           </Stack>
         </Stack>
       </DialogContent>
