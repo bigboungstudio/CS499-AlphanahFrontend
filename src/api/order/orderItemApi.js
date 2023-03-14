@@ -76,9 +76,18 @@ export async function getSalesOrderById(order_item_uuid) {
     .then(handleResponse)
     .catch(handleError);
 }
-export async function updateSalesOrderStatus(order_item_uuid) {
+export async function updateSalesOrderStatus(order_item_uuid, token) {
   return await axios
-    .put(baseUrl + `/sale_order/` + order_item_uuid)
+    .put(
+      baseUrl + `/sale_order/` + order_item_uuid,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token.tokenType} ${token.accessToken}`,
+        },
+      }
+    )
     .then(handleResponse)
     .catch(handleError);
 }

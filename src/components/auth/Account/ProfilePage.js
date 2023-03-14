@@ -6,6 +6,7 @@ import {
   Typography,
   TextField,
   Button,
+  CircularProgress,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 
@@ -46,6 +47,7 @@ export default function ProfilePage({
   handleInputChange,
   formValues,
   handleUpload,
+  loading,
 }) {
   return (
     <Box
@@ -145,11 +147,14 @@ export default function ProfilePage({
         </Stack>
         <Box spacing={2} mt={5} pb={5}>
           <Button
+            disabled={loading}
             type="submit"
             sx={{ height: 40, fontSize: 18, px: 2 }}
             variant="contained"
           >
-            <Typography px={2}>แก้ไข</Typography>
+            <Typography px={2}>
+              {loading ? <CircularProgress size={24} /> : "แก้ไข"}
+            </Typography>
           </Button>
         </Box>
       </form>

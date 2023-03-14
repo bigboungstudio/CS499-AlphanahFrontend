@@ -8,7 +8,7 @@ import { loadProductByMerchant } from "../../redux/actions/productActions";
 export default function SellerHomePage() {
   const dispatch = useDispatch();
   const seller = useSelector((state) => state.auth.seller);
-  const products = useSelector((state) => state.products.merchantProducts.data);
+  const products = useSelector((state) => state.products.merchantProducts);
   const [outOfStockCount, setOutOfStockCount] = useState(0);
   useEffect(() => {
     seller.isAuthentication && dispatch(loadUserDetail("seller", seller.token));
@@ -20,12 +20,15 @@ export default function SellerHomePage() {
     seller.isAuthentication,
     seller.token,
   ]);
-  products &&
-    products.map(
-      (product) =>
-        product.outOfStock > 0 &&
-        setOutOfStockCount(outOfStockCount + product.outOfStock)
-    );
+  useEffect(() => {
+    Object.keys(products).length !== 0 &&
+      products !== undefined &&
+      products.data.map(
+        (product) =>
+          product.outOfStock > 0 &&
+          setOutOfStockCount(outOfStockCount + product.outOfStock)
+      );
+  }, [outOfStockCount, products]);
 
   function ToDoItem({ num, text, link }) {
     return (

@@ -17,7 +17,7 @@ const initialState = {
     merchantProducts: {},
     merchantDetail: {},
   },
-  category: {},
+  categories: {},
   order: {
     purchaseHistory: {},
     cart: {},

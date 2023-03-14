@@ -1,6 +1,10 @@
 import * as types from "./actionTypes";
 import * as authenticationApi from "../../api/auth/authenticationApi";
 import * as accountApi from "../../api/auth/accountApi";
+import {
+  resetBuyerOrderSuccess,
+  resetSellerOrderSuccess,
+} from "./orderActions";
 
 export function loadUserDetailSuccess(userType, user) {
   return {
@@ -54,15 +58,17 @@ export function loadUserDetail(userType, token) {
   };
 }
 
-export function updateUserDetail(userType, user, token) {
+export function updateUserDetail(userType, user, token, setLoading) {
   return async function (dispatch) {
     function onSuccess(success) {
       dispatch(updateUserDetailSuccess(userType, success));
+      setLoading();
     }
     try {
       const success = await accountApi.updateCurrentAccount(user, token);
       return onSuccess(success);
     } catch (error) {
+      setLoading();
       throw error;
     }
   };
@@ -147,6 +153,11 @@ export function logout(userType) {
     function onSuccess() {
       dispatch(
         userType === "buyer" ? buyerLogoutSuccess() : sellerLogoutSuccess()
+      );
+      dispatch(
+        userType === "buyer"
+          ? resetBuyerOrderSuccess()
+          : resetSellerOrderSuccess()
       );
     }
     return onSuccess();

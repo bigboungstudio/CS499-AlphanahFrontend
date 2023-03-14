@@ -125,7 +125,7 @@ export default function ShoppingPage() {
           )}
 
           {params !== "all"
-            ? typeof category.childCategories !== "undefined" &&
+            ? category.childCategories !== undefined &&
               (category.level === 0
                 ? category.childCategories !== [] &&
                   [...category.childCategories].map((item, index) => (

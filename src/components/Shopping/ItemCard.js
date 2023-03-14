@@ -33,9 +33,13 @@ export default function ItemCard({ product }) {
           <CardContent>
             <CardMedia
               component="img"
-              image={product.mainImage.path}
+              image={
+                product.mainImage === null
+                  ? "/vergil.jpg"
+                  : product.mainImage.path
+              }
               alt={product.name}
-              sx={{ height: 150 }}
+              sx={{ objectFit: "contain", height: 150 }}
             />
             <Typography variant="h6" component="div">
               {product.name}

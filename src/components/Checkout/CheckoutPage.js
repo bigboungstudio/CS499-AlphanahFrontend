@@ -110,7 +110,7 @@ export default function CheckoutPage() {
   const handleUseProfile = (e) => {
     setIsChecked(e.target.checked);
     isChecked === false &&
-      typeof buyer.currentUser.accountUUID !== "undefined" &&
+      buyer.currentUser.accountUUID !== undefined &&
       setFormValues({
         ...formValues,
         firstname: buyer.currentUser.firstname,

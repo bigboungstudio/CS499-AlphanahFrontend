@@ -34,7 +34,7 @@ export default function CartPage() {
 
   return (
     <>
-      {typeof cart !== "undefined" && (
+      {Object.keys(cart).length !== 0 && cart !== undefined && (
         <>
           <Typography sx={{ fontSize: "30px" }} spacing={2} padding={5}>
             รถเข็นสินค้า

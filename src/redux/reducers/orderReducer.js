@@ -34,6 +34,18 @@ export default function orderReducer(state = initialState.order, action) {
       return { ...state, purchaseHistory: action.purchaseHistory };
     case types.LOAD_SALES_ORDER_SUCCESS:
       return { ...state, salesOrder: action.salesOrder };
+    case types.UPDATE_SALES_ORDER_SUCCESS:
+      return {
+        ...state,
+        salesOrder: {
+          ...state.salesOrder,
+          data: state.salesOrder.data.map((order) =>
+            order.orderItemUUID === action.salesOrder.orderItemUUID
+              ? action.salesOrder
+              : order
+          ),
+        },
+      };
     case types.RESET_BUYER_ORDER_SUCCESS:
       return {
         ...state,

@@ -25,7 +25,10 @@ export default function AccountPage() {
   useEffect(() => {
     buyer.isAuthentication && dispatch(loadUserDetail("buyer", buyer.token));
     buyer.isAuthentication && dispatch(loadPurchaseHistory(buyer.token));
-    typeof buyer.currentUser.accountUUID !== "undefined" &&
+  }, [buyer.isAuthentication, buyer.token, dispatch]);
+
+  useEffect(() => {
+    buyer.currentUser.accountUUID !== undefined &&
       setFormValues({
         firstname: buyer.currentUser.firstname,
         lastname: buyer.currentUser.lastname,
@@ -33,13 +36,10 @@ export default function AccountPage() {
         phone: buyer.currentUser.phone ?? "",
       });
   }, [
-    buyer.token,
-    buyer.isAuthentication,
-    dispatch,
     buyer.currentUser.accountUUID,
+    buyer.currentUser.address,
     buyer.currentUser.firstname,
     buyer.currentUser.lastname,
-    buyer.currentUser.address,
     buyer.currentUser.phone,
   ]);
 
@@ -69,9 +69,15 @@ export default function AccountPage() {
     address: "",
     phone: "",
   });
+  const [loading, setLoading] = useState(false);
   const handleSubmit = async (event) => {
     event.preventDefault();
-    dispatch(updateUserDetail("buyer", formValues, buyer.token));
+    setLoading(true);
+    dispatch(
+      updateUserDetail("buyer", formValues, buyer.token, () =>
+        setLoading(false)
+      )
+    );
   };
   const handleUpload = async (event) => {
     if (event.target.files.length !== 0) {
@@ -119,18 +125,18 @@ export default function AccountPage() {
         </Stack>
         <Divider orientation="vertical" flexItem />
         <Box sx={{ flex: "1 1 auto", overflowY: "auto" }}>
-          {typeof buyer.currentUser.accountUUID !== "undefined" && isProfile ? (
+          {buyer.currentUser.accountUUID !== undefined && isProfile ? (
             <ProfilePage
               buyer={buyer}
               handleInputChange={handleInputChange}
               handleSubmit={handleSubmit}
               formValues={formValues}
               handleUpload={handleUpload}
+              loading={loading}
             />
           ) : (
-            typeof history !== "undefined" && (
-              <HistoryPage histories={history.data} />
-            )
+            Object.keys(history).length !== 0 &&
+            history !== undefined && <HistoryPage histories={history.data} />
           )}
         </Box>
       </Stack>

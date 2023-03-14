@@ -53,6 +53,21 @@ export function loadSalesOrderSuccess(salesOrder) {
   };
 }
 
+export function updateSalesOrderSuccess(salesOrder) {
+  return {
+    type: types.UPDATE_SALES_ORDER_SUCCESS,
+    salesOrder,
+  };
+}
+
+export function resetBuyerOrderSuccess() {
+  return { type: types.RESET_BUYER_ORDER_SUCCESS };
+}
+
+export function resetSellerOrderSuccess() {
+  return { type: types.RESET_SELLER_ORDER_SUCCESS };
+}
+
 export function loadCart(token) {
   return async function (dispatch) {
     function onSuccess(success) {
@@ -151,6 +166,25 @@ export function loadSalesOrder(token) {
       const success = await orderItemApi.getSalesOrder(token);
       return onSuccess(success);
     } catch (error) {
+      throw error;
+    }
+  };
+}
+
+export function updateSalesOrder(orderItemUUID, token, setLoading) {
+  return async function (dispatch) {
+    function onSuccess(success) {
+      dispatch(updateSalesOrderSuccess(success));
+      setLoading();
+    }
+    try {
+      const success = await orderItemApi.updateSalesOrderStatus(
+        orderItemUUID,
+        token
+      );
+      return onSuccess(success);
+    } catch (error) {
+      setLoading();
       throw error;
     }
   };

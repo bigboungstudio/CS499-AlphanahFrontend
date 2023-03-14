@@ -55,9 +55,15 @@ export function loadProducts() {
   };
 }
 
-export function addProduct(product, token, navigate) {
+export function addProduct(product, token, navigate, loading) {
   return async function (dispatch) {
     async function onSuccess(success) {
+      dispatch(addProductSuccess());
+      loading();
+      navigate();
+    }
+    try {
+      const success = await productApi.saveProduct(product, token);
       const productUUID = success.productUUID;
       await productCategoryApi.createProductCategory(
         productUUID,
@@ -77,13 +83,9 @@ export function addProduct(product, token, navigate) {
         async (image) =>
           await imageApi.createProductImage(productUUID, image.file, token)
       );
-      dispatch(addProductSuccess());
-      navigate();
-    }
-    try {
-      const success = await productApi.saveProduct(product, token);
       return onSuccess(success);
     } catch (error) {
+      loading();
       throw error;
     }
   };
@@ -103,10 +105,22 @@ export function deleteProduct(productUUID, token) {
   };
 }
 
-export function updateProduct(newProduct, deleteProduct, token, navigate) {
+export function updateProduct(
+  newProduct,
+  deleteProduct,
+  token,
+  navigate,
+  loading
+) {
   const productUUID = newProduct.productUUID;
   return async function (dispatch) {
     async function onSuccess(success) {
+      dispatch(updateProductSuccess());
+      loading();
+      navigate();
+    }
+    try {
+      const success = await productApi.saveProduct(newProduct, token);
       if (Object.keys(deleteProduct.category).length !== 0) {
         await productCategoryApi.deleteProductCategory(
           productUUID,
@@ -114,6 +128,12 @@ export function updateProduct(newProduct, deleteProduct, token, navigate) {
           token
         );
 
+        await productCategoryApi.createProductCategory(
+          productUUID,
+          newProduct.category.categoryUUID,
+          token
+        );
+      } else if (Object.keys(deleteProduct.category).length === 0) {
         await productCategoryApi.createProductCategory(
           productUUID,
           newProduct.category.categoryUUID,
@@ -156,13 +176,9 @@ export function updateProduct(newProduct, deleteProduct, token, navigate) {
           !image.imageUUID &&
           (await imageApi.createProductImage(productUUID, image.file, token))
       );
-      dispatch(updateProductSuccess());
-      navigate();
-    }
-    try {
-      const success = await productApi.saveProduct(newProduct, token);
       return onSuccess(success);
     } catch (error) {
+      loading();
       throw error;
     }
   };

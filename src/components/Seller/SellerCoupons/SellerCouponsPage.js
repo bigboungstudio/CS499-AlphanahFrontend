@@ -29,7 +29,7 @@ import { deleteCoupon } from "../../../redux/actions/couponActions";
 export default function SellerCouponsPage() {
   const dispatch = useDispatch();
   const seller = useSelector((state) => state.auth.seller);
-  const coupons = useSelector((state) => state.coupons.data);
+  const coupons = useSelector((state) => state.coupons);
   const initialValues = {
     type: "all",
     type2: "all",
@@ -204,49 +204,40 @@ export default function SellerCouponsPage() {
           <Tab value="&expired=true" label="หมดอายุ" />
           <Tab value="&runOut=true" label="ถูกใช้หมด" />
         </Tabs>
-        {/* 
-        <Stack alignItems="center" direction="row" py={2} justifyContent="end">
-          <Typography pr={2}>เรียงโดย:</Typography>
-          <TextField
-            size="small"
-            select
-            defaultValue="เลือก"
-            sx={{ minWidth: "120px" }}
-            inputProps={{
-              sx: {
-                height: "7px",
-                fontSize: "14px",
-              },
-            }}
-          />
-        </Stack> */}
-        <Table>
-          <TableHead>
-            <TableRow>
-              <ProductsTableHeadCell text="รหัสคูปอง" />
-              <ProductsTableHeadCell text="ประเภท" />
-              <ProductsTableHeadCell text="ส่วนลด" />
-              <ProductsTableHeadCell text="จำนวนการใช้งาน" />
-              <ProductsTableHeadCell text="เริ่มใช้งานได้" />
-              <ProductsTableHeadCell text="หมดอายุ" />
-              <TableCell />
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {coupons &&
-              coupons.map(
-                (coupon, index) =>
-                  !coupon.softDelete && (
-                    <ProductsTableBody key={index} coupon={coupon} />
-                  )
-              )}
-          </TableBody>
-        </Table>
-        {coupons && coupons.length > 5 && (
-          <Stack mt={4} direction="row" justifyContent="space-between">
-            <div></div>
-            <Pagination count={Math.ceil(coupons.length / 5)} alignself="end" />
-          </Stack>
+        {Object.keys(coupons).length !== 0 && coupons !== undefined && (
+          <>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <ProductsTableHeadCell text="รหัสคูปอง" />
+                  <ProductsTableHeadCell text="ประเภท" />
+                  <ProductsTableHeadCell text="ส่วนลด" />
+                  <ProductsTableHeadCell text="จำนวนการใช้งาน" />
+                  <ProductsTableHeadCell text="เริ่มใช้งานได้" />
+                  <ProductsTableHeadCell text="หมดอายุ" />
+                  <TableCell />
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {coupons.data &&
+                  coupons.data.map(
+                    (coupon, index) =>
+                      !coupon.softDelete && (
+                        <ProductsTableBody key={index} coupon={coupon} />
+                      )
+                  )}
+              </TableBody>
+            </Table>
+            {coupons.data && coupons.data.length > 5 && (
+              <Stack mt={4} direction="row" justifyContent="space-between">
+                <div></div>
+                <Pagination
+                  count={Math.ceil(coupons.data.length / 5)}
+                  alignself="end"
+                />
+              </Stack>
+            )}
+          </>
         )}
       </Box>
     </Box>

@@ -26,7 +26,7 @@ export default function MerchantPage() {
         height: "100vh",
       }}
     >
-      {merchant && (
+      {Object.keys(merchant).length !== 0 && merchant !== undefined && (
         <Stack
           bgcolor="white"
           direction="row"
@@ -74,7 +74,8 @@ export default function MerchantPage() {
           สินค้าทั้งหมดของผู้ขาย
         </Typography>
         <Grid container spacing={3} alignContent="space-evenly" pt={3}>
-          {products &&
+          {Object.keys(products).length !== 0 &&
+            products !== undefined &&
             products.data.map((item, i) => <ItemCard product={item} key={i} />)}
         </Grid>
       </Box>

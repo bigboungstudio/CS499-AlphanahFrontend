@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -22,6 +22,19 @@ export default function ProductPreview({ isAuthentication, handleClick }) {
   const cart = useSelector((state) => state.order.cart);
   const [quantity, setQuantity] = useState(1);
   const [option, setOption] = useState(0);
+  const [isInCart, setIsInCart] = useState(false);
+
+  useEffect(() => {
+    Object.keys(cart).length !== 0 &&
+      cart !== undefined &&
+      setIsInCart(
+        cart.cartItems.find(
+          (item) =>
+            item.product.productUUID === product.productUUID &&
+            item.option.optionUUID === product.options[option].optionUUID
+        )
+      );
+  }, [cart, option, product.options, product.productUUID]);
   const handleOption = (event, newOption) => {
     if (newOption !== null) {
       setOption(newOption);
@@ -38,11 +51,6 @@ export default function ProductPreview({ isAuthentication, handleClick }) {
       setQuantity(value);
     }
   };
-  const isInCart = cart.cartItems.find(
-    (item) =>
-      item.product.productUUID === product.productUUID &&
-      item.option.optionUUID === product.options[option].optionUUID
-  );
   const addDisable =
     !isAuthentication ||
     (isAuthentication && isInCart ? true : false) ||
@@ -174,9 +182,10 @@ export default function ProductPreview({ isAuthentication, handleClick }) {
           >
             เพิ่มในรถเข็น
           </Button>
-          {!isAuthentication && <Typography>กรุณาเข้าสู่ระบบก่อน</Typography>}
-          {isAuthentication && isInCart && (
-            <Typography>คุณมีสินค้านี้ในรถเข็นแล้ว</Typography>
+          {!isAuthentication ? (
+            <Typography>กรุณาเข้าสู่ระบบก่อน</Typography>
+          ) : (
+            isInCart && <Typography>คุณมีสินค้านี้ในรถเข็นแล้ว</Typography>
           )}
         </Stack>
       </Box>

@@ -41,7 +41,9 @@ export default function BuyerRegisterPage() {
 
   return (
     <Stack spacing={3} px="20%" pt={10} bgcolor="#f5f5f5" height="100vh">
-      <Typography sx={{ fontSize: "30px" }}>สร้างบัญชี Alphanah</Typography>
+      <Typography sx={{ fontSize: "30px" }}>
+        สร้างบัญชีผู้ซื้อ Alphanah
+      </Typography>
       <form onSubmit={handleSubmit}>
         <Stack direction="row" spacing={8} sx={{ p: 4, bgcolor: "white" }}>
           <Stack width="50%" spacing={3}>

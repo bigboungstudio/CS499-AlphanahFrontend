@@ -6,22 +6,34 @@ import {
   ListSubheader,
   Collapse,
 } from "@mui/material";
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { Link } from "react-router-dom";
+import { loadCategories } from "../../redux/actions/categoryActions";
 
 export default function CategoriesDrawer({ open, toggleDrawer }) {
+  const dispatch = useDispatch();
   const [nestOpen, setNestOpen] = useState({});
   const categories = useSelector((state) => state.categories);
-  const levelOne = [...categories.data].filter(
-    (category) => category.level === 0
-  );
+  useEffect(() => {
+    dispatch(loadCategories());
+  }, [dispatch]);
+  const [levelOne, setLevelOne] = useState([]);
+  useEffect(() => {
+    Object.keys(categories).length !== 0 &&
+      setLevelOne(
+        [...categories.data].filter((category) => category.level === 0)
+      );
+  }, [categories]);
+
   function handleOpenNest(id) {
     setNestOpen((prevState) => ({ ...prevState, [id]: !prevState[id] }));
   }
-  return (
+  return Object.keys(categories).length === 0 ? (
+    <></>
+  ) : (
     <Drawer
       sx={{}}
       anchor="left"

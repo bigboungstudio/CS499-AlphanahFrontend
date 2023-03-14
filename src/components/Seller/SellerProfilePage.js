@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Avatar,
   Box,
@@ -6,6 +6,7 @@ import {
   Typography,
   TextField,
   Button,
+  CircularProgress,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { useSelector, useDispatch } from "react-redux";
@@ -51,7 +52,9 @@ export default function SellerProfilePage() {
   const seller = useSelector((state) => state.auth.seller);
   useEffect(() => {
     seller.isAuthentication && dispatch(loadUserDetail("seller", seller.token));
-    typeof seller.currentUser.accountUUID !== "undefined" &&
+  }, [dispatch, seller.isAuthentication, seller.token]);
+  useEffect(() => {
+    seller.currentUser.accountUUID !== undefined &&
       setFormValues({
         firstname: seller.currentUser.firstname,
         lastname: seller.currentUser.lastname,
@@ -59,21 +62,19 @@ export default function SellerProfilePage() {
         phone: seller.currentUser.phone ?? "",
       });
   }, [
-    dispatch,
     seller.currentUser.accountUUID,
     seller.currentUser.address,
     seller.currentUser.firstname,
     seller.currentUser.lastname,
     seller.currentUser.phone,
-    seller.isAuthentication,
-    seller.token,
   ]);
-  const [formValues, setFormValues] = React.useState({
+  const [formValues, setFormValues] = useState({
     firstname: "",
     lastname: "",
     address: "",
     phone: "",
   });
+  const [loading, setLoading] = useState(false);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormValues({
@@ -83,7 +84,12 @@ export default function SellerProfilePage() {
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
-    dispatch(updateUserDetail("seller", formValues, seller.token));
+    setLoading(true);
+    dispatch(
+      updateUserDetail("seller", formValues, seller.token, () =>
+        setLoading(false)
+      )
+    );
   };
   const handleUpload = async (event) => {
     if (event.target.files.length !== 0) {
@@ -131,7 +137,7 @@ export default function SellerProfilePage() {
               <TextField
                 disabled
                 sx={{ width: "50%" }}
-                value="vergilnumberone@gmail.com"
+                value={seller.currentUser.email}
                 inputProps={{
                   sx: {
                     height: "7px",
@@ -192,11 +198,14 @@ export default function SellerProfilePage() {
           </Stack>
           <Box spacing={2} mt={5}>
             <Button
+              disabled={loading}
               sx={{ height: 40, fontSize: 18, px: 2 }}
               variant="contained"
               type="submit"
             >
-              <Typography px={2}>แก้ไข</Typography>
+              <Typography px={2}>
+                {loading ? <CircularProgress size={24} /> : "แก้ไข"}
+              </Typography>
             </Button>
           </Box>
         </form>

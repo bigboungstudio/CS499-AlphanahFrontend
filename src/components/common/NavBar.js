@@ -4,14 +4,12 @@ import {
   Toolbar,
   IconButton,
   Box,
-  InputAdornment,
   Stack,
   Button,
-  TextField,
   Typography,
 } from "@mui/material";
 import NavBarText from "./NavbarText";
-import SearchIcon from "@mui/icons-material/Search";
+import NabBarSearchBar from "./NavBarSearchBar";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import MenuIcon from "@mui/icons-material/Menu";
 import CategoriesDrawer from "./CategoriesDrawer";
@@ -23,7 +21,6 @@ export default function NavBar() {
   const buyer = useSelector((state) => state.auth.buyer);
   const seller = useSelector((state) => state.auth.seller);
   const isAuthentication = buyer.isAuthentication;
-
   function toggleDrawer(newOpen) {
     setOpen(newOpen);
   }
@@ -85,18 +82,7 @@ export default function NavBar() {
                 lphanah
               </Typography>
             </Button>
-            <TextField
-              placeholder="ค้นหาสินค้า"
-              sx={{ width: "55%", bgcolor: "#f5f5f5" }}
-              InputProps={{
-                sx: { height: "40px", fontSize: "16px" },
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
-              }}
-            />
+            <NabBarSearchBar />
             <Box>
               <IconButton
                 color="primary"

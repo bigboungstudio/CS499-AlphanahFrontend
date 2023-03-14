@@ -13,6 +13,7 @@ import {
   Badge,
   CardMedia,
   ButtonBase,
+  CircularProgress,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -37,6 +38,7 @@ export default function SellerEditProductPage() {
   const product = {
     ...products.find((product) => product.productUUID === params),
   };
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     dispatch(loadCategories());
   }, [dispatch]);
@@ -228,10 +230,16 @@ export default function SellerEditProductPage() {
       );
     });
   }
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setLoading(true);
     dispatch(
-      updateProduct(formValues, deleteValues, seller.token, () =>
-        navigate("/seller/products")
+      updateProduct(
+        formValues,
+        deleteValues,
+        seller.token,
+        () => navigate("/seller/products"),
+        () => setLoading(false)
       )
     );
   };
@@ -441,11 +449,12 @@ export default function SellerEditProductPage() {
       </Stack>
       <Box sx={{ pb: 5 }}>
         <Button
+          disabled={loading}
           onClick={handleSubmit}
           variant="contained"
           sx={{ width: "15%", fontSize: 20, mr: 5 }}
         >
-          แก้ไข
+          {loading ? <CircularProgress size={24} /> : "แก้ไข"}
         </Button>
         <Button
           component={Link}
