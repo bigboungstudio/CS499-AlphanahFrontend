@@ -1,13 +1,5 @@
 import * as React from "react";
-import {
-  AppBar,
-  Toolbar,
-  IconButton,
-  Box,
-  Stack,
-  Button,
-  Typography,
-} from "@mui/material";
+import { AppBar, Toolbar, IconButton, Box, Stack, Button } from "@mui/material";
 import NavBarText from "./NavbarText";
 import NabBarSearchBar from "./NavBarSearchBar";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -77,10 +69,7 @@ export default function NavBar() {
             </IconButton>
             <CategoriesDrawer open={open} toggleDrawer={toggleDrawer} />
             <Button component={Link} to={"/"}>
-              <img height="50px" src="/a.png" alt="logo" />
-              <Typography variant="h4" component="div" color="primary">
-                lphanah
-              </Typography>
+              <img height="50px" src="/logo.png" alt="logo" />
             </Button>
             <NabBarSearchBar />
             <Box>
