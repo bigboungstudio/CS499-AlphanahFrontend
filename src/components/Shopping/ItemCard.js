@@ -41,7 +41,15 @@ export default function ItemCard({ product }) {
               alt={product.name}
               sx={{ objectFit: "contain", height: 150 }}
             />
-            <Typography variant="h6" component="div">
+            <Typography
+              sx={{
+                fontSize: 16,
+                display: "-webkit-box",
+                overflow: "hidden",
+                WebkitBoxOrient: "vertical",
+                WebkitLineClamp: 2,
+              }}
+            >
               {product.name}
             </Typography>
             <Typography color="#01bfa6" py={0.5} variant="h6" component="div">

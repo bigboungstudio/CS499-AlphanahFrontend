@@ -413,7 +413,7 @@ export default function CheckoutPage() {
                 }}
                 InputProps={{
                   style: { height: "45px", fontSize: "16px" },
-                  startAdornment: (
+                  startadornment: (
                     <InputAdornment position="start">
                       <ConfirmationNumberIcon sx={{ color: "#faaf00" }} />
                     </InputAdornment>

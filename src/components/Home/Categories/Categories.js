@@ -63,7 +63,7 @@ export default function Categories() {
       </Stack>
       <Grid container alignContent="space-evenly">
         {items.map((item, i) => (
-          <CategoriesCard item={item} />
+          <CategoriesCard item={item} key={i} />
         ))}
       </Grid>
     </Box>

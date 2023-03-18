@@ -22,6 +22,32 @@ import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import { useTheme } from "@mui/material/styles";
 import CancelIcon from "@mui/icons-material/Cancel";
 
+function ImageCard({ handleUploadImage }) {
+  return (
+    <ButtonBase component="label">
+      <Card
+        sx={{
+          display: "flex",
+          borderStyle: "dashed",
+          borderWidth: 1,
+          backgroundColor: "#f5f5f5",
+          width: 160,
+          height: 100,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <CloudUploadOutlinedIcon
+          sx={{
+            fontSize: 40,
+          }}
+        />
+      </Card>
+      <input type="file" accept="image/*" hidden onChange={handleUploadImage} />
+    </ButtonBase>
+  );
+}
+
 export default function WriteReviewPage({
   open,
   handleClose,
@@ -176,7 +202,7 @@ export default function WriteReviewPage({
                 ))}
               {formValues.images.length <= 2 && (
                 <Grid item>
-                  <ImageCard />
+                  <ImageCard handleUploadImage={handleUploadImage} />
                 </Grid>
               )}
             </Grid>
@@ -185,35 +211,4 @@ export default function WriteReviewPage({
       </DialogContent>
     </Dialog>
   );
-
-  function ImageCard() {
-    return (
-      <ButtonBase component="label">
-        <Card
-          sx={{
-            display: "flex",
-            borderStyle: "dashed",
-            borderWidth: 1,
-            backgroundColor: "#f5f5f5",
-            width: 160,
-            height: 100,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <CloudUploadOutlinedIcon
-            sx={{
-              fontSize: 40,
-            }}
-          />
-        </Card>
-        <input
-          type="file"
-          accept="image/*"
-          hidden
-          onChange={handleUploadImage}
-        />
-      </ButtonBase>
-    );
-  }
 }

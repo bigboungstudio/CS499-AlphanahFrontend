@@ -288,7 +288,7 @@ export default function SellerProductsPage() {
               },
             }}
             InputProps={{
-              startAdornment: (
+              startadornment: (
                 <InputAdornment position="start">
                   <SearchIcon />
                 </InputAdornment>

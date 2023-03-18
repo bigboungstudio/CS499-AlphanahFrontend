@@ -183,7 +183,7 @@ export default function SellerCouponsPage() {
               },
             }}
             InputProps={{
-              startAdornment: (
+              startadornment: (
                 <InputAdornment position="start">
                   <SearchIcon />
                 </InputAdornment>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Autocomplete, TextField } from "@mui/material";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+// import SearchIcon from "@mui/icons-material/Search";
 
 const NabBarSearchBar = () => {
   const navigate = useNavigate();
@@ -65,15 +66,23 @@ const NabBarSearchBar = () => {
           placeholder="ค้นหาสินค้า"
           fullWidth
           sx={{ bgcolor: "#f5f5f5" }}
-          //   InputProps={
-          //     {
-          //       startAdornment: (
-          //         <InputAdornment position="start">
-          //           <SearchIcon />
-          //         </InputAdornment>
-          //       ),
-          //     }
-          //   }
+          inputProps={{
+            ...params.inputProps,
+            onKeyDown: (e) => {
+              if (e.key === "Enter") {
+                e.stopPropagation();
+              }
+            },
+            sx: {
+              height: "7px",
+              fontSize: "14px",
+            },
+            // startAdornment: (
+            //   <InputAdornment position="start">
+            //     <SearchIcon />
+            //   </InputAdornment>
+            // ),
+          }}
         />
       )}
     />

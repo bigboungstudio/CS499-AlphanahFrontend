@@ -29,6 +29,68 @@ import { addProduct } from "../../../redux/actions/productActions";
 import { useNavigate } from "react-router-dom";
 import NewOption from "./NewOption";
 
+function ImageCardMain({ handleUploadMainImage }) {
+  return (
+    <ButtonBase component="label" sx={{ mr: 2, mb: 2 }}>
+      <Card
+        sx={{
+          display: "flex",
+          borderStyle: "dashed",
+          borderWidth: 1,
+          backgroundColor: "#f5f5f5",
+          width: 160,
+          height: 100,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <AddCircleOutlineIcon
+          sx={{
+            fontSize: 40,
+          }}
+        />
+      </Card>
+      <input
+        type="file"
+        accept="image/*"
+        hidden
+        onChange={handleUploadMainImage}
+      />
+    </ButtonBase>
+  );
+}
+
+function ImageCardSecondary({ handleUploadSecondaryImage }) {
+  return (
+    <ButtonBase component="label" sx={{ mr: 2, mb: 2 }}>
+      <Card
+        sx={{
+          display: "flex",
+          borderStyle: "dashed",
+          borderWidth: 1,
+          backgroundColor: "#f5f5f5",
+          width: 160,
+          height: 100,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <AddCircleOutlineIcon
+          sx={{
+            fontSize: 40,
+          }}
+        />
+      </Card>
+      <input
+        type="file"
+        accept="image/*"
+        hidden
+        onChange={handleUploadSecondaryImage}
+      />
+    </ButtonBase>
+  );
+}
+
 export default function SellerAddProductPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -346,7 +408,9 @@ export default function SellerAddProductPage() {
               <Typography>รูปหลักของสินค้า *</Typography>
               <Box alignItems="start">
                 {Object.keys(formValues.mainImage).length === 0 ? (
-                  <ImageCardMain />
+                  <ImageCardMain
+                    handleUploadMainImage={handleUploadMainImage}
+                  />
                 ) : (
                   <Badge
                     sx={{ mr: 2, mb: 2 }}
@@ -395,7 +459,11 @@ export default function SellerAddProductPage() {
                     />
                   </Badge>
                 ))}
-              {formValues.images.length <= 7 && <ImageCardSecondary />}
+              {formValues.images.length <= 7 && (
+                <ImageCardSecondary
+                  handleUploadSecondaryImage={handleUploadSecondaryImage}
+                />
+              )}
             </Grid>
           </Stack>
         </Stack>
@@ -420,66 +488,4 @@ export default function SellerAddProductPage() {
       </Box>
     </Stack>
   );
-
-  function ImageCardMain() {
-    return (
-      <ButtonBase component="label" sx={{ mr: 2, mb: 2 }}>
-        <Card
-          sx={{
-            display: "flex",
-            borderStyle: "dashed",
-            borderWidth: 1,
-            backgroundColor: "#f5f5f5",
-            width: 160,
-            height: 100,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <AddCircleOutlineIcon
-            sx={{
-              fontSize: 40,
-            }}
-          />
-        </Card>
-        <input
-          type="file"
-          accept="image/*"
-          hidden
-          onChange={handleUploadMainImage}
-        />
-      </ButtonBase>
-    );
-  }
-
-  function ImageCardSecondary() {
-    return (
-      <ButtonBase component="label" sx={{ mr: 2, mb: 2 }}>
-        <Card
-          sx={{
-            display: "flex",
-            borderStyle: "dashed",
-            borderWidth: 1,
-            backgroundColor: "#f5f5f5",
-            width: 160,
-            height: 100,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <AddCircleOutlineIcon
-            sx={{
-              fontSize: 40,
-            }}
-          />
-        </Card>
-        <input
-          type="file"
-          accept="image/*"
-          hidden
-          onChange={handleUploadSecondaryImage}
-        />
-      </ButtonBase>
-    );
-  }
 }

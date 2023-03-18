@@ -90,9 +90,11 @@ export function updateUserImage(userType, file, token) {
 
 export function buyerRegister(customer) {
   return async function (dispatch) {
-    function onSuccess(success) {
-      dispatch(buyerRegisterSuccess());
-      buyerLogin(customer);
+    async function onSuccess(success) {
+      const token = await authenticationApi.Login(customer);
+      if (token.account.role !== "MERCHANT") {
+        dispatch(buyerLoginSuccess(token));
+      }
     }
     try {
       const success = await authenticationApi.RegisterAsCustomer(customer);
@@ -120,9 +122,11 @@ export function buyerLogin(customer) {
 
 export function sellerRegister(merchant) {
   return async function (dispatch) {
-    function onSuccess(success) {
-      dispatch(sellerRegisterSuccess());
-      sellerLogin(merchant);
+    async function onSuccess(success) {
+      const token = await authenticationApi.Login(merchant);
+      if (token.account.role === "MERCHANT") {
+        dispatch(sellerLoginSuccess(token));
+      }
     }
     try {
       const success = await authenticationApi.RegisterAsMerchant(merchant);

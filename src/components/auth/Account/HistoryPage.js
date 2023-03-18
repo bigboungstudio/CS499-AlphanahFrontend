@@ -40,7 +40,7 @@ export default function HistoryPage({ histories }) {
           },
         }}
         InputProps={{
-          startAdornment: (
+          startadornment: (
             <InputAdornment position="start">
               <SearchIcon />
             </InputAdornment>

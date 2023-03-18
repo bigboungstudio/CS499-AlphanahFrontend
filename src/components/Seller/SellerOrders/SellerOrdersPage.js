@@ -31,17 +31,22 @@ export default function SellerOrdersPage() {
   const dispatch = useDispatch();
   const seller = useSelector((state) => state.auth.seller);
   const salesOrders = useSelector((state) => state.order.salesOrder);
+  const [orders, setOrders] = useState([]);
   const [value, setValue] = useState("all");
   useEffect(() => {
-    dispatch(loadSalesOrder(seller.token));
-  }, [dispatch, seller.token]);
-  const [sortedOrders, setSortedOrders] = useState([]);
+    seller.currentUser.accountUUID && dispatch(loadSalesOrder(seller.token));
+  }, [dispatch, seller.currentUser.accountUUID, seller.token]);
   useEffect(() => {
     Object.keys(salesOrders).length !== 0 &&
-    salesOrders !== undefined &&
+      salesOrders.data !== undefined &&
+      salesOrders !== undefined &&
+      setOrders(salesOrders.data);
+  }, [salesOrders]);
+  const [sortedOrders, setSortedOrders] = useState([]);
+  useEffect(() => {
     value === "all"
       ? setSortedOrders(
-          [...salesOrders.data].sort((a, b) => {
+          [...orders].sort((a, b) => {
             return (
               new Date(b.order.checkoutDate).getTime() -
               new Date(a.order.checkoutDate).getTime()
@@ -49,7 +54,7 @@ export default function SellerOrdersPage() {
           })
         )
       : setSortedOrders(
-          [...salesOrders.data]
+          [...orders]
             .filter((order) => order.deliveryStatus === value)
             .sort((a, b) => {
               return (
@@ -58,7 +63,7 @@ export default function SellerOrdersPage() {
               );
             })
         );
-  }, [salesOrders, value]);
+  }, [orders, value]);
   const [sortOption, setSortOption] = useState("ล่าสุด");
 
   const handleChange = (event, newValue) => {
