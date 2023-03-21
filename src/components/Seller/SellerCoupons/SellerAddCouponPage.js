@@ -110,7 +110,8 @@ export default function SellerAddCouponPage() {
   };
   const handleSubmit = () => {
     const formatDate = (value) => {
-      const date = new Date(value.toISOString());
+      let date = new Date(value.toISOString());
+      date.setUTCHours(date.getUTCHours() + 7);
       const offsetMinutes = date.getTimezoneOffset();
       const offsetHours = Math.abs(offsetMinutes / 60);
       const offsetSign = offsetMinutes > 0 ? "-" : "+";
@@ -122,8 +123,6 @@ export default function SellerAddCouponPage() {
       const isoString = date.toISOString().replace("Z", offsetString);
       return isoString;
     };
-    // console.log(formatDate(formValues.startDate));
-    // console.log(formatDate(formValues.endDate));
 
     const newFormValues = {
       ...formValues,
