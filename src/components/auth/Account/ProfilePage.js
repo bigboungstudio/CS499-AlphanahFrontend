@@ -18,6 +18,7 @@ const EditForm = ({
   maxLength,
   onChange,
   name,
+  error = null,
 }) => {
   return (
     <Box>
@@ -36,6 +37,7 @@ const EditForm = ({
             fontSize: "14px",
           },
         }}
+        {...(error && { error: true, helperText: error })}
       />
     </Box>
   );
@@ -48,6 +50,7 @@ export default function ProfilePage({
   formValues,
   handleUpload,
   loading,
+  errors,
 }) {
   return (
     <Box
@@ -98,22 +101,24 @@ export default function ProfilePage({
           </Box>
 
           <EditForm
-            head="ชื่อ"
+            head="ชื่อ *"
             name="firstname"
             value={formValues.firstname}
             placeholder="ระบุชื่อใหม่"
             type="text"
             maxLength={50}
             onChange={handleInputChange}
+            error={errors.firstname}
           />
           <EditForm
-            head="นามสกุล"
+            head="นามสกุล *"
             name="lastname"
             value={formValues.lastname}
             placeholder="ระบุนามสกุลใหม่"
             type="text"
             maxLength={50}
             onChange={handleInputChange}
+            error={errors.lastname}
           />
           <EditForm
             head="เบอร์โทรศัพท์"

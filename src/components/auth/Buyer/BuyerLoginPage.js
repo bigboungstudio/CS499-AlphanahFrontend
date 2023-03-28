@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { Button, Box, Stack, Typography, Divider } from "@mui/material";
 import { Link } from "react-router-dom";
 import FacebookIcon from "@mui/icons-material/Facebook";
@@ -27,10 +27,26 @@ export default function BuyerLoginPage() {
       [name]: value,
     });
   };
-  const [formValues, setFormValues] = React.useState(initialValues);
+  const [formValues, setFormValues] = useState(initialValues);
+
+  const [errors, setErrors] = useState({});
+  const validate = () => {
+    let temp = {};
+    temp.email = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(
+      formValues.email
+    )
+      ? ""
+      : "อีเมลไม่ถูกต้อง";
+    temp.password = formValues.password.length >= 8 ? "" : "รหัสผ่านไม่ถูกต้อง";
+
+    setErrors({ ...temp });
+    return Object.values(temp).every((x) => x === "");
+  };
   const handleSubmit = async (event) => {
     event.preventDefault();
-    dispatch(buyerLogin(formValues)).then(setFormValues(initialValues));
+    if (validate()) {
+      dispatch(buyerLogin(formValues)).then(setFormValues(initialValues));
+    }
   };
   return (
     <Stack spacing={3} px="20%" pt={10} bgcolor="#f5f5f5" height="100vh">
@@ -48,6 +64,7 @@ export default function BuyerLoginPage() {
               type="email"
               handleOnchange={handleInputChange}
               maxLength={128}
+              error={errors.email}
             />
             <TextFieldForm
               head="รหัสผ่าน"
@@ -57,6 +74,7 @@ export default function BuyerLoginPage() {
               type="password"
               handleOnchange={handleInputChange}
               maxLength={256}
+              error={errors.password}
             />
           </Stack>
           <Stack width="40%">
@@ -65,8 +83,6 @@ export default function BuyerLoginPage() {
                 type="submit"
                 sx={{ height: 50, fontSize: 18 }}
                 variant="contained"
-                // component={Link}
-                // to={"/account"}
               >
                 เข้าสู่ระบบ
               </Button>

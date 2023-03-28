@@ -3,16 +3,17 @@ import {
   Typography,
   Box,
   Button,
-  Divider,
+  // Divider,
   TextField,
 } from "@mui/material";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import FacebookIcon from "@mui/icons-material/Facebook";
+// import FacebookIcon from "@mui/icons-material/Facebook";
 import SellerNavBar from "../../common/SellerNavBar";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { sellerRegister } from "../../../redux/actions/authActions";
+import CircleIcon from "@mui/icons-material/Circle";
 
 export default function SellerRegisterPage() {
   const navigate = useNavigate();
@@ -36,14 +37,55 @@ export default function SellerRegisterPage() {
     });
   };
   const [formValues, setFormValues] = useState(initialValues);
+  const [errors, setErrors] = useState({});
+  const validate = () => {
+    let temp = {};
+    temp.email = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(
+      formValues.email
+    )
+      ? ""
+      : "อีเมลไม่ถูกต้อง";
+    const uppercaseRegExp = /(?=.*?[A-Z])/;
+    const lowercaseRegExp = /(?=.*?[a-z])/;
+    const digitsRegExp = /(?=.*?[0-9])/;
+    const specialCharRegExp = /(?=.*?[#?!@$%^&*-])/;
+    const minLengthRegExp = /.{8,}/;
+    const passwordLength = formValues.password.length;
+    const uppercasePassword = uppercaseRegExp.test(formValues.password);
+    const lowercasePassword = lowercaseRegExp.test(formValues.password);
+    const digitsPassword = digitsRegExp.test(formValues.password);
+    const specialCharPassword = specialCharRegExp.test(formValues.password);
+    const minLengthPassword = minLengthRegExp.test(formValues.password);
+    let errMsg = "";
+    if (passwordLength === 0) {
+      errMsg = "กรุณากรอกรหัสผ่าน";
+    } else if (!uppercasePassword) {
+      errMsg = "ตัวอักษรตัวใหญ่อย่างน้อย 1 ตัว";
+    } else if (!lowercasePassword) {
+      errMsg = "ตัวอักษรตัวเล็กอย่างน้อย 1 ตัว";
+    } else if (!digitsPassword) {
+      errMsg = "ตัวเลขอย่างน้อย 1 ตัว";
+    } else if (!specialCharPassword) {
+      errMsg = "ตัวอักษรพิเศษอย่างน้อย 1 ตัว";
+    } else if (!minLengthPassword) {
+      errMsg = "ความยาวอย่างน้อย 8 ตัว";
+    } else {
+      errMsg = "";
+    }
+    temp.password = errMsg;
+
+    temp.confirmPassword =
+      formValues.confirmPassword === formValues.password
+        ? ""
+        : "รหัสผ่านไม่ตรงกัน";
+    setErrors({ ...temp });
+    return Object.values(temp).every((x) => x === "");
+  };
   const handleSubmit = (event) => {
     event.preventDefault();
-    dispatch(sellerRegister(formValues));
-    // .then(
-    //   dispatch(
-    //     sellerLogin({ email: formValues.email, password: formValues.password })
-    //   ).then(setFormValues(initialValues))
-    // );
+    if (validate()) {
+      dispatch(sellerRegister(formValues)).then(setFormValues(initialValues));
+    }
   };
   return (
     <>
@@ -78,6 +120,7 @@ export default function SellerRegisterPage() {
                     fontSize: "16px",
                   },
                 }}
+                {...(errors.email && { error: true, helperText: errors.email })}
               />
               <TextField
                 name="password"
@@ -93,6 +136,10 @@ export default function SellerRegisterPage() {
                     fontSize: "16px",
                   },
                 }}
+                {...(errors.password && {
+                  error: true,
+                  helperText: errors.password,
+                })}
               />
               <TextField
                 name="confirmPassword"
@@ -108,7 +155,54 @@ export default function SellerRegisterPage() {
                     fontSize: "16px",
                   },
                 }}
+                {...(errors.confirmPassword && {
+                  error: true,
+                  helperText: errors.confirmPassword,
+                })}
               />
+              <Stack sx={{ color: "#8f8f8f" }}>
+                <Typography sx={{ fontSize: 15 }}>รหัสผ่านจะต้อง :</Typography>
+                <Stack direction="row" alignItems="center" spacing={1}>
+                  <CircleIcon sx={{ fontSize: 12 }} />
+                  <Typography sx={{ fontSize: 15 }}>
+                    ภาษาอังกฤษเท่านั้น
+                  </Typography>
+                </Stack>
+                <Stack direction="row" alignItems="center" spacing={1}>
+                  <CircleIcon sx={{ fontSize: 12 }} />
+                  <Typography sx={{ fontSize: 15 }}>
+                    ความยาวอย่างน้อย 5 ตัว
+                  </Typography>
+                </Stack>
+                <Stack direction="row" alignItems="center" spacing={1}>
+                  <CircleIcon sx={{ fontSize: 12 }} />
+                  <Typography sx={{ fontSize: 15 }}>
+                    จะต้องมีตัวอักษรเหล่านี้อย่างน้อย 1 ตัว
+                  </Typography>
+                </Stack>
+                <Box sx={{ ml: 3 }}>
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    <CircleIcon sx={{ fontSize: 6, color: "black" }} />
+                    <Typography sx={{ fontSize: 15 }}>
+                      ตัวอักษรตัวพิมพ์ใหญ่
+                    </Typography>
+                  </Stack>
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    <CircleIcon sx={{ fontSize: 6, color: "black" }} />
+                    <Typography sx={{ fontSize: 15 }}>
+                      ตัวอักษรตัวพิมพ์เล็ก
+                    </Typography>
+                  </Stack>
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    <CircleIcon sx={{ fontSize: 6, color: "black" }} />
+                    <Typography sx={{ fontSize: 15 }}>ตัวอักษรพิเศษ</Typography>
+                  </Stack>
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    <CircleIcon sx={{ fontSize: 6, color: "black" }} />
+                    <Typography sx={{ fontSize: 15 }}>ตัวเลข</Typography>
+                  </Stack>
+                </Box>
+              </Stack>
 
               <Stack spacing={1}>
                 <Button
@@ -128,7 +222,7 @@ export default function SellerRegisterPage() {
                   เข้าสู่ระบบ
                 </Button>
               </Stack>
-              <Box>
+              {/* <Box>
                 <Divider spacing={1}>
                   <Typography sx={{ fontSize: "16px" }}>หรือ</Typography>
                 </Divider>
@@ -149,7 +243,7 @@ export default function SellerRegisterPage() {
                 }}
               >
                 Facebook
-              </Button>
+              </Button> */}
             </Stack>
           </form>
         </Box>

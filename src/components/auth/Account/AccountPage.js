@@ -63,21 +63,32 @@ export default function AccountPage() {
       [name]: value,
     });
   };
-  const [formValues, setFormValues] = React.useState({
+  const [formValues, setFormValues] = useState({
     firstname: "",
     lastname: "",
     address: "",
     phone: "",
   });
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+  const validate = () => {
+    let temp = {};
+    temp.firstname = formValues.firstname ? "" : "กรุณากรอกชื่อ";
+    temp.lastname = formValues.lastname ? "" : "กรุณากรอกนามสกุล";
+    setErrors({ ...temp });
+
+    return Object.values(temp).every((x) => x === "");
+  };
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setLoading(true);
-    dispatch(
-      updateUserDetail("buyer", formValues, buyer.token, () =>
-        setLoading(false)
-      )
-    );
+    if (validate()) {
+      setLoading(true);
+      dispatch(
+        updateUserDetail("buyer", formValues, buyer.token, () =>
+          setLoading(false)
+        )
+      );
+    }
   };
   const handleUpload = async (event) => {
     if (event.target.files.length !== 0) {
@@ -133,6 +144,7 @@ export default function AccountPage() {
               formValues={formValues}
               handleUpload={handleUpload}
               loading={loading}
+              errors={errors}
             />
           ) : (
             Object.keys(history).length !== 0 &&

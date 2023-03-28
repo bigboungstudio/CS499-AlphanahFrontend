@@ -26,6 +26,7 @@ export function TextFieldForm({
   type,
   handleOnchange,
   maxLength,
+  error = null,
 }) {
   return (
     <Box>
@@ -44,6 +45,7 @@ export function TextFieldForm({
           },
           maxLength: { maxLength },
         }}
+        {...(error && { error: true, helperText: error })}
       />
     </Box>
   );

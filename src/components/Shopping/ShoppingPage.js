@@ -160,6 +160,8 @@ export default function ShoppingPage() {
     e.preventDefault();
     const { name } = e.target;
     if (starFilter === name) {
+      setStarFilter("");
+      setIsFiltered({ ...isFiltered, star: false });
       isFiltered.price
         ? setFilteredProducts(
             [...sortedProducts].filter(
@@ -169,22 +171,31 @@ export default function ShoppingPage() {
             )
           )
         : setFilteredProducts([...sortedProducts]);
-      setStarFilter("");
-      setIsFiltered({ ...isFiltered, star: false });
     } else if (starFilter !== name) {
+      setStarFilter(name);
+      setIsFiltered({ ...isFiltered, star: true });
+      const min =
+        priceFilter.max === priceFilter.min || priceFilter.min < priceFilter.max
+          ? parseInt(priceFilter.min)
+          : parseInt(priceFilter.max);
+      const max =
+        priceFilter.max === priceFilter.min || priceFilter.min < priceFilter.max
+          ? parseInt(priceFilter.max)
+          : parseInt(priceFilter.min);
       isFiltered.price
         ? setFilteredProducts(
-            [...filteredProducts].filter(
-              (product) => product.reviewScore >= parseInt(starFilter)
+            [...sortedProducts].filter(
+              (product) =>
+                product.reviewScore >= parseInt(name) &&
+                product.minPrice >= min &&
+                product.minPrice <= max
             )
           )
         : setFilteredProducts(
             [...sortedProducts].filter(
-              (product) => product.reviewScore >= parseInt(starFilter)
+              (product) => product.reviewScore >= parseInt(name)
             )
           );
-      setStarFilter(name);
-      setIsFiltered({ ...isFiltered, star: true });
     }
   };
   const parentUUID =

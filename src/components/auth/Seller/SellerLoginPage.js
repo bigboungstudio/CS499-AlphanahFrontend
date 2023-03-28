@@ -3,12 +3,12 @@ import {
   Typography,
   Box,
   Button,
-  Divider,
+  // Divider,
   TextField,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import FacebookIcon from "@mui/icons-material/Facebook";
+// import FacebookIcon from "@mui/icons-material/Facebook";
 import SellerNavBar from "../../common/SellerNavBar";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -35,9 +35,24 @@ export default function SellerLoginPage() {
     });
   };
   const [formValues, setFormValues] = React.useState(initialValues);
+  const [errors, setErrors] = useState({});
+  const validate = () => {
+    let temp = {};
+    temp.email = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(
+      formValues.email
+    )
+      ? ""
+      : "อีเมลไม่ถูกต้อง";
+    temp.password = formValues.password.length >= 8 ? "" : "รหัสผ่านไม่ถูกต้อง";
+
+    setErrors({ ...temp });
+    return Object.values(temp).every((x) => x === "");
+  };
   const handleSubmit = async (event) => {
     event.preventDefault();
-    dispatch(sellerLogin(formValues)).then(setFormValues(initialValues));
+    if (validate()) {
+      dispatch(sellerLogin(formValues)).then(setFormValues(initialValues));
+    }
   };
   return (
     <>
@@ -72,6 +87,7 @@ export default function SellerLoginPage() {
                     fontSize: "16px",
                   },
                 }}
+                {...(errors.email && { error: true, helperText: errors.email })}
               />
               <Stack spacing={1}>
                 <TextField
@@ -88,6 +104,10 @@ export default function SellerLoginPage() {
                       fontSize: "16px",
                     },
                   }}
+                  {...(errors.password && {
+                    error: true,
+                    helperText: errors.password,
+                  })}
                 />
                 {/* <Button sx={{ alignSelf: "start" }} variant="text">
                 ลืมรหัสผ่าน?
@@ -111,7 +131,7 @@ export default function SellerLoginPage() {
                   สร้างบัญชี
                 </Button>
               </Stack>
-              <Box>
+              {/* <Box>
                 <Divider spacing={1}>
                   <Typography sx={{ fontSize: "16px" }}>หรือ</Typography>
                 </Divider>
@@ -132,7 +152,7 @@ export default function SellerLoginPage() {
                 }}
               >
                 Facebook
-              </Button>
+              </Button> */}
             </Stack>
           </form>
         </Box>
