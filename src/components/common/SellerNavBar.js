@@ -1,5 +1,5 @@
 import React from "react";
-import { AppBar, Toolbar, Box, Stack, Button, Typography } from "@mui/material";
+import { AppBar, Toolbar, Box, Stack, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 
 export default function SellerNavBar() {
@@ -17,13 +17,7 @@ export default function SellerNavBar() {
         <Toolbar>
           <Stack flexGrow={1} direction="row" justifyContent="space-between">
             <Button>
-              <img height="50px" src="/a.png" alt="logo" />
-              <Typography variant="h4" component="div" color="#FB6376" pr={1}>
-                lphanah
-              </Typography>
-              <Typography variant="h4" component="div" color="#FB6376">
-                Seller
-              </Typography>
+              <img height="65px" src="/alphanah_seller_1.png" alt="logo" />
             </Button>
             <Button component={Link} to={"/"} variant="text" size="large">
               กลับหน้าร้านค้า

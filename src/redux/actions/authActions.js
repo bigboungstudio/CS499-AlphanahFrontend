@@ -34,6 +34,9 @@ export function sellerRegisterSuccess() {
 export function buyerLoginSuccess(token) {
   return { type: types.BUYER_LOGIN_SUCCESS, token };
 }
+export function loginFacebookSuccess(token) {
+  return { type: types.LOGIN_FACEBOOK_SUCCESS, token };
+}
 export function sellerLoginSuccess(token) {
   return { type: types.SELLER_LOGIN_SUCCESS, token };
 }
@@ -125,6 +128,11 @@ export function buyerLogin(customer) {
       window.alert("เข้าสู่ระบบไม่สำเร็จ");
       throw error;
     }
+  };
+}
+export function loginFacebook(token) {
+  return function (dispatch) {
+    dispatch(loginFacebookSuccess(token));
   };
 }
 

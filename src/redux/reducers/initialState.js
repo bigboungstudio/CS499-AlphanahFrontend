@@ -1,6 +1,7 @@
 const initialState = {
   auth: {
     buyer: {
+      isFacebook: false,
       isAuthentication: false,
       currentUser: {},
       token: {},

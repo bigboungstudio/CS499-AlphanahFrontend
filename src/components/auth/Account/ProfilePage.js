@@ -85,20 +85,22 @@ export default function ProfilePage({
       </Stack>
       <form onSubmit={handleSubmit}>
         <Stack spacing={3}>
-          <Box>
-            <Typography sx={{ fontSize: "16px", pb: 1 }}>อีเมล</Typography>
-            <TextField
-              disabled
-              sx={{ width: "50%" }}
-              value={buyer.currentUser.email}
-              inputProps={{
-                sx: {
-                  height: "7px",
-                  fontSize: "14px",
-                },
-              }}
-            />
-          </Box>
+          {!buyer.isFacebook && (
+            <Box>
+              <Typography sx={{ fontSize: "16px", pb: 1 }}>อีเมล</Typography>
+              <TextField
+                disabled
+                sx={{ width: "50%" }}
+                value={buyer.currentUser.email}
+                inputProps={{
+                  sx: {
+                    height: "7px",
+                    fontSize: "14px",
+                  },
+                }}
+              />
+            </Box>
+          )}
 
           <EditForm
             head="ชื่อ *"

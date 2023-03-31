@@ -5,16 +5,32 @@ export default function authReducer(state = initialState.auth, action) {
   switch (action.type) {
     case types.BUYER_REGISTER_SUCCESS:
       return state;
+    case types.LOGIN_FACEBOOK_SUCCESS:
+      return {
+        ...state,
+        buyer: {
+          ...state.buyer,
+          isAuthentication: true,
+          isFacebook: true,
+          token: action.token,
+        },
+      };
     case types.BUYER_LOGIN_SUCCESS:
       return {
         ...state,
-        buyer: { ...state.buyer, isAuthentication: true, token: action.token },
+        buyer: {
+          ...state.buyer,
+          isAuthentication: true,
+          isFacebook: false,
+          token: action.token,
+        },
       };
     case types.BUYER_LOGOUT_SUCCESS:
       return {
         ...state,
         buyer: {
           isAuthentication: false,
+          isFacebook: false,
           currentUser: {},
           token: {},
         },

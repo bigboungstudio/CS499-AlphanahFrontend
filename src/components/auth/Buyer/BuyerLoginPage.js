@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Box, Stack, Typography, Divider } from "@mui/material";
 import { Link } from "react-router-dom";
 import FacebookIcon from "@mui/icons-material/Facebook";
@@ -11,7 +11,7 @@ export default function BuyerLoginPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const buyer = useSelector((state) => state.auth.buyer);
-  React.useEffect(() => {
+  useEffect(() => {
     const goHomePage = () => navigate("/");
     buyer.isAuthentication && goHomePage();
   }, [buyer, navigate]);
@@ -47,6 +47,11 @@ export default function BuyerLoginPage() {
     if (validate()) {
       dispatch(buyerLogin(formValues)).then(setFormValues(initialValues));
     }
+  };
+  const onFacebook = () => {
+    window.location.replace(
+      "https://auth.alphanah.com/oauth2/authorize?identity_provider=Facebook&redirect_uri=http://localhost:3000/buyer/facebook&response_type=TOKEN&client_id=7hopjdad9ohj6n1v9h93c4eo3c&scope=aws.cognito.signin.user.admin+email+openid+profile"
+    );
   };
   return (
     <Stack spacing={3} px="20%" pt={10} bgcolor="#f5f5f5" height="100vh">
@@ -92,6 +97,7 @@ export default function BuyerLoginPage() {
                 </Divider>
               </Box>
               <Button
+                onClick={onFacebook}
                 size="large"
                 variant="outlined"
                 startIcon={<FacebookIcon />}

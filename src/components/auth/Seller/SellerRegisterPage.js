@@ -171,7 +171,7 @@ export default function SellerRegisterPage() {
                 <Stack direction="row" alignItems="center" spacing={1}>
                   <CircleIcon sx={{ fontSize: 12 }} />
                   <Typography sx={{ fontSize: 15 }}>
-                    ความยาวอย่างน้อย 5 ตัว
+                    ความยาวอย่างน้อย 8 ตัว
                   </Typography>
                 </Stack>
                 <Stack direction="row" alignItems="center" spacing={1}>

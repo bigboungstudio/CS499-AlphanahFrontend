@@ -79,6 +79,11 @@ export default function BuyerRegisterPage() {
       dispatch(buyerRegister(formValues)).then(setFormValues(initialValues));
     }
   };
+  const onFacebook = () => {
+    window.location.replace(
+      "https://auth.alphanah.com/oauth2/authorize?identity_provider=Facebook&redirect_uri=http://localhost:3000/buyer/facebook&response_type=TOKEN&client_id=7hopjdad9ohj6n1v9h93c4eo3c&scope=aws.cognito.signin.user.admin+email+openid+profile"
+    );
+  };
 
   return (
     <Stack spacing={3} px="20%" pt={10} bgcolor="#f5f5f5" height="100vh">
@@ -129,7 +134,7 @@ export default function BuyerRegisterPage() {
               <Stack direction="row" alignItems="center" spacing={1}>
                 <CircleIcon sx={{ fontSize: 12 }} />
                 <Typography sx={{ fontSize: 15 }}>
-                  ความยาวอย่างน้อย 5 ตัว
+                  ความยาวอย่างน้อย 8 ตัว
                 </Typography>
               </Stack>
               <Stack direction="row" alignItems="center" spacing={1}>
@@ -176,6 +181,7 @@ export default function BuyerRegisterPage() {
               </Divider>
             </Box>
             <Button
+              onClick={onFacebook}
               size="large"
               variant="outlined"
               startIcon={<FacebookIcon />}

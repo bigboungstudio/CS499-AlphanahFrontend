@@ -7,9 +7,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Typography,
   Button,
-  Stack,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import InventoryIcon from "@mui/icons-material/Inventory";
@@ -73,17 +71,7 @@ export default function SellerDrawer({ location }) {
       anchor="left"
     >
       <Button component={Link} to={"/seller/home"} sx={{ mt: 2 }}>
-        <Stack>
-          <Stack direction="row">
-            <img height="45px" src="/a.png" alt="logo" />
-            <Typography variant="h4" component="div" color="#FB6376" pr={1}>
-              lphanah
-            </Typography>
-          </Stack>
-          <Typography pl={15} variant="h4" component="div" color="#FB6376">
-            Seller
-          </Typography>
-        </Stack>
+        <img height="90px" src="/alphanah_seller_2.png" alt="logo" />
       </Button>
       <Divider />
       <List>

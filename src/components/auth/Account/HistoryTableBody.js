@@ -76,7 +76,7 @@ export default function HistoryTableBody({ history }) {
         </Stack>
       </TableCell>
       <TableCell align="center" sx={{ fontSize: "20px" }}>
-        {format(date, "dd/MM/yyyy hh:mm")}
+        {format(date, "dd/MM/yyyy HH:mm")}
       </TableCell>
       <TableCell align="center" sx={{ fontSize: "20px", color: "#01bfa6" }}>
         {FormatPrice(history.totalPrice + history.deliveryFee)}

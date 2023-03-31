@@ -77,7 +77,7 @@ export default function SellerOrderDetail({ order, open, handleClose }) {
               สั่งซื้อเมื่อ:
             </Typography>
             <Typography sx={{ fontSize: 20 }}>
-              {format(date, "dd/MM/yyyy hh:mm")}
+              {format(date, "dd/MM/yyyy HH:mm")}
             </Typography>
           </Stack>
         </Stack>

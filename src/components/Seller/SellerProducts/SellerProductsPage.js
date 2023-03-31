@@ -408,7 +408,7 @@ export default function SellerProductsPage() {
           {product.saleCount}
         </TableCell>
         <TableCell align="center" sx={{ fontSize: "20px" }}>
-          {format(date, "dd/MM/yyyy hh:mm")}
+          {format(date, "dd/MM/yyyy HH:mm")}
         </TableCell>
         <TableCell>
           <Stack>

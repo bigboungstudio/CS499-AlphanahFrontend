@@ -21,6 +21,7 @@ import SellerProfilePage from "./components/Seller/SellerProfilePage";
 import SellerCouponsPage from "./components/Seller/SellerCoupons/SellerCouponsPage";
 import SellerAddCouponPage from "./components/Seller/SellerCoupons/SellerAddCouponPage";
 import MerchantPage from "./components/Shopping/MerchantPage";
+import BuyerFacebook from "./components/auth/Buyer/BuyerFacebook";
 
 import { Box } from "@mui/material";
 
@@ -38,6 +39,7 @@ function App() {
           <Routes>
             <Route exact path="/" element={<HomePage />} />
             <Route exact path="/buyer/login" element={<BuyerLoginPage />} />
+            <Route exact path="/buyer/facebook" element={<BuyerFacebook />} />
             <Route exact path="/cart" element={<CartPage />} />
             <Route
               exact
