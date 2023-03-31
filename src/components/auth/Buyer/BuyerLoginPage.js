@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Button, Box, Stack, Typography, Divider } from "@mui/material";
+import { Button, Box, Stack, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import FacebookIcon from "@mui/icons-material/Facebook";
+// import FacebookIcon from "@mui/icons-material/Facebook";
 import { TextFieldForm } from "../AuthComponents";
 import { useSelector, useDispatch } from "react-redux";
 import { buyerLogin } from "../../../redux/actions/authActions";
@@ -48,11 +48,11 @@ export default function BuyerLoginPage() {
       dispatch(buyerLogin(formValues)).then(setFormValues(initialValues));
     }
   };
-  const onFacebook = () => {
-    window.location.replace(
-      "https://auth.alphanah.com/oauth2/authorize?identity_provider=Facebook&redirect_uri=http://localhost:3000/buyer/facebook&response_type=TOKEN&client_id=7hopjdad9ohj6n1v9h93c4eo3c&scope=aws.cognito.signin.user.admin+email+openid+profile"
-    );
-  };
+  // const onFacebook = () => {
+  //   window.location.replace(
+  //     "https://auth.alphanah.com/oauth2/authorize?identity_provider=Facebook&redirect_uri=http://localhost:3000/buyer/facebook&response_type=TOKEN&client_id=7hopjdad9ohj6n1v9h93c4eo3c&scope=aws.cognito.signin.user.admin+email+openid+profile"
+  //   );
+  // };
   return (
     <Stack spacing={3} px="20%" pt={10} bgcolor="#f5f5f5" height="100vh">
       <Typography sx={{ fontSize: "30px" }}>
@@ -91,12 +91,12 @@ export default function BuyerLoginPage() {
               >
                 เข้าสู่ระบบ
               </Button>
-              <Box>
+              {/* <Box>
                 <Divider spacing={1}>
                   <Typography sx={{ fontSize: "16px" }}>หรือ</Typography>
                 </Divider>
-              </Box>
-              <Button
+              </Box> */}
+              {/* <Button
                 onClick={onFacebook}
                 size="large"
                 variant="outlined"
@@ -113,7 +113,7 @@ export default function BuyerLoginPage() {
                 }}
               >
                 Facebook
-              </Button>
+              </Button> */}
               <Box display="flex" alignItems="center">
                 <Typography>เข้ามาใน Alphanah ครั้งแรก?</Typography>
                 <Button variant="text" component={Link} to={"/buyer/register"}>

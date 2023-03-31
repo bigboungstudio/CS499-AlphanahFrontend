@@ -1,7 +1,7 @@
-import { Stack, Typography, Box, Button, Divider } from "@mui/material";
+import { Stack, Typography, Box, Button } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import FacebookIcon from "@mui/icons-material/Facebook";
+// import FacebookIcon from "@mui/icons-material/Facebook";
 import { TextFieldForm } from "../AuthComponents";
 import { buyerRegister } from "../../../redux/actions/authActions";
 import { useDispatch, useSelector } from "react-redux";
@@ -79,11 +79,11 @@ export default function BuyerRegisterPage() {
       dispatch(buyerRegister(formValues)).then(setFormValues(initialValues));
     }
   };
-  const onFacebook = () => {
-    window.location.replace(
-      "https://auth.alphanah.com/oauth2/authorize?identity_provider=Facebook&redirect_uri=http://localhost:3000/buyer/facebook&response_type=TOKEN&client_id=7hopjdad9ohj6n1v9h93c4eo3c&scope=aws.cognito.signin.user.admin+email+openid+profile"
-    );
-  };
+  // const onFacebook = () => {
+  //   window.location.replace(
+  //     "https://auth.alphanah.com/oauth2/authorize?identity_provider=Facebook&redirect_uri=http://localhost:3000/buyer/facebook&response_type=TOKEN&client_id=7hopjdad9ohj6n1v9h93c4eo3c&scope=aws.cognito.signin.user.admin+email+openid+profile"
+  //   );
+  // };
 
   return (
     <Stack spacing={3} px="20%" pt={10} bgcolor="#f5f5f5" height="100vh">
@@ -175,12 +175,12 @@ export default function BuyerRegisterPage() {
             >
               สร้างบัญชี
             </Button>
-            <Box>
+            {/* <Box>
               <Divider spacing={1}>
                 <Typography sx={{ fontSize: "16px" }}>หรือ</Typography>
               </Divider>
-            </Box>
-            <Button
+            </Box> */}
+            {/* <Button
               onClick={onFacebook}
               size="large"
               variant="outlined"
@@ -197,7 +197,7 @@ export default function BuyerRegisterPage() {
               }}
             >
               Facebook
-            </Button>
+            </Button> */}
             <Box display="flex" alignItems="center">
               <Typography>มีบัญชีอยู่แล้วหรือ?</Typography>
               <Button variant="text" component={Link} to={"/buyer/login"}>
