@@ -57,7 +57,10 @@ export default function AccountPage() {
   };
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    var { name, value } = e.target;
+    if (name === "phone") {
+      value = e.target.value.replace(/\D/g, "");
+    }
     setFormValues({
       ...formValues,
       [name]: value,
@@ -75,6 +78,8 @@ export default function AccountPage() {
     let temp = {};
     temp.firstname = formValues.firstname ? "" : "กรุณากรอกชื่อ";
     temp.lastname = formValues.lastname ? "" : "กรุณากรอกนามสกุล";
+    temp.phone = formValues.phone ? "" : "กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง";
+    temp.address = formValues.address ? "" : "กรุณากรอกที่อยู่";
     setErrors({ ...temp });
 
     return Object.values(temp).every((x) => x === "");

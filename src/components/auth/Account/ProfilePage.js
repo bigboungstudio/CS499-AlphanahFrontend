@@ -123,16 +123,17 @@ export default function ProfilePage({
             error={errors.lastname}
           />
           <EditForm
-            head="เบอร์โทรศัพท์"
+            head="เบอร์โทรศัพท์ *"
             name="phone"
             placeholder="ระบุเบอร์โทรศัพท์ติดต่อ"
             value={formValues.phone}
             type="tel"
             maxLength={19}
             onChange={handleInputChange}
+            error={errors.phone}
           />
           <Box>
-            <Typography sx={{ fontSize: "16px", pb: 1 }}>ที่อยู่</Typography>
+            <Typography sx={{ fontSize: "16px", pb: 1 }}>ที่อยู่ *</Typography>
             <TextField
               multiline={true}
               rows={3}
@@ -149,6 +150,10 @@ export default function ProfilePage({
                   fontSize: "14px",
                 },
               }}
+              {...(errors.address && {
+                error: true,
+                helperText: errors.address,
+              })}
             />
           </Box>
         </Stack>

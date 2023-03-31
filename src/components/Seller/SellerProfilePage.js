@@ -60,8 +60,8 @@ export default function SellerProfilePage() {
       setFormValues({
         firstname: seller.currentUser.firstname,
         lastname: seller.currentUser.lastname,
-        address: seller.currentUser.address ?? "",
-        phone: seller.currentUser.phone ?? "",
+        address: seller.currentUser.address ?? "a",
+        phone: seller.currentUser.phone ?? "0000000000",
       });
   }, [
     seller.currentUser.accountUUID,
@@ -73,8 +73,8 @@ export default function SellerProfilePage() {
   const [formValues, setFormValues] = useState({
     firstname: "",
     lastname: "",
-    address: "",
-    phone: "",
+    address: "a",
+    phone: "0000000000",
   });
   const [loading, setLoading] = useState(false);
   const handleInputChange = (e) => {
@@ -179,7 +179,7 @@ export default function SellerProfilePage() {
               onChange={handleInputChange}
               error={errors.lastname}
             />
-            <EditForm
+            {/* <EditForm
               head="เบอร์โทรศัพท์"
               name="phone"
               placeholder="ระบุเบอร์โทรศัพท์ติดต่อ"
@@ -209,7 +209,7 @@ export default function SellerProfilePage() {
                   },
                 }}
               />
-            </Box>
+            </Box> */}
           </Stack>
           <Box spacing={2} mt={5}>
             <Button
