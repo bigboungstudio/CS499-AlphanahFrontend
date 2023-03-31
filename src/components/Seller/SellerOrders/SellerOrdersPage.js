@@ -17,6 +17,9 @@ import {
   Button,
   MenuItem,
   CircularProgress,
+  Dialog,
+  DialogTitle,
+  DialogActions,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import SellerOrderDetail from "./SellerOrderDetail";
@@ -135,6 +138,16 @@ export default function SellerOrdersPage() {
 
   function OrderTableBody({ order }) {
     const [open, setOpen] = useState(false);
+    const [confirmOpen, setConfirmOpen] = useState(false);
+
+    const handleConfirmOpen = () => {
+      setConfirmOpen(true);
+    };
+
+    const handleConfirmClose = () => {
+      setConfirmOpen(false);
+    };
+
     const [loading, setLoading] = useState(false);
     const handleClickOpen = () => {
       setOpen(true);
@@ -143,6 +156,7 @@ export default function SellerOrdersPage() {
       setOpen(false);
     };
     const handleChangeStatus = () => {
+      setConfirmOpen(false);
       setLoading(true);
       dispatch(
         updateSalesOrder(order.orderItemUUID, seller.token, () =>
@@ -204,20 +218,33 @@ export default function SellerOrdersPage() {
         </TableCell>
         <TableCell>
           {order.deliveryStatus !== "DELIVERED" && (
-            <Button
-              disabled={loading}
-              onClick={handleChangeStatus}
-              type="text"
-              sx={{ fontSize: "20px", color: "blue" }}
-            >
-              {loading ? (
-                <CircularProgress size={24} />
-              ) : order.deliveryStatus === "PENDING" ? (
-                "จัดส่ง"
-              ) : (
-                "ได้รับสินค้าแล้ว"
-              )}
-            </Button>
+            <>
+              <Button
+                disabled={loading}
+                onClick={handleConfirmOpen}
+                type="text"
+                sx={{ fontSize: "20px", color: "blue" }}
+              >
+                {loading ? (
+                  <CircularProgress size={24} />
+                ) : order.deliveryStatus === "PENDING" ? (
+                  "จัดส่ง"
+                ) : (
+                  "ได้รับสินค้าแล้ว"
+                )}
+              </Button>
+              <Dialog open={confirmOpen} onClose={handleConfirmClose}>
+                <DialogTitle>ยืนยันที่จะเปลี่ยนสถานะหรือไม่</DialogTitle>
+                <DialogActions>
+                  <Button color="error" onClick={handleConfirmClose}>
+                    ยกเลิก
+                  </Button>
+                  <Button onClick={handleChangeStatus} autoFocus>
+                    ตกลง
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </>
           )}
         </TableCell>
       </TableRow>

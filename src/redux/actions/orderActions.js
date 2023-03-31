@@ -185,6 +185,7 @@ export function updateSalesOrder(orderItemUUID, token, setLoading) {
       return onSuccess(success);
     } catch (error) {
       setLoading();
+      window.alert("เปลี่ยนสถานะไม่สำเร็จ");
       throw error;
     }
   };
