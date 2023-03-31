@@ -15,7 +15,7 @@ function Item(props) {
       <CardContent>
         <CardMedia
           component="img"
-          sx={{ objectFit: "contain", height: 425 }}
+          sx={{ maxWidth: "100%", bottom: "20" }}
           image={props.item.src}
           alt={props.item.alt}
         />
@@ -27,24 +27,28 @@ function Item(props) {
 export default function ImageSlider() {
   var items = [
     {
-      src: "/home/banner2.jpg",
+      src: "/home/banner1.jpg",
       alt: "home1",
     },
     {
-      src: "/home/banner3.png",
+      src: "/home/banner2.jpg",
       alt: "home2",
     },
     {
-      src: "/home/banner4.png",
+      src: "/home/banner3.png",
       alt: "home3",
     },
     {
-      src: "/home/banner5.png",
+      src: "/home/banner4.jpg",
       alt: "home4",
     },
     {
-      src: "/home/banner6.png",
+      src: "/home/banner5.jpg",
       alt: "home5",
+    },
+    {
+      src: "/home/banner6.png",
+      alt: "home6",
     },
   ];
   return (
