@@ -1,6 +1,10 @@
 import { Box, Stack, Typography, TextField } from "@mui/material";
 
-export default function NewOption({ option, handleOptionChange }) {
+export default function NewOption({
+  option,
+  handleOptionChange,
+  error = null,
+}) {
   return (
     <Box width="95%">
       <Stack direction="row" alignItems="center" spacing={2} pb={3}>
@@ -20,6 +24,12 @@ export default function NewOption({ option, handleOptionChange }) {
               fontSize: "14px",
             },
           }}
+          FormHelperTextProps={{ style: { backgroundColor: "#f5f5f5" } }}
+          {...(error &&
+            error.name && {
+              error: true,
+              helperText: error.name,
+            })}
         />
       </Stack>
       <Stack direction="row" spacing={3}>
@@ -38,6 +48,12 @@ export default function NewOption({ option, handleOptionChange }) {
                 fontSize: "14px",
               },
             }}
+            FormHelperTextProps={{ style: { backgroundColor: "#f5f5f5" } }}
+            {...(error &&
+              error.price && {
+                error: true,
+                helperText: error.price,
+              })}
           />
         </Stack>
         <Stack direction="row" alignItems="center" spacing={2}>
@@ -55,6 +71,12 @@ export default function NewOption({ option, handleOptionChange }) {
                 fontSize: "14px",
               },
             }}
+            FormHelperTextProps={{ style: { backgroundColor: "#f5f5f5" } }}
+            {...(error &&
+              error.quantity && {
+                error: true,
+                helperText: error.quantity,
+              })}
           />
         </Stack>
       </Stack>

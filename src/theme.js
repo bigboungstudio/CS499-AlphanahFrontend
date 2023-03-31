@@ -24,6 +24,15 @@ const theme = createTheme({
         },
       },
     },
+    MuiFormHelperText: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "transparent",
+          margin: 0,
+          paddingLeft: 10,
+        },
+      },
+    },
   },
   typography: {
     fontFamily: ["Kanit", "sans-serif"].join(","),

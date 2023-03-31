@@ -83,28 +83,43 @@ export default function CheckoutPage() {
   const handleRemoveCoupon = () => {
     dispatch(removeCouponFromCart(buyer.token, () => setCode("")));
   };
+
+  const [errors, setErrors] = useState({});
+  const validate = () => {
+    let temp = {};
+    temp.firstname = formValues.firstname ? "" : "กรุณากรอกชื่อ";
+    temp.lastname = formValues.lastname ? "" : "กรุณากรอกนามสกุล";
+    temp.phone = formValues.phone ? "" : "กรุณากรอกเบอร์โทรศัพท์";
+    temp.address = formValues.address ? "" : "กรุณากรอกทึ่อยู่";
+    setErrors({ ...temp });
+
+    return Object.values(temp).every((x) => x === "");
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!stripe || !elements) {
       return;
     }
-
-    setLoading(true);
-    const result = await stripe.createPaymentMethod({
-      type: "card",
-      card: elements.getElement(CardElement),
-      billing_details: {
-        name: formValues.firstname + " " + formValues.lastname,
-      },
-    });
-
-    stripePaymentMethodHandler(
-      stripe,
-      result,
-      formValues,
-      buyer.token,
-      handlePaymentComplete
-    );
+    if (validate()) {
+      setLoading(true);
+      const result = await stripe.createPaymentMethod({
+        type: "card",
+        card: elements.getElement(CardElement),
+        billing_details: {
+          name: formValues.firstname + " " + formValues.lastname,
+        },
+      });
+      stripePaymentMethodHandler(
+        stripe,
+        result,
+        formValues,
+        buyer.token,
+        handlePaymentComplete,
+        () => setLoading(false)
+      );
+    } else if (!validate()) {
+      window.alert("กรุณากรอกข้อมูลส่วนตัวให้ครบ");
+    }
   };
 
   const handleUseProfile = (e) => {
@@ -272,7 +287,9 @@ export default function CheckoutPage() {
               />
               <Stack direction="row" spacing={2} pb={2}>
                 <Box width="50%">
-                  <Typography sx={{ fontSize: "16px", pb: 2 }}>ชื่อ</Typography>
+                  <Typography sx={{ fontSize: "16px", pb: 2 }}>
+                    ชื่อ *
+                  </Typography>
                   <TextField
                     name="firstname"
                     value={formValues.firstname}
@@ -282,11 +299,15 @@ export default function CheckoutPage() {
                     InputProps={{
                       sx: { height: "45px", fontSize: "16px" },
                     }}
+                    {...(errors.firstname && {
+                      error: true,
+                      helperText: errors.firstname,
+                    })}
                   />
                 </Box>
                 <Box width="50%">
                   <Typography sx={{ fontSize: "16px", pb: 2 }}>
-                    นามสกุล
+                    นามสกุล *
                   </Typography>
                   <TextField
                     name="lastname"
@@ -297,12 +318,16 @@ export default function CheckoutPage() {
                     InputProps={{
                       sx: { height: "45px", fontSize: "16px" },
                     }}
+                    {...(errors.lastname && {
+                      error: true,
+                      helperText: errors.lastname,
+                    })}
                   />
                 </Box>
               </Stack>
               <Box pb={2} width="100%">
                 <Typography sx={{ fontSize: "16px", pb: 2 }}>
-                  เบอร์โทรศัพท์
+                  เบอร์โทรศัพท์ *
                 </Typography>
                 <TextField
                   name="phone"
@@ -313,11 +338,15 @@ export default function CheckoutPage() {
                   InputProps={{
                     sx: { height: "45px", fontSize: "16px" },
                   }}
+                  {...(errors.phone && {
+                    error: true,
+                    helperText: errors.phone,
+                  })}
                 />
               </Box>
               <Box pb={2} width="100%">
                 <Typography sx={{ fontSize: "16px", pb: 2 }}>
-                  ที่อยู่
+                  ที่อยู่ *
                 </Typography>
                 <TextField
                   name="address"
@@ -330,6 +359,10 @@ export default function CheckoutPage() {
                   InputProps={{
                     sx: { fontSize: "16px" },
                   }}
+                  {...(errors.address && {
+                    error: true,
+                    helperText: errors.address,
+                  })}
                 />
               </Box>
             </Stack>

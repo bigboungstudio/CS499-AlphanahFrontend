@@ -121,7 +121,10 @@ export default function SellerAddProductPage() {
       setIsOne(false);
       setFormValues({
         ...formValues,
-        options: [{ id: "0", name: "", price: "", quantity: "" }],
+        options: [
+          { id: "0", name: "", price: "", quantity: "" },
+          { id: "1", name: "", price: "", quantity: "" },
+        ],
       });
     }
   };
@@ -232,8 +235,14 @@ export default function SellerAddProductPage() {
     return formValues.options.map((option, i) => {
       return (
         <Stack direction="row" key={i} pb={2} bgcolor="#f5f5f5" padding={3}>
-          <NewOption option={option} handleOptionChange={handleOptionChange} />
-          {formValues.options.length !== 1 && (
+          <NewOption
+            option={option}
+            handleOptionChange={handleOptionChange}
+            error={
+              errors.options && errors.options.length !== 1 && errors.options[i]
+            }
+          />
+          {formValues.options.length !== 2 && (
             <IconButton onClick={() => handleRemoveOption(i)}>
               <RemoveCircleIcon color="error" />
             </IconButton>
@@ -242,17 +251,69 @@ export default function SellerAddProductPage() {
       );
     });
   }
+  const [errors, setErrors] = useState({});
+  const validate = () => {
+    let temp = {};
+    temp.name = formValues.name ? "" : "กรุณากรอกชื่อสินค้า";
+    temp.description = formValues.description
+      ? ""
+      : "กรุณากรอกรายละเอียดสินค้า";
+    temp.category =
+      formValues.category.name && formValues.category.categoryUUID
+        ? ""
+        : "กรุณาเลือกหมวดหมู่สินค้า";
+    if (isOne) {
+      let optionTemp = {};
+      optionTemp.price = formValues.options[0].price ? "" : "กรุณากรอกราคา";
+      optionTemp.quantity = formValues.options[0].quantity
+        ? ""
+        : "กรุณากรอกจำนวน";
+      temp.options = [optionTemp];
+    } else if (!isOne) {
+      let optionsTemp = [];
+      formValues.options.map((option) =>
+        optionsTemp.push({
+          name: option.name ? "" : "กรุณากรอกรายละเอียดตัวเลือก",
+          price: option.price ? "" : "กรุณากรอกราคา",
+          quantity: option.quantity ? "" : "กรุณากรอกจำนวน",
+        })
+      );
+      temp.options = [...optionsTemp];
+    }
+    temp.mainImage =
+      Object.keys(formValues.mainImage).length !== 0
+        ? ""
+        : "กรุณาเลือกรูปหลักสินค้า";
+    setErrors({ ...temp });
+    let error = true;
+    Object.entries(temp).map(([key, value]) =>
+      key !== "options"
+        ? value !== "" && (error = false)
+        : value.map(
+            (option) =>
+              ((value.length !== 1 && option.name !== "") ||
+                option.price !== "" ||
+                option.quantity !== "") &&
+              (error = false)
+          )
+    );
+    return error;
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
-    dispatch(
-      addProduct(
-        formValues,
-        seller.token,
-        () => navigate("/seller/products"),
-        () => setLoading(false)
-      )
-    );
+    if (validate()) {
+      setLoading(true);
+      dispatch(
+        addProduct(
+          formValues,
+          seller.token,
+          () => navigate("/seller/products"),
+          () => setLoading(false)
+        )
+      );
+    } else if (!validate()) {
+      window.alert("กรุณากรอกข้อมูลสินค้าให้ครบ");
+    }
   };
 
   function OneOption() {
@@ -273,6 +334,12 @@ export default function SellerAddProductPage() {
                 fontSize: "14px",
               },
             }}
+            {...(errors.options &&
+              errors.options.length === 1 &&
+              errors.options[0].price && {
+                error: true,
+                helperText: errors.options[0].price,
+              })}
           />
         </Stack>
         <Stack direction="row" alignItems="center">
@@ -290,6 +357,12 @@ export default function SellerAddProductPage() {
                 fontSize: "14px",
               },
             }}
+            {...(errors.options &&
+              errors.options.length === 1 &&
+              errors.options[0].quantity && {
+                error: true,
+                helperText: errors.options[0].quantity,
+              })}
           />
         </Stack>
       </>
@@ -316,6 +389,7 @@ export default function SellerAddProductPage() {
                 fontSize: "14px",
               },
             }}
+            {...(errors.name && { error: true, helperText: errors.name })}
           />
         </Stack>
         <Stack direction="row">
@@ -338,23 +412,35 @@ export default function SellerAddProductPage() {
                 fontSize: "14px",
               },
             }}
+            {...(errors.description && {
+              error: true,
+              helperText: errors.description,
+            })}
           />
         </Stack>
-        <Stack direction="row" alignItems="center">
-          <Typography sx={{ width: "15%" }}>หมวดหมู่สินค้า *</Typography>
-          <Typography color="#ababab">
-            {formValues.category.name === ""
-              ? "เลือกหมวดหมู่สินค้า"
-              : formValues.category.name}
-          </Typography>
-          <IconButton onClick={() => toggleDrawer(true)}>
-            <EditIcon />
-          </IconButton>
-          <SelectCategoriesDrawer
-            open={open}
-            toggleDrawer={toggleDrawer}
-            handleSelectCategory={handleSelectCategory}
-          />
+        <Stack>
+          <Stack direction="row" alignItems="center">
+            <Typography sx={{ width: "15%" }}>หมวดหมู่สินค้า *</Typography>
+            <Typography color="#ababab">
+              {formValues.category.name === ""
+                ? "เลือกหมวดหมู่สินค้า"
+                : formValues.category.name}
+            </Typography>
+
+            <IconButton onClick={() => toggleDrawer(true)}>
+              <EditIcon />
+            </IconButton>
+            <SelectCategoriesDrawer
+              open={open}
+              toggleDrawer={toggleDrawer}
+              handleSelectCategory={handleSelectCategory}
+            />
+          </Stack>
+          {errors.category && (
+            <Typography sx={{ pl: "16%", color: "red", fontSize: 12 }}>
+              {errors.category}
+            </Typography>
+          )}
         </Stack>
       </Stack>
       <Stack bgcolor="white" padding={5} spacing={4}>
@@ -429,6 +515,11 @@ export default function SellerAddProductPage() {
                       sx={{ objectFit: "contain", width: 160, height: 100 }}
                     />
                   </Badge>
+                )}
+                {errors.mainImage && (
+                  <Typography sx={{ pl: "14%", color: "red", fontSize: 12 }}>
+                    {errors.mainImage}
+                  </Typography>
                 )}
               </Box>
             </Stack>

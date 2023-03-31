@@ -32,7 +32,7 @@ export default function SellerAddCouponPage() {
   };
 
   const [formValues, setFormValues] = useState(initialValues);
-  const [isUnlimitedUsage, setIsUnlimitedUsage] = React.useState(true);
+  const [isUnlimitedUsage, setIsUnlimitedUsage] = useState(true);
   const handleUnlimitedUsageChange = (event) => {
     if (event.target.value === "1") {
       setIsUnlimitedUsage(true);
@@ -48,7 +48,7 @@ export default function SellerAddCouponPage() {
       });
     }
   };
-  const [isNoExpireDate, setNoExpireDate] = React.useState(true);
+  const [isNoExpireDate, setNoExpireDate] = useState(true);
   const handleNoExpireDateChange = (event) => {
     if (event.target.value === "1") {
       setNoExpireDate(true);
@@ -108,34 +108,62 @@ export default function SellerAddCouponPage() {
       endDate: e,
     });
   };
+  const [errors, setErrors] = useState({});
+  const validate = () => {
+    let temp = {};
+    temp.code = formValues.code ? "" : "กรุณากรอกรหัสคูปอง";
+    if (formValues.type !== "FREE_SHIPPING") {
+      temp.value = formValues.value
+        ? ""
+        : formValues.type === "PERCENTAGE_DISCOUNT"
+        ? "กรุณากรอกส่วนลด"
+        : "กรุณากรอกจำนวนเงินที่ลด";
+    }
+    if (!isUnlimitedUsage) {
+      temp.maxUse = formValues.maxUse ? "" : "กรุณากรอกจำนวนการใช้งาน";
+    }
+    if (!isNoExpireDate) {
+      temp.date =
+        new Date(formValues.startDate).getTime() <
+        new Date(formValues.endDate).getTime()
+          ? ""
+          : "เวลาเริ่มใช้งานมากกว่าหรือเท่ากันกับเวลาหมดอายุไม่ได้";
+    }
+    setErrors({ ...temp });
+    return Object.values(temp).every((x) => x === "");
+  };
   const handleSubmit = () => {
-    const formatDate = (value) => {
-      let date = new Date(value.toISOString());
-      date.setUTCHours(date.getUTCHours() + 7);
-      const offsetMinutes = date.getTimezoneOffset();
-      const offsetHours = Math.abs(offsetMinutes / 60);
-      const offsetSign = offsetMinutes > 0 ? "-" : "+";
-      const offsetString = `${offsetSign}${String(offsetHours).padStart(
-        2,
-        "0"
-      )}:${String(Math.abs(offsetMinutes % 60)).padStart(2, "0")}`;
-
-      const isoString = date.toISOString().replace("Z", offsetString);
-      return isoString;
-    };
-
-    const newFormValues = {
-      ...formValues,
-      startDate: formValues.startDate ? formatDate(formValues.startDate) : null,
-      endDate: formValues.endDate ? formatDate(formValues.endDate) : null,
-    };
-    newFormValues.value === null && delete newFormValues.value;
-    newFormValues.startDate === null && delete newFormValues.startDate;
-    newFormValues.endDate === null && delete newFormValues.endDate;
-    newFormValues.maxUse === null && delete newFormValues.maxUse;
-    dispatch(
-      addCoupon(newFormValues, seller.token, () => navigate("/seller/coupons"))
-    );
+    if (validate()) {
+      const formatDate = (value) => {
+        let date = new Date(value.toISOString());
+        date.setUTCHours(date.getUTCHours() + 7);
+        const offsetMinutes = date.getTimezoneOffset();
+        const offsetHours = Math.abs(offsetMinutes / 60);
+        const offsetSign = offsetMinutes > 0 ? "-" : "+";
+        const offsetString = `${offsetSign}${String(offsetHours).padStart(
+          2,
+          "0"
+        )}:${String(Math.abs(offsetMinutes % 60)).padStart(2, "0")}`;
+        const isoString = date.toISOString().replace("Z", offsetString);
+        return isoString;
+      };
+      const newFormValues = {
+        ...formValues,
+        startDate: formValues.startDate
+          ? formatDate(formValues.startDate)
+          : null,
+        endDate: formValues.endDate ? formatDate(formValues.endDate) : null,
+      };
+      newFormValues.value === null && delete newFormValues.value;
+      newFormValues.startDate === null && delete newFormValues.startDate;
+      newFormValues.endDate === null && delete newFormValues.endDate;
+      newFormValues.maxUse === null && delete newFormValues.maxUse;
+      dispatch(
+        addCoupon(newFormValues, seller.token, () =>
+          navigate("/seller/coupons")
+        )
+      );
+    }
   };
 
   return (
@@ -158,6 +186,10 @@ export default function SellerAddCouponPage() {
                 fontSize: "14px",
               },
             }}
+            {...(errors.code && {
+              error: true,
+              helperText: errors.code,
+            })}
           />
         </Stack>
         <Stack direction="row" alignItems="center">
@@ -220,6 +252,10 @@ export default function SellerAddCouponPage() {
                   fontSize: "14px",
                 },
               }}
+              {...(errors.value && {
+                error: true,
+                helperText: errors.value,
+              })}
             />
           </Stack>
         )}
@@ -267,6 +303,10 @@ export default function SellerAddCouponPage() {
                   fontSize: "14px",
                 },
               }}
+              {...(errors.maxUse && {
+                error: true,
+                helperText: errors.maxUse,
+              })}
             />
           </Stack>
         )}
@@ -300,11 +340,18 @@ export default function SellerAddCouponPage() {
           </Stack>
         </Stack>
         {!isNoExpireDate && (
-          <SellerCouponDatePicker
-            formValues={formValues}
-            handleStartDateChange={handleStartDateChange}
-            handleEndDateChange={handleEndDateChange}
-          />
+          <>
+            <SellerCouponDatePicker
+              formValues={formValues}
+              handleStartDateChange={handleStartDateChange}
+              handleEndDateChange={handleEndDateChange}
+            />
+            {errors.date && (
+              <Typography sx={{ pl: "16%", color: "red", fontSize: 12 }}>
+                {errors.date}
+              </Typography>
+            )}
+          </>
         )}
       </Stack>
 

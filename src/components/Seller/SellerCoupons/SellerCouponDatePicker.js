@@ -16,7 +16,7 @@ export default function SellerCouponDatePicker({
         <Stack direction="row" alignItems="center" spacing={3}>
           <DateTimePicker
             ampm={false}
-            label="วันเริ่มใช้งาน"
+            label="เวลาเริ่มใช้งาน"
             disablePast
             onChange={handleStartDateChange}
             renderInput={(params) => <TextField {...params} />}
@@ -28,7 +28,7 @@ export default function SellerCouponDatePicker({
           <DateTimePicker
             ampm={false}
             minDate={formValues.startDate}
-            label="วันหมดอายุ"
+            label="เวลาหมดอายุ"
             disablePast
             onChange={handleEndDateChange}
             renderInput={(params) => <TextField {...params} />}

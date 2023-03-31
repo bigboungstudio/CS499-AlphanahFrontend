@@ -34,6 +34,7 @@ export default function SellerCouponsPage() {
     type: "all",
     type2: "all",
   };
+  const [query, setQuery] = useState("");
   const [formValues, setFormValues] = useState(initialValues);
   useEffect(() => {
     seller.isAuthentication && dispatch(loadUserDetail("seller", seller.token));
@@ -62,6 +63,9 @@ export default function SellerCouponsPage() {
   };
   const handleChangeType2 = (event, newValue) => {
     setFormValues({ ...formValues, type2: newValue });
+  };
+  const handleChangeQuery = (e) => {
+    setQuery(e.target.value);
   };
 
   function ProductsTableHeadCell({ text }) {
@@ -176,6 +180,8 @@ export default function SellerCouponsPage() {
           <TextField
             sx={{ width: "30%" }}
             placeholder="ค้นหารหัสคูปอง"
+            value={query}
+            onChange={handleChangeQuery}
             inputProps={{
               sx: {
                 height: "7px",
@@ -219,13 +225,25 @@ export default function SellerCouponsPage() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {coupons.data &&
-                  coupons.data.map(
-                    (coupon, index) =>
-                      !coupon.softDelete && (
-                        <ProductsTableBody key={index} coupon={coupon} />
+                {coupons.data && query === ""
+                  ? coupons.data.map(
+                      (coupon, index) =>
+                        !coupon.softDelete && (
+                          <ProductsTableBody key={index} coupon={coupon} />
+                        )
+                    )
+                  : coupons.data
+                      .filter((coupon) =>
+                        coupon.couponCode
+                          .toLowerCase()
+                          .includes(query.toLowerCase())
                       )
-                  )}
+                      .map(
+                        (coupon, index) =>
+                          !coupon.softDelete && (
+                            <ProductsTableBody key={index} coupon={coupon} />
+                          )
+                      )}
               </TableBody>
             </Table>
             {coupons.data && coupons.data.length > 5 && (

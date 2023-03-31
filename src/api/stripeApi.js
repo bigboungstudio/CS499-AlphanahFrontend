@@ -6,9 +6,12 @@ export async function stripePaymentMethodHandler(
   result,
   profile,
   token,
-  setPaymentComplete
+  setPaymentComplete,
+  setLoading
 ) {
   if (result.error) {
+    window.alert("กรุณากรอกข้อมูลบัตร");
+    setLoading();
     // Show error in payment form
   } else {
     // Otherwise send paymentMethod.id to your server (see Step 4)

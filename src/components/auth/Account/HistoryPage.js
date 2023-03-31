@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   TextField,
   InputAdornment,
@@ -17,6 +17,10 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import HistoryTableBody from "./HistoryTableBody";
 
 export default function HistoryPage({ histories }) {
+  const [query, setQuery] = useState("");
+  const handleChangeQuery = (e) => {
+    setQuery(e.target.value);
+  };
   function HistoryTableHeadCell({ text }) {
     return (
       <TableCell>
@@ -32,6 +36,8 @@ export default function HistoryPage({ histories }) {
   return (
     <>
       <TextField
+        value={query}
+        onChange={handleChangeQuery}
         placeholder="ค้นหาสินค้า"
         inputProps={{
           sx: {
@@ -58,9 +64,18 @@ export default function HistoryPage({ histories }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {histories.map((history, index) => (
-              <HistoryTableBody key={index} history={history} />
-            ))}
+            {query === ""
+              ? histories.map((history, index) => (
+                  <HistoryTableBody key={index} history={history} />
+                ))
+              : histories.map(
+                  (history, index) =>
+                    history.orderItems.find((item) =>
+                      item.product.name
+                        .toLowerCase()
+                        .includes(query.toLowerCase())
+                    ) && <HistoryTableBody key={index} history={history} />
+                )}
           </TableBody>
         </Table>
         {histories && histories.length > 5 && (

@@ -35,9 +35,9 @@ export default function SellerProductsPage() {
   const dispatch = useDispatch();
   const seller = useSelector((state) => state.auth.seller);
   const products = useSelector((state) => state.products.merchantProducts.data);
-  const [sortedProducts, setSortedProducts] = useState(
-    [...products].sort((a, b) => Date(b.createDate) - Date(a.createDate)) ?? []
-  );
+  const [sortedProducts, setSortedProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [query, setQuery] = useState("");
   useEffect(() => {
     seller.isAuthentication && dispatch(loadUserDetail("seller", seller.token));
     seller.currentUser.accountUUID &&
@@ -49,20 +49,36 @@ export default function SellerProductsPage() {
     seller.token,
   ]);
   useEffect(() => {
-    products &&
+    if (products) {
+      let newCategories = [];
       setSortedProducts(
-        [...products].sort((a, b) => {
-          return (
+        [...products].sort(
+          (a, b) =>
             new Date(b.createDate).getTime() - new Date(a.createDate).getTime()
-          );
-        })
+        )
       );
+      products.map((product) =>
+        newCategories.push(
+          product.categories.find((category) => category.level === 1)
+        )
+      );
+      setCategories(
+        Array.from(new Set(newCategories.map((a) => a.categoryUUID))).map(
+          (categoryUUID) =>
+            newCategories.find((a) => a.categoryUUID === categoryUUID)
+        )
+      );
+    }
   }, [products]);
+  const [sortCategory, setSortCategory] = useState("ทั้งหมด");
   const [value, setValue] = useState("all");
   const [sortOption, setSortOption] = useState("ล่าสุด");
-  const outOfStockProducts = [
-    ...products.filter((product) => product.outOfStock > 0),
-  ];
+  const [outOfStockProducts, setOutOfStockProducts] = useState(
+    [...products.filter((product) => product.outOfStock > 0)].sort(
+      (a, b) =>
+        new Date(b.createDate).getTime() - new Date(a.createDate).getTime()
+    )
+  );
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -70,20 +86,213 @@ export default function SellerProductsPage() {
     setSortOption(event.target.value);
     if (event.target.value === "ล่าสุด") {
       setSortedProducts(
-        [...sortedProducts].sort((a, b) => {
-          return (
+        [...sortedProducts].sort(
+          (a, b) =>
             new Date(b.createDate).getTime() - new Date(a.createDate).getTime()
-          );
-        })
+        )
+      );
+      setOutOfStockProducts(
+        [...outOfStockProducts].sort(
+          (a, b) =>
+            new Date(b.createDate).getTime() - new Date(a.createDate).getTime()
+        )
       );
     } else if (event.target.value === "ราคาสูงสุด") {
       setSortedProducts(
         [...sortedProducts].sort((a, b) => b.minPrice - a.minPrice)
       );
+      setOutOfStockProducts(
+        [...outOfStockProducts].sort((a, b) => b.minPrice - a.minPrice)
+      );
     } else if (event.target.value === "ราคาต่ำสุด") {
       setSortedProducts(
         [...sortedProducts].sort((a, b) => a.minPrice - b.minPrice)
       );
+      setOutOfStockProducts(
+        [...outOfStockProducts].sort((a, b) => a.minPrice - b.minPrice)
+      );
+    }
+  };
+  const handleChangeCategory = (e) => {
+    setSortCategory(e.target.value);
+    if (sortOption === "ล่าสุด") {
+      setSortedProducts(
+        [
+          ...(e.target.value === "ทั้งหมด"
+            ? products
+            : sortedProducts.filter(
+                (product) =>
+                  product.categories.find((category) => category.level === 1)
+                    .categoryUUID === e.target.value
+              )),
+        ].sort(
+          (a, b) =>
+            new Date(b.createDate).getTime() - new Date(a.createDate).getTime()
+        )
+      );
+      setOutOfStockProducts(
+        [
+          ...(e.target.value === "ทั้งหมด"
+            ? products.filter((product) => product.outOfStock > 0)
+            : outOfStockProducts.filter(
+                (product) =>
+                  product.categories.find((category) => category.level === 1)
+                    .categoryUUID === e.target.value
+              )),
+        ].sort(
+          (a, b) =>
+            new Date(b.createDate).getTime() - new Date(a.createDate).getTime()
+        )
+      );
+    } else if (sortOption === "ราคาสูงสุด") {
+      setSortedProducts(
+        [
+          ...(e.target.value === "ทั้งหมด"
+            ? products
+            : sortedProducts.filter(
+                (product) =>
+                  product.categories.find((category) => category.level === 1)
+                    .categoryUUID === e.target.value
+              )),
+        ].sort((a, b) => b.minPrice - a.minPrice)
+      );
+      setOutOfStockProducts(
+        [
+          ...(e.target.value === "ทั้งหมด"
+            ? products.filter((product) => product.outOfStock > 0)
+            : outOfStockProducts.filter(
+                (product) =>
+                  product.categories.find((category) => category.level === 1)
+                    .categoryUUID === e.target.value
+              )),
+        ].sort((a, b) => b.minPrice - a.minPrice)
+      );
+    } else if (sortOption === "ราคาต่ำสุด") {
+      setSortedProducts(
+        [
+          ...(e.target.value === "ทั้งหมด"
+            ? products
+            : sortedProducts.filter(
+                (product) =>
+                  product.categories.find((category) => category.level === 1)
+                    .categoryUUID === e.target.value
+              )),
+        ].sort((a, b) => a.minPrice - b.minPrice)
+      );
+      setOutOfStockProducts(
+        [
+          ...(e.target.value === "ทั้งหมด"
+            ? products.filter((product) => product.outOfStock > 0)
+            : outOfStockProducts.filter(
+                (product) =>
+                  product.categories.find((category) => category.level === 1)
+                    .categoryUUID === e.target.value
+              )),
+        ].sort((a, b) => a.minPrice - b.minPrice)
+      );
+    }
+  };
+  const handleChangeQuery = (e) => {
+    setQuery(e.target.value);
+    if (e.target.value !== "") {
+      setSortedProducts(
+        [...sortedProducts].filter((product) =>
+          product.name.toLowerCase().includes(e.target.value.toLowerCase())
+        )
+      );
+      setOutOfStockProducts(
+        [...outOfStockProducts].filter((product) =>
+          product.name.toLowerCase().includes(e.target.value.toLowerCase())
+        )
+      );
+    } else {
+      if (sortOption === "ล่าสุด") {
+        setSortedProducts(
+          [
+            ...(sortCategory === "ทั้งหมด"
+              ? products
+              : products.filter(
+                  (product) =>
+                    product.categories.find((category) => category.level === 1)
+                      .categoryUUID === sortCategory
+                )),
+          ].sort(
+            (a, b) =>
+              new Date(b.createDate).getTime() -
+              new Date(a.createDate).getTime()
+          )
+        );
+        setOutOfStockProducts(
+          [
+            ...(sortCategory === "ทั้งหมด"
+              ? products.filter((product) => product.outOfStock > 0)
+              : products
+                  .filter((product) => product.outOfStock > 0)
+                  .filter(
+                    (product) =>
+                      product.categories.find(
+                        (category) => category.level === 1
+                      ).categoryUUID === sortCategory
+                  )),
+          ].sort(
+            (a, b) =>
+              new Date(b.createDate).getTime() -
+              new Date(a.createDate).getTime()
+          )
+        );
+      } else if (sortOption === "ราคาสูงสุด") {
+        setSortedProducts(
+          [
+            ...(sortCategory === "ทั้งหมด"
+              ? products
+              : products.filter(
+                  (product) =>
+                    product.categories.find((category) => category.level === 1)
+                      .categoryUUID === sortCategory
+                )),
+          ].sort((a, b) => b.minPrice - a.minPrice)
+        );
+        setOutOfStockProducts(
+          [
+            ...(sortCategory === "ทั้งหมด"
+              ? products.filter((product) => product.outOfStock > 0)
+              : products
+                  .filter((product) => product.outOfStock > 0)
+                  .filter(
+                    (product) =>
+                      product.categories.find(
+                        (category) => category.level === 1
+                      ).categoryUUID === sortCategory
+                  )),
+          ].sort((a, b) => b.minPrice - a.minPrice)
+        );
+      } else if (sortOption === "ราคาต่ำสุด") {
+        setSortedProducts(
+          [
+            ...(sortCategory === "ทั้งหมด"
+              ? products
+              : products.filter(
+                  (product) =>
+                    product.categories.find((category) => category.level === 1)
+                      .categoryUUID === sortCategory
+                )),
+          ].sort((a, b) => a.minPrice - b.minPrice)
+        );
+        setOutOfStockProducts(
+          [
+            ...(sortCategory === "ทั้งหมด"
+              ? products.filter((product) => product.outOfStock > 0)
+              : products
+                  .filter((product) => product.outOfStock > 0)
+                  .filter(
+                    (product) =>
+                      product.categories.find(
+                        (category) => category.level === 1
+                      ).categoryUUID === sortCategory
+                  )),
+          ].sort((a, b) => a.minPrice - b.minPrice)
+        );
+      }
     }
   };
 
@@ -264,7 +473,7 @@ export default function SellerProductsPage() {
             <TextField
               size="small"
               select
-              defaultValue="ทั้งหมด"
+              value={sortCategory}
               sx={{ minWidth: "200px" }}
               inputProps={{
                 sx: {
@@ -272,14 +481,25 @@ export default function SellerProductsPage() {
                   fontSize: "14px",
                 },
               }}
+              onChange={handleChangeCategory}
             >
               <MenuItem key="ทั้งหมด" value="ทั้งหมด">
                 ทั้งหมด
               </MenuItem>
+              {categories.map((category) => (
+                <MenuItem
+                  key={category.categoryUUID}
+                  value={category.categoryUUID}
+                >
+                  {category.name}
+                </MenuItem>
+              ))}
             </TextField>
           </Stack>
           <TextField
             sx={{ width: "30%" }}
+            value={query}
+            onChange={handleChangeQuery}
             placeholder="ค้นหาสินค้า"
             inputProps={{
               sx: {

@@ -65,7 +65,10 @@ export default function SellerOrdersPage() {
         );
   }, [orders, value]);
   const [sortOption, setSortOption] = useState("ล่าสุด");
-
+  const [query, setQuery] = useState("");
+  const handleChangeQuery = (e) => {
+    setQuery(e.target.value);
+  };
   const handleChange = (event, newValue) => {
     setValue(newValue);
     setSortOption("ล่าสุด");
@@ -130,7 +133,7 @@ export default function SellerOrdersPage() {
     );
   }
 
-  function HistoryTableBody({ order }) {
+  function OrderTableBody({ order }) {
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const handleClickOpen = () => {
@@ -233,6 +236,8 @@ export default function SellerOrdersPage() {
               <TextField
                 sx={{ width: "30%" }}
                 placeholder="ค้นหาสินค้า"
+                value={query}
+                onChange={handleChangeQuery}
                 inputProps={{
                   sx: {
                     height: "7px",
@@ -324,9 +329,19 @@ export default function SellerOrdersPage() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {sortedOrders.map((salesOrder, index) => (
-                  <HistoryTableBody key={index} order={salesOrder} />
-                ))}
+                {query === ""
+                  ? sortedOrders.map((salesOrder, index) => (
+                      <OrderTableBody key={index} order={salesOrder} />
+                    ))
+                  : sortedOrders
+                      .filter((salesOrder) =>
+                        salesOrder.product.name
+                          .toLowerCase()
+                          .includes(query.toLowerCase())
+                      )
+                      .map((salesOrder, index) => (
+                        <OrderTableBody key={index} order={salesOrder} />
+                      ))}
               </TableBody>
             </Table>
             {sortedOrders.length > 5 && (
