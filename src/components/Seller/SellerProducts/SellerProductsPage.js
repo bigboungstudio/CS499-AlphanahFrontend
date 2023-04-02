@@ -16,7 +16,7 @@ import {
   Tabs,
   Tab,
   Menu,
-  Pagination,
+  // Pagination,
   CardMedia,
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -577,7 +577,7 @@ export default function SellerProductsPage() {
                 ))}
           </TableBody>
         </Table>
-        {sortedProducts && sortedProducts.length > 5 && (
+        {/* {sortedProducts && sortedProducts.length > 5 && (
           <Stack mt={4} direction="row" justifyContent="space-between">
             <div></div>
             <Pagination
@@ -585,7 +585,7 @@ export default function SellerProductsPage() {
               alignself="end"
             />
           </Stack>
-        )}
+        )} */}
       </Box>
     </Box>
   );

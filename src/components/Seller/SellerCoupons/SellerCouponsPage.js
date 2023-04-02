@@ -15,7 +15,7 @@ import {
   InputAdornment,
   Tabs,
   Tab,
-  Pagination,
+  // Pagination,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
@@ -110,12 +110,12 @@ export default function SellerCouponsPage() {
         </TableCell>
         <TableCell align="center" sx={{ fontSize: "20px" }}>
           {coupon.endDate
-            ? format(startDate, "dd/MM/yyyy hh:mm")
+            ? format(startDate, "dd/MM/yyyy HH:mm")
             : "ไม่จำกัดเวลา"}
         </TableCell>
         <TableCell align="center" sx={{ fontSize: "20px" }}>
           {coupon.endDate
-            ? format(endDate, "dd/MM/yyyy hh:mm")
+            ? format(endDate, "dd/MM/yyyy HH:mm")
             : "ไม่จำกัดเวลา"}
         </TableCell>
         <TableCell>
@@ -246,7 +246,7 @@ export default function SellerCouponsPage() {
                       )}
               </TableBody>
             </Table>
-            {coupons.data && coupons.data.length > 5 && (
+            {/* {coupons.data && coupons.data.length > 5 && (
               <Stack mt={4} direction="row" justifyContent="space-between">
                 <div></div>
                 <Pagination
@@ -254,7 +254,7 @@ export default function SellerCouponsPage() {
                   alignself="end"
                 />
               </Stack>
-            )}
+            )} */}
           </>
         )}
       </Box>

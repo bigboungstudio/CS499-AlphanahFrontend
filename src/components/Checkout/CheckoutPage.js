@@ -28,6 +28,7 @@ import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import { Link } from "react-router-dom";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import { stripePaymentMethodHandler } from "../../api/stripeApi";
+import { useNavigate } from "react-router-dom";
 
 const CARD_ELEMENT_OPTIONS = {
   hidePostalCode: true,
@@ -49,6 +50,8 @@ const CARD_ELEMENT_OPTIONS = {
 };
 
 export default function CheckoutPage() {
+  const navigate = useNavigate();
+  const goCartPage = () => navigate("/cart");
   const stripe = useStripe();
   const elements = useElements();
   const cart = useSelector((state) => state.order.cart);
@@ -115,7 +118,8 @@ export default function CheckoutPage() {
         formValues,
         buyer.token,
         handlePaymentComplete,
-        () => setLoading(false)
+        () => setLoading(false),
+        goCartPage()
       );
     } else if (!validate()) {
       window.alert("กรุณากรอกข้อมูลส่วนตัวให้ครบ");

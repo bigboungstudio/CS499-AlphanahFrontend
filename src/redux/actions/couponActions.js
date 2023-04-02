@@ -40,6 +40,7 @@ export function addCoupon(coupon, token, navigate) {
       const success = await couponApi.createCoupon(coupon, token);
       return onSuccess(success);
     } catch (error) {
+      window.alert("สร้างคูปองไม่สำเร็จ รหัสคูปองอาจจะซ้ำ");
       throw error;
     }
   };

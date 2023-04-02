@@ -13,7 +13,7 @@ import {
   Tabs,
   Tab,
   CardMedia,
-  Pagination,
+  // Pagination,
   Button,
   MenuItem,
   CircularProgress,
@@ -371,7 +371,7 @@ export default function SellerOrdersPage() {
                       ))}
               </TableBody>
             </Table>
-            {sortedOrders.length > 5 && (
+            {/* {sortedOrders.length > 5 && (
               <Stack mt={4} direction="row" justifyContent="space-between">
                 <div></div>
                 <Pagination
@@ -379,7 +379,7 @@ export default function SellerOrdersPage() {
                   alignself="end"
                 />
               </Stack>
-            )}
+            )} */}
           </Box>
         </Box>
       ) : (

@@ -5,7 +5,7 @@ import {
   Button,
   Stack,
   Divider,
-  Pagination,
+  // Pagination,
 } from "@mui/material";
 import ReviewCard from "./ReviewCard";
 import StarRatingBar from "./StarRatingBar";
@@ -118,7 +118,7 @@ export default function ProductReview({
           ))}
         </Box>
       </Box>
-      {product.reviews.length > 5 && (
+      {/* {product.reviews.length > 5 && (
         <Stack direction="row" justifyContent="space-between">
           <div></div>
           <Pagination
@@ -126,7 +126,7 @@ export default function ProductReview({
             alignself="end"
           />
         </Stack>
-      )}
+      )} */}
     </Box>
   );
 }

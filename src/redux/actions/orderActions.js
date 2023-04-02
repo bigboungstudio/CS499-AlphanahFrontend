@@ -123,6 +123,7 @@ export function applyCouponToCart(couponCode, token) {
       const success = await orderApi.ApplyCouponToCart(couponCode, token);
       return onSuccess(success);
     } catch (error) {
+      window.alert("ไม่สามารถใช้คูปองนี้ได้");
       throw error;
     }
   };

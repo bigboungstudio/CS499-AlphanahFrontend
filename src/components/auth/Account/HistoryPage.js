@@ -9,7 +9,7 @@ import {
   TableBody,
   TableCell,
   Typography,
-  Pagination,
+  // Pagination,
   Stack,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
@@ -78,7 +78,7 @@ export default function HistoryPage({ histories }) {
                 )}
           </TableBody>
         </Table>
-        {histories && histories.length > 5 && (
+        {/* {histories && histories.length > 5 && (
           <Stack mt={5} direction="row" justifyContent="space-between">
             <div></div>
             <Pagination
@@ -86,7 +86,7 @@ export default function HistoryPage({ histories }) {
               alignself="end"
             />
           </Stack>
-        )}
+        )} */}
       </Box>
     </>
   );
