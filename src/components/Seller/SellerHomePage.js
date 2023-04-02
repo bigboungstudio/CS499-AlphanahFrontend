@@ -27,10 +27,8 @@ export default function SellerHomePage() {
   useEffect(() => {
     Object.keys(products).length !== 0 &&
       products !== undefined &&
-      products.data.map(
-        (product) =>
-          product.outOfStock > 0 &&
-          setOutOfStockCount(outOfStockCount + product.outOfStock)
+      setOutOfStockCount(
+        products.data.filter((product) => product.outOfStock > 0).length
       );
   }, [outOfStockCount, products]);
   useEffect(() => {

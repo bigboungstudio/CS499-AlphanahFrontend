@@ -51,7 +51,6 @@ const CARD_ELEMENT_OPTIONS = {
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
-  const goCartPage = () => navigate("/cart");
   const stripe = useStripe();
   const elements = useElements();
   const cart = useSelector((state) => state.order.cart);
@@ -119,7 +118,7 @@ export default function CheckoutPage() {
         buyer.token,
         handlePaymentComplete,
         () => setLoading(false),
-        goCartPage()
+        () => navigate("/cart")
       );
     } else if (!validate()) {
       window.alert("กรุณากรอกข้อมูลส่วนตัวให้ครบ");
