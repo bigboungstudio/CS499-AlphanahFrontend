@@ -1,5 +1,5 @@
 export async function handleResponse(response) {
-  console.log(response);
+  // console.log(response);
   if (response.request.status === 200) {
     return response.data;
   } else if (response.request.status !== 200) {

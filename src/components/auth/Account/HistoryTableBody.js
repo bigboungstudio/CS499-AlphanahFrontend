@@ -13,6 +13,15 @@ import { format } from "date-fns";
 
 export default function HistoryTableBody({ history }) {
   var date = new Date(history.checkoutDate);
+  const formatStatus = (value) => {
+    if (value === "PENDING") {
+      return "รอจัดส่ง";
+    } else if (value === "SHIPPED") {
+      return "จัดส่งแล้ว";
+    } else {
+      return "ได้รับสินค้าแล้ว";
+    }
+  };
   return (
     <TableRow>
       <TableCell>
@@ -69,7 +78,7 @@ export default function HistoryTableBody({ history }) {
                 </Typography>
               </Box>
               <Typography sx={{ fontSize: "20px", color: "#226CE0" }}>
-                {item.deliveryStatus}
+                {formatStatus(item.deliveryStatus)}
               </Typography>
             </Stack>
           ))}
